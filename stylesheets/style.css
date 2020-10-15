@@ -27,9 +27,15 @@ body {
 }
 
 .cross {
-    background-color: #42FF00;
+    background-color: #000;
+    color: #42FF00;
     height: 50px;
     width: 50px;
-    font-size: 50px;
-    
+    font-size: 40px;
+    border: none;
+}   
+
+.button {
+    display: flex;
+    align-self: flex-end;
 }
