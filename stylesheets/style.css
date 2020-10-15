@@ -25,3 +25,11 @@ body {
     display: flex;
     border-width: 0;
 }
+
+.cross {
+    background-color: #42FF00;
+    height: 50px;
+    width: 50px;
+    font-size: 50px;
+    
+}
