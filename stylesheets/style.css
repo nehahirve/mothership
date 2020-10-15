@@ -1,0 +1,27 @@
+body {
+    background-color: #000;
+}
+
+.page {
+    display: flex;
+    border-width: 0;
+}
+
+.leftBar {
+    display: flex;
+    border-width: 0;
+    width: 900px;
+    height: 0;
+}
+
+.gameBox {
+    display: flex;
+    border-left: 7px #42FF00 solid;
+    width: 100%;
+    height: 100vh;
+}
+
+.alien {
+    display: flex;
+    border-width: 0;
+}
