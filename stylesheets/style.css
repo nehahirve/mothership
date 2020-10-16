@@ -1,41 +1,28 @@
+@font-face {
+    font-family: 'sprites';
+    src: url('../fonts/sprites.ttf');
+    src: local('sprites'), local('sprites'), url('../fonts/sprites.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
 body {
-    background-color: #000;
+    font-family: 'sprites';
+    background-color: linen;
+    position: relative;
+    font-family: 'sprites';
 }
 
-.page {
-    display: flex;
-    border-width: 0;
-}
-
-.leftBar {
-    display: flex;
-    border-width: 0;
-    width: 900px;
-    height: 0;
-}
-
-.gameBox {
-    display: flex;
-    border-left: 7px #42FF00 solid;
-    width: 100%;
+#canvas {
+    width: 70vw;
     height: 100vh;
+    float: right;
+    position: relative;
 }
 
-.alien {
-    display: flex;
-    border-width: 0;
-}
-
-.cross {
-    background-color: #000;
-    color: #42FF00;
-    height: 50px;
-    width: 50px;
-    font-size: 40px;
-    border: none;
-}   
-
-.button {
-    display: flex;
-    align-self: flex-end;
+canvas {
+    position: absolute;
 }
