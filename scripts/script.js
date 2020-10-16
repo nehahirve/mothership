@@ -11,10 +11,10 @@ const userData = {
     {
       habitName: 'brush teeth',
       questLength: 50,
-      longestStreak: 5,
+      longestStreak: 7,
       currentStreak: 1,
       dateStarted: '201010',
-      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1]
+      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 1]
     }
   ]
 }

@@ -2,10 +2,20 @@
     font-family: 'sprites';
     src: url('../fonts/sprites.ttf');
     src: local('sprites'), local('sprites'), url('../fonts/sprites.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'space_invaders';
+    src: url('../fonts/space-invaders.ttf');
+    src: url('../fonts/space-invaders.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'machine';
+    src: url('../fonts/machinestd-medium.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
-
 
 
 
@@ -13,16 +23,81 @@ body {
     font-family: 'sprites';
     background-color: linen;
     position: relative;
-    font-family: 'sprites';
 }
 
-#canvas {
+main {
+    font-family: 'sprites';
     width: 70vw;
     height: 100vh;
     float: right;
     position: relative;
+    background-color: black;
 }
 
-canvas {
-    position: absolute;
+#calendar {
+    display: grid;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 410px;
+    margin-top: 15vh;
+    grid-template-columns: repeat(auto-fill, 50px);
+    grid-gap: 10px;
+}
+
+.box {
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    width: 50px;
+    height: 50px;
+    
+}
+
+.future {
+    font-family: 'space_invaders';
+    font-size: 1.7rem;
+    color: lightgrey;
+    opacity: 0.2;
+    padding: 0.3rem 0 0 0.2rem;
+}
+
+.current {
+    font-family: 'space_invaders';
+    font-size: 1.7rem;
+    padding: 0.3rem 0 0 0.2rem;
+    color: linen;
+    animation: infinite pulse 5s ease-in-out;
+    text-shadow: 2px 2px 6px #ff00a0;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(0.95);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.past {
+    font-family: 'sprites';
+    padding: 0.3rem 0 0 0.3rem;
+    font-size: 2.7rem;
+    background: black;
+    
+}
+
+.alien-1 {
+    color: hotpink;
+}
+
+.alien-2 {
+    color:#7a04eb;
+}
+
+.alien-3 {
+    color: #7a04eb;
 }
