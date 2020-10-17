@@ -12,11 +12,11 @@ const userData = {
     {
       habitName: 'brush teeth',
       questLength: 31,
-      longestStreak: 7,
-      currentStreak: 1,
-      dateStarted: '20-09-30',
-      lastCompleted: '20-10-21',
-      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 1]
+      longestStreak: 10,
+      currentStreak: 10,
+      dateStarted: '20-10-07',
+      lastCompleted: '20-10-16',
+      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2]
     },
     {
       habitName: 'drink vodka',
@@ -26,9 +26,19 @@ const userData = {
       dateStarted: '20-09-25',
       lastCompleted: '20-09-30',
       alienList: [1, 1, 1, 0, 1, 1]
+    },
+    {
+      habitName: 'code',
+      questLength: 31,
+      longestStreak: 0,
+      currentStreak: 0,
+      dateStarted: '20-10-17',
+      alienList: []
     }
   ]
 }
+
+const thisHabit = userData.habits[0]
 
 /*
 *********************************
@@ -38,12 +48,12 @@ CONSTANTS
 
 const calendar = document.querySelector('#calendar')
 const main = document.querySelector('main')
-const thisHabit = userData.habits[1]
-let currentHabitDay
+
+let currentHabitDay = 0
 const alienKeyCodes = {
   0: ['', ''],
   1: ['b', 'c'],
-  2: ['e', 'f'],
+  2: ['d', 'e'],
   3: ['l', 'm']
 }
 
@@ -52,32 +62,35 @@ let isReadyToPlay
 
 /*
 *********************************
-ON TRIGGER
+INIT
 *********************************
 */
 
 init()
 
-/*
-*********************************
-MAIN
-*********************************
-*/
-
 function init() {
-  fastForwardToToday()
+  if (thisHabit.alienList.length !== 0) {
+    fastForwardToToday()
+  }
   loadCalendar()
   checkIfQuestComplete()
 }
 
+/*
+*********************************
+MAIN FUNCTIONS
+*********************************
+*/
+
 function fastForwardToToday() {
   const elapsedDays = getElapsedDays(thisHabit.lastCompleted, getToday())
-
-  for (let i = 0; i < elapsedDays; i++) {
-    thisHabit.alienList.push('0')
+  if (elapsedDays > 1) {
+    for (let i = 0; i < elapsedDays; i++) {
+      thisHabit.alienList.push('0')
+    }
+    thisHabit.lastCompleted = getYesterday()
+    thisHabit.currentStreak = 0
   }
-  thisHabit.lastCompleted = getYesterday()
-  thisHabit.currentStreak = 0
   currentHabitDay = thisHabit.alienList.length
 }
 
@@ -85,7 +98,7 @@ function loadCalendar() {
   for (let i = 0; i < thisHabit.questLength; i++) {
     const box = document.createElement('button')
     if (i < currentHabitDay) {
-      let alienType = thisHabit.alienList[i]
+      const alienType = thisHabit.alienList[i]
       const text = getRandom(alienKeyCodes[alienType])
       box.className = `box past alien-${alienType}`
       box.innerText = text
@@ -108,14 +121,16 @@ function checkIfQuestComplete() {
   isReadyToPlay = daysRemaining === 0 ? true : false
   const startBtn = document.createElement('button')
   startBtn.className = 'game-start-button'
-  startBtn.innerText = `READY TO PLAY IN : 
-    `
+  startBtn.innerText = `READY TO PLAY IN :
+  `
   const span = document.createElement('span')
+
   span.innerText = `${daysRemaining} DAYS`
-  span.className = 'game-start-button countdown'
+  span.className = `game-start-button countdown`
+
   startBtn.insertAdjacentElement('beforeend', span)
   main.appendChild(startBtn)
-  if (true) {
+  if (isReadyToPlay) {
     startBtn.innerText = 'PRESS TO PLAY'
     startBtn.classList.add('countdown')
     startBtn.addEventListener('click', initGame)
@@ -123,7 +138,29 @@ function checkIfQuestComplete() {
 }
 
 function completeHabit() {
-  console.log(this.innerText)
+  this.removeEventListener('click', completeHabit)
+  const streak = thisHabit.currentStreak
+  let lastKnownAlien = thisHabit.alienList[thisHabit.alienList.length - 1]
+  let alienType
+  if (!+lastKnownAlien) {
+    alienType = 1
+  } else {
+    console.log(lastKnownAlien)
+    alienType = +lastKnownAlien
+  }
+  if (streak > 7) {
+    alienType += 1
+  } else if (streak > 14) {
+    alienType += 1
+  }
+  this.className = `box past alien-${alienType} clicked`
+  this.innerText = getRandom(alienKeyCodes[alienType])
+  thisHabit.currentStreak += 1
+  thisHabit.longestStreak =
+    thisHabit.longestStreak < thisHabit.currentStreak
+      ? thisHabit.currentStreak
+      : thisHabit.longestStreak
+  thisHabit.lastCompleted = getToday()
 }
 
 function initGame() {
@@ -141,19 +178,19 @@ function getToday() {
   const year = new Date().getFullYear().toString().slice(2)
   let month = new Date().getMonth() + 1
   if (month < 10) month = `0${month}`
-  let date = new Date().getDate()
+  const date = new Date().getDate()
   if (date < 10) month = `0${date}`
   return `${year}-${month}-${date}`
 }
 
 function getYesterday() {
   const today = new Date()
-  let yesterday = new Date(today)
+  const yesterday = new Date(today)
   yesterday.setDate(today.getDate() - 1)
   const year = yesterday.getFullYear().toString().slice(2)
   let month = yesterday.getMonth() + 1
   if (month < 10) month = `0${month}`
-  let date = yesterday.getDate()
+  const date = yesterday.getDate()
   if (date < 10) month = `0${date}`
   return `${year}-${month}-${date}`
 }
@@ -163,22 +200,30 @@ function getRandom(array) {
 }
 
 function getElapsedDays(date1, date2) {
+  let isLeapYear
+  if (date1[0] % 4 === 0) isLeapYear = true
   date1 = date1.split('-').map(number => +number)
   date2 = date2.split('-').map(number => +number)
-  let yeardiff = date2[0] - date1[0]
-  let monthdiff = date2[1] - date1[1]
-  let daydiff = date2[2] - date1[2]
-  let monthLength
+  const yeardiff = date2[0] - date1[0]
+  const monthdiff = date2[1] - date1[1]
+  const daydiff = date2[2] - date1[2]
+  let monthLength, yearLength
   if ([4, 6, 9, 11].includes(date1[1])) {
     monthLength = 30
   } else if ([2].includes(date1[1])) {
-    monthLength = 29
-  }
+    if (isLeapYear) monthLength = 29
+    else monthLength = 28
+  } else monthLength = 31
+  if (isLeapYear) yearLength = 366
+  else yearLength = 365
   if (yeardiff === 0) {
     if (monthdiff === 0) {
       return daydiff
     } else {
       return monthLength + daydiff - 1
     }
+  } else {
+    console.log(yearLength, monthLength)
+    return yeardiff + monthLength + daydiff - 1
   }
 }
