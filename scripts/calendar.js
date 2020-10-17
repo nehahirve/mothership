@@ -38,7 +38,7 @@ const userData = {
   ]
 }
 
-const thisHabit = userData.habits[2]
+const thisHabit = userData.habits[0]
 
 /*
 *********************************
