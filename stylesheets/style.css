@@ -35,7 +35,6 @@ main {
 }
 
 #calendar {
-    
     display: grid;
     flex-wrap: wrap;
     margin: auto;
@@ -72,6 +71,7 @@ main {
     color: linen;
     animation: infinite pulse 5s ease-in-out;
     text-shadow: 2px 2px 6px #ff00a0;
+    cursor: pointer;
 }
 
 @keyframes pulse {
@@ -101,4 +101,26 @@ main {
 
 .alien-3 {
     color: #7a04eb;
+}
+
+.game-start-button {
+    outline: none;
+    border: none;
+    margin-top: 1rem;
+    width: 100%;
+    height: 200px;
+    background: none;
+    color: linen;
+    font-size:  2.6rem;
+    font-family: 'space_invaders';
+}
+
+.countdown {
+    color: hotpink;
+    text-shadow: 2px 2px 6px #ff00a0;
+}
+
+.countdown:focus, .countdown:hover {
+    color: linen;
+    cursor: pointer;
 }
