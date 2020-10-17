@@ -1,3 +1,22 @@
+@font-face {
+    font-family: 'sprites';
+    src: url('../fonts/sprites.ttf');
+    src: local('sprites'), local('sprites'), url('../fonts/sprites.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'space_invaders';
+    src: url('../fonts/space-invaders.ttf');
+    src: url('../fonts/space-invaders.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'machine';
+    src: url('../fonts/machinestd-medium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     background-color: #000;
 }
