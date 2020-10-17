@@ -74,6 +74,7 @@ function init() {
   }
   loadCalendar()
   checkIfQuestComplete()
+  loadStars()
 }
 
 /*
@@ -164,6 +165,19 @@ function completeHabit() {
 
 function initGame() {
   console.log('play game')
+}
+
+function loadStars() {
+  const star1 = document.createElement('div')
+  star1.className = 'star1'
+  const star2 = document.createElement('div')
+  star2.className = 'star2'
+  star1.style.position = 'absolute'
+  star2.style.position = 'absolute'
+  star1.style.top = '0'
+  star2.style.top = '0'
+  main.appendChild(star1)
+  main.appendChild(star2)
 }
 
 /*
