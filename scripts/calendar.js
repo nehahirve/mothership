@@ -38,7 +38,7 @@ const userData = {
   ]
 }
 
-const thisHabit = userData.habits[0]
+const thisHabit = userData.habits[2]
 
 /*
 *********************************
@@ -69,12 +69,12 @@ INIT
 init()
 
 function init() {
+  loadStars()
   if (thisHabit.alienList.length !== 0) {
     fastForwardToToday()
   }
   loadCalendar()
   checkIfQuestComplete()
-  loadStars()
 }
 
 /*
@@ -87,9 +87,9 @@ function fastForwardToToday() {
   const elapsedDays = getElapsedDays(thisHabit.lastCompleted, getToday())
   if (elapsedDays > 1) {
     for (let i = 0; i < elapsedDays; i++) {
-      thisHabit.alienList.push('0')
+      thisHabit.alienList.push(0)
     }
-    thisHabit.lastCompleted = getYesterday()
+    thisHabit.lastCompleted = getToday(-1)
     thisHabit.currentStreak = 0
   }
   currentHabitDay = thisHabit.alienList.length
@@ -152,7 +152,6 @@ function completeHabit() {
   } else if (streak > 21) {
     alienType += 1
   }
-  console.log(alienType)
   this.className = `box past alien-${alienType} clicked`
   this.innerText = getRandom(alienKeyCodes[alienType])
   thisHabit.currentStreak += 1
@@ -161,6 +160,7 @@ function completeHabit() {
       ? thisHabit.currentStreak
       : thisHabit.longestStreak
   thisHabit.lastCompleted = getToday()
+  thisHabit.alienList.push(alienType)
 }
 
 function initGame() {
@@ -168,16 +168,13 @@ function initGame() {
 }
 
 function loadStars() {
-  const star1 = document.createElement('div')
-  star1.className = 'star1'
-  const star2 = document.createElement('div')
-  star2.className = 'star2'
-  star1.style.position = 'absolute'
-  star2.style.position = 'absolute'
-  star1.style.top = '0'
-  star2.style.top = '0'
-  main.appendChild(star1)
-  main.appendChild(star2)
+  for (let i = 0; i < 2; i++) {
+    const star = document.createElement('div')
+    star.className = `star${i + 1}`
+    star.style.position = 'absolute'
+    star.style.top = '0'
+    main.appendChild(star)
+  }
 }
 
 /*
@@ -186,24 +183,14 @@ HELPER FUNCTIONS
 *********************************
 */
 
-function getToday() {
-  // gets and formats date
-  const year = new Date().getFullYear().toString().slice(2)
-  let month = new Date().getMonth() + 1
-  if (month < 10) month = `0${month}`
-  const date = new Date().getDate()
-  if (date < 10) month = `0${date}`
-  return `${year}-${month}-${date}`
-}
-
-function getYesterday() {
+function getToday(offset = 0) {
   const today = new Date()
-  const yesterday = new Date(today)
-  yesterday.setDate(today.getDate() - 1)
-  const year = yesterday.getFullYear().toString().slice(2)
-  let month = yesterday.getMonth() + 1
+  const day = new Date(today)
+  day.setDate(today.getDate() + offset)
+  const year = day.getFullYear().toString().slice(2)
+  let month = day.getMonth() + 1
   if (month < 10) month = `0${month}`
-  const date = yesterday.getDate()
+  const date = day.getDate()
   if (date < 10) month = `0${date}`
   return `${year}-${month}-${date}`
 }
@@ -213,6 +200,7 @@ function getRandom(array) {
 }
 
 function getElapsedDays(date1, date2) {
+  // this function won't work after 2020!
   let isLeapYear
   if (date1[0] % 4 === 0) isLeapYear = true
   date1 = date1.split('-').map(number => +number)

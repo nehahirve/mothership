@@ -224,6 +224,7 @@ main {
   }
 
 .star1 {
+    animation-fill-mode: forwards;
     width: 1px;
     height: 1px;
     background: transparent;
@@ -232,7 +233,7 @@ main {
   }
 
 .star2 {
-      z-index: 10;
+    animation-fill-mode: forwards;
     width: 4px;
     height: 4px;
     background: transparent;
