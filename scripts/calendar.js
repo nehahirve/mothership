@@ -38,7 +38,7 @@ const userData = {
   ]
 }
 
-const thisHabit = userData.habits[0]
+const thisHabit = userData.habits[2]
 
 /*
 *********************************
@@ -121,17 +121,20 @@ function checkIfQuestComplete() {
   isReadyToPlay = daysRemaining === 0 ? true : false
   const startBtn = document.createElement('button')
   startBtn.className = 'game-start-button'
-  startBtn.innerText = `READY TO PLAY IN :
-  `
-  const span = document.createElement('span')
+  startBtn.innerText = `READY TO PLAY IN :`
+  const count = document.createElement('div')
 
-  span.innerText = `${daysRemaining} DAYS`
-  span.className = `game-start-button countdown`
+  count.innerText = `${daysRemaining} DAYS`
+  count.className = 'countdown'
+  count.setAttribute('data-text', `${daysRemaining} DAYS`)
 
-  startBtn.insertAdjacentElement('beforeend', span)
   main.appendChild(startBtn)
+  main.appendChild(count)
   if (isReadyToPlay) {
+    main.removeChild(count)
     startBtn.innerText = 'PRESS TO PLAY'
+    startBtn.style.marginTop = '100px'
+    startBtn.setAttribute('data-text', 'PRESS TO PLAY')
     startBtn.classList.add('countdown')
     startBtn.addEventListener('click', initGame)
   }
@@ -140,19 +143,15 @@ function checkIfQuestComplete() {
 function completeHabit() {
   this.removeEventListener('click', completeHabit)
   const streak = thisHabit.currentStreak
-  let lastKnownAlien = thisHabit.alienList[thisHabit.alienList.length - 1]
-  let alienType
-  if (!+lastKnownAlien) {
-    alienType = 1
-  } else {
-    console.log(lastKnownAlien)
-    alienType = +lastKnownAlien
-  }
+  let alienType = 1
   if (streak > 7) {
     alienType += 1
   } else if (streak > 14) {
     alienType += 1
+  } else if (streak > 21) {
+    alienType += 1
   }
+  console.log(alienType)
   this.className = `box past alien-${alienType} clicked`
   this.innerText = getRandom(alienKeyCodes[alienType])
   thisHabit.currentStreak += 1
