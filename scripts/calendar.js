@@ -7,6 +7,7 @@ SAMPLE USER DATA
 const userData = {
   name: 'Tuva',
   highScore: 2000,
+  lastLogin: '201021',
   habits: [
     {
       habitName: 'brush teeth',
@@ -14,6 +15,7 @@ const userData = {
       longestStreak: 7,
       currentStreak: 1,
       dateStarted: '201010',
+      lastCompleted: '201021',
       alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 1]
     }
   ]

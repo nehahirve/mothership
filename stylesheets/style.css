@@ -21,7 +21,7 @@
 
 body {
     font-family: 'sprites';
-    background-color: linen;
+    background: linen;
     position: relative;
 }
 
@@ -35,6 +35,7 @@ main {
 }
 
 #calendar {
+    
     display: grid;
     flex-wrap: wrap;
     margin: auto;
