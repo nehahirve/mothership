@@ -1,37 +1,82 @@
-@font-face {
-    font-family: 'sprites';
-    src: url('../fonts/sprites.ttf');
-    src: local('sprites'), local('sprites'), url('../fonts/sprites.ttf') format('truetype');
+/********
+COLOUR PALLETTE
+********/
+
+html, body {
+  --background: black;
+  --white: linen;
+  --colour-one: hotpink;
+  --colour-two: cyan;
+  background: var(--background);
+} 
+
+nav {
+  outline: var(--white) solid 2px;
+  background: var(--background);
+  overflow-y: hidden;
+  position: relative;
+  float: left;
+  width: 35vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-@font-face {
-    font-family: 'space_invaders';
-    src: url('../fonts/space-invaders.ttf');
-    src: url('../fonts/space-invaders.ttf') format('truetype');
+header {
+  width: 100%;
+  height: 5rem;
+  border:crimson 2px dashed;
 }
 
-@font-face {
-    font-family: 'machine';
-    src: url('../fonts/machinestd-medium.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
+#habit-list {
+  background-color: aqua;
+  width: 100%;
+  position: absolute;
+  top: 5rem;
 }
 
-body, html {
-    font-family: 'sprites';
-    background: linen;
-    position: relative; 
-    overflow-x: hidden ;
+#heatmap {
+  border:yellow 2px dashed;
+  height: 15rem;
+  width: 100%;
+  position: absolute;
+  bottom: 5rem;
 }
+
+#menu-bottom {
+  border:cyan 2px dashed;
+  height: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 2rem 0 2rem;
+}
+
+button {
+  border: none;
+  outline: none;
+  width: 2rem;
+  height: 2rem;
+  background: var(--white)
+}
+
+#plus-icon {
+  padding:4px 0 0 2px;
+  font-size: 2rem;
+}
+
+/********
+NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
+********/
 
 main {
-    font-family: 'sprites';
-    width: 65vw;
-    height: 100vh;
-    float: right;
-    position: relative;
-    background-color: black;
-   
+  outline: var(--white) dashed 2px;
+  float: right;
+  width: 65vw;
+  height: 100vh;
+  font-family: 'sprites';
+  position: relative;
 }
 
 #calendar {
