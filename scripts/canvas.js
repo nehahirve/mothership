@@ -1,3 +1,17 @@
+/*
+*********************************
+SAMPLE STARTER DATA
+*********************************
+*/
+
+let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
+
+/*
+*********************************
+HELPER CLASSES & VARIABLES
+*********************************
+*/
+
 class Vec {
   constructor(x, y) {
     this.x = x
@@ -13,35 +27,21 @@ class Vec {
   }
 }
 
-let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
-let WIDTH
-let HEIGHT
-let game
-let gameRunning
-
 let startPos = new Vec(
   main.offsetWidth / 2 - 205 + 25,
   window.innerHeight * 0.15 + 25
 )
 
-function resizeCanvas() {
-  gameRunning = false
-  canvas.width = window.innerWidth * 0.65
-  canvas.height = window.innerHeight
-  WIDTH = canvas.width
-  HEIGHT = canvas.height
-  startPos = new Vec(
-    main.offsetWidth / 2 - 205 + 25,
-    window.innerHeight * 0.15 + 25
-  )
-  //gameRunning = true
-}
+const canvas = document.querySelector('canvas')
+const ctx = canvas.getContext('2d')
+let WIDTH, HEIGHT, game
+let gameRunning
 
-window.addEventListener('resize', resizeCanvas)
-
-resizeCanvas()
+/*
+*********************************
+GAME CLASSES
+*********************************
+*/
 
 class Game {
   constructor(canvas, context) {
@@ -142,6 +142,24 @@ class Player {
   }
 }
 
+/*
+*********************************
+ON CANVAS LOAD
+*********************************
+*/
+
+resizeCanvas()
+window.addEventListener('resize', resizeCanvas)
+const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
+
+initGame()
+
+/*
+*********************************
+HELPER FUNCTIONS
+*********************************
+*/
+
 function trackKeys(keysArray) {
   const down = Object.create(null)
   function track(e) {
@@ -155,6 +173,15 @@ function trackKeys(keysArray) {
   return down
 }
 
-const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
-
-initGame()
+function resizeCanvas() {
+  gameRunning = false
+  canvas.width = window.innerWidth * 0.65
+  canvas.height = window.innerHeight
+  WIDTH = canvas.width
+  HEIGHT = canvas.height
+  startPos = new Vec(
+    main.offsetWidth / 2 - 205 + 25,
+    window.innerHeight * 0.15 + 25
+  )
+  //gameRunning = true
+}
