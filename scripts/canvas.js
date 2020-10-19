@@ -13,7 +13,7 @@ class Vec {
   }
 }
 
-let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0, 0, 1, 1]
+let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 let WIDTH
@@ -37,7 +37,6 @@ function resizeCanvas() {
     window.innerHeight * 0.15 + 25
   )
   //gameRunning = true
-  console.log(game)
 }
 
 window.addEventListener('resize', resizeCanvas)
@@ -89,37 +88,43 @@ function initGame() {
 
 function createAliens(game) {
   let numberOfAliens = aliens.length
-  console.log(numberOfAliens)
   let newAliens = []
+  let start = new Vec(startPos.x, startPos.y)
+  let x = start.x
+  let type
+  let y = start.y - 60
   for (let i = 0; i < numberOfAliens; i++) {
-    let x, y
-    x = startPos.x + i * 60
-    if (i < 7) {
-      y = startPos.y
-    } else if (i < 14) {
-      y = startPos.y + 60
-    } else if (i < 21) {
-      y = startPos.y
-    } else if (i < 28) {
-      y = startPos.y
-    } else if (i < 35) {
-      y = startPos.y
+    type = aliens[i]
+    if (i % 7 === 0) {
+      x = start.x
+      y += 60
+    } else {
+      x += 60
     }
-    newAliens.push(new Alien(game, new Vec(x, y)))
+    console.log(i, x, y)
+    newAliens.push(new Alien(game, new Vec(x, y), type))
   }
   return newAliens
 }
 
 class Alien {
-  constructor(game, center) {
+  constructor(game, center, type) {
     this.size = { x: 50, y: 50 }
     this.center = center
     this.game = game
-    this.colour = 'green'
+    this.type = type
+    const typeLegend = {
+      0: ['black', 0],
+      1: ['green', 30],
+      2: ['yellow', 50],
+      3: ['magenta', 75],
+      4: ['white', 100],
+      5: ['pink', 200]
+    }
+    this.colour = typeLegend[type][0]
+    this.points = typeLegend[type][1]
   }
 }
-
-createAliens(game)
 
 class Player {
   constructor(game, gameSize) {
@@ -142,7 +147,6 @@ function trackKeys(keysArray) {
   function track(e) {
     if (keysArray.includes(e.key)) {
       down[e.key] = e.type === 'keydown'
-      console.log(down)
       e.preventDefault()
     }
   }
