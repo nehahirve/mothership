@@ -84,7 +84,10 @@ MAIN FUNCTIONS
 */
 
 function fastForwardToToday() {
-  const elapsedDays = getElapsedDays(thisHabit.lastCompleted, getToday())
+  const elapsedDays = getDaysElapsedFromToday(
+    thisHabit.lastCompleted,
+    getToday()
+  )
   if (elapsedDays > 1) {
     for (let i = 0; i < elapsedDays; i++) {
       thisHabit.alienList.push(0)
@@ -174,57 +177,5 @@ function loadStars() {
     star.style.position = 'absolute'
     star.style.top = '0'
     main.appendChild(star)
-  }
-}
-
-/*
-*********************************
-HELPER FUNCTIONS
-*********************************
-*/
-
-function getToday(offset = 0) {
-  const today = new Date()
-  const day = new Date(today)
-  day.setDate(today.getDate() + offset)
-  const year = day.getFullYear().toString().slice(2)
-  let month = day.getMonth() + 1
-  if (month < 10) month = `0${month}`
-  const date = day.getDate()
-  if (date < 10) month = `0${date}`
-  return `${year}-${month}-${date}`
-}
-
-function getRandom(array) {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
-function getElapsedDays(date1, date2) {
-  // this function won't work after 2020!
-  let isLeapYear
-  if (date1[0] % 4 === 0) isLeapYear = true
-  date1 = date1.split('-').map(number => +number)
-  date2 = date2.split('-').map(number => +number)
-  const yeardiff = date2[0] - date1[0]
-  const monthdiff = date2[1] - date1[1]
-  const daydiff = date2[2] - date1[2]
-  let monthLength, yearLength
-  if ([4, 6, 9, 11].includes(date1[1])) {
-    monthLength = 30
-  } else if ([2].includes(date1[1])) {
-    if (isLeapYear) monthLength = 29
-    else monthLength = 28
-  } else monthLength = 31
-  if (isLeapYear) yearLength = 366
-  else yearLength = 365
-  if (yeardiff === 0) {
-    if (monthdiff === 0) {
-      return daydiff
-    } else {
-      return monthLength + daydiff - 1
-    }
-  } else {
-    console.log(yearLength, monthLength)
-    return yeardiff + monthLength + daydiff - 1
   }
 }
