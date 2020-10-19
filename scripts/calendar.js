@@ -48,6 +48,7 @@ CONSTANTS
 
 const calendar = document.querySelector('#calendar')
 const main = document.querySelector('main')
+const startBtn = document.createElement('button')
 
 let currentHabitDay = 0
 const alienKeyCodes = {
@@ -123,7 +124,6 @@ function loadCalendar() {
 function checkIfQuestComplete() {
   const daysRemaining = thisHabit.questLength - currentHabitDay
   isReadyToPlay = daysRemaining === 0 ? true : false
-  const startBtn = document.createElement('button')
   startBtn.className = 'game-start-button'
   startBtn.innerText = `READY TO PLAY IN :`
   const count = document.createElement('div')
@@ -134,7 +134,7 @@ function checkIfQuestComplete() {
 
   main.appendChild(startBtn)
   main.appendChild(count)
-  if (isReadyToPlay) {
+  if (true) {
     main.removeChild(count)
     startBtn.innerText = 'PRESS TO PLAY'
     startBtn.style.marginTop = '100px'
@@ -166,10 +166,6 @@ function completeHabit() {
   thisHabit.alienList.push(alienType)
 }
 
-function initGame() {
-  console.log('play game')
-}
-
 function loadStars() {
   for (let i = 0; i < 2; i++) {
     const star = document.createElement('div')
@@ -178,4 +174,11 @@ function loadStars() {
     star.style.top = '0'
     main.appendChild(star)
   }
+}
+
+function initGame() {
+  //calendar.remove()
+  main.removeChild(startBtn)
+  const canvas = document.querySelector('canvas')
+  const ctx = canvas.getContext('2d')
 }
