@@ -4,7 +4,7 @@ flatUI, clean, simple, modern &amp; minimalist habit tracker (work in progress)
 
 Contributors:
 
-    Michaela Guzmická
+    Michaela Guzmická :-)
     Neha Hirve
     Emma Scott-Allen
     Tuva Åkerlund
