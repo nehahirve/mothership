@@ -28,11 +28,6 @@ class Vec {
   }
 }
 
-let startPos = new Vec(
-  main.offsetWidth / 2 - 205 + 25,
-  window.innerHeight * 0.15 + 25
-)
-
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 let WIDTH, HEIGHT, game
@@ -110,9 +105,9 @@ function initGame() {
   main.removeChild(startBtn)
   game = new Game(canvas, ctx)
   //gameRunning = true
-  canvas.style.opacity = 1
+  canvas.style.opacity = 0.5
   setTimeout(function () {
-    if (document.fonts.check('45px sprites')) {
+    if (document.fonts.check('44.5px sprites')) {
       gameRunning = true
       game.loop()
     }
@@ -125,14 +120,14 @@ function createAliens(game) {
   let start = new Vec(startPos.x, startPos.y)
   let x = start.x
   let type
-  let y = start.y - 60
+  let y = start.y - 120
   for (let i = 0; i < numberOfAliens; i++) {
     type = aliens[i]
     if (i % 7 === 0) {
       x = start.x
-      y += 60
+      y += 120
     } else {
-      x += 60
+      x += 120
     }
     newAliens.push(new Alien(game, new Vec(x, y), type))
   }
@@ -159,7 +154,7 @@ class Alien {
     this.colour = typeLegend[type][0]
     this.points = typeLegend[type][1]
     this.patrolX = 0
-    this.speed = new Vec(0.3, 0.01)
+    this.speed = new Vec(0, 0)
   }
 
   get name() {
@@ -270,22 +265,25 @@ function trackKeys(keysArray) {
 }
 
 function resizeCanvas() {
-  gameRunning = false
-  canvas.width = window.innerWidth * 0.65
-  canvas.height = window.innerHeight
+  let scale = window.devicePixelRatio
+  //gameRunning = false
+  canvas.width = Math.floor(window.innerWidth * 0.65 * scale)
+  canvas.height = Math.floor(window.innerHeight * scale)
   WIDTH = canvas.width
   HEIGHT = canvas.height
   startPos = new Vec(
-    main.offsetWidth / 2 - 205 + 25,
-    window.innerHeight * 0.15 + 25
+    (main.offsetWidth / 2 - 205 + 14) * scale,
+    (window.innerHeight * 0.15 + 32) * scale
   )
   //gameRunning = true
 }
 
+resizeCanvas()
+
 function drawRect(ctx, body, colour) {
-  if (document.fonts.check('45px sprites')) {
-    calendar.style.opacity = 0
-    ctx.font = '45px sprites'
+  if (document.fonts.check('100px sprites')) {
+    calendar.style.opacity = 1
+    ctx.font = '85px sprites'
     if (body.name === 'Player') {
       ctx.fillStyle = 'black'
       ctx.fillRect(
@@ -326,7 +324,7 @@ function drawRect(ctx, body, colour) {
       else text = alienKeyCodes[body.type][1]
       let offset = 0
       if (text == 'd' || text == 'e') {
-        offset = 8
+        offset = 11
       }
       ctx.fillText(
         text,
