@@ -4,7 +4,8 @@ SAMPLE STARTER DATA
 *********************************
 */
 
-let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
+let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
+let highScore = 0
 
 /*
 *********************************
@@ -43,23 +44,56 @@ GAME CLASSES
 *********************************
 */
 
+let ticker = Date.now()
+let alienPicker
+
+function GameOver() {
+  gameRunning = false
+  main.remove(canvas)
+}
+
 class Game {
   constructor(canvas, context) {
     this.gameSize = new Vec(WIDTH, HEIGHT)
     this.canvas = canvas
     this.ctx = context
     this.bodies = [new Player(this, this.gameSize)].concat(createAliens(this))
-    console.log(this.bodies)
     self = this
   }
 
   loop() {
-    console.log('looping')
+    if (ticker % 60 === 0) {
+      console.log('looping')
+      if (alienPicker) alienPicker = false
+      else alienPicker = true
+    }
     self.draw()
-    self.bodies[0].update()
+    self.update()
+    self.bodies.forEach(body => body.update())
+    ticker++
     if (gameRunning) {
       requestAnimationFrame(self.loop)
     } else console.log('stop')
+  }
+
+  update() {
+    for (let body of self.bodies) {
+      body.update()
+    }
+
+    self.bodies = self.bodies.filter(body => {
+      return notColliding(body)
+    })
+
+    function notColliding(b1) {
+      return (
+        self.bodies.filter(function (b2) {
+          return colliding(b1, b2)
+        }).length === 0
+      )
+    }
+
+    self.bodies = self.bodies.filter(body => !(body.center.y < 0))
   }
 
   draw() {
@@ -67,23 +101,22 @@ class Game {
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
     this.bodies.forEach(body => {
-      this.ctx.fillStyle = body.colour
-      this.ctx.fillRect(
-        body.center.x - body.size.x / 2,
-        body.center.y - body.size.y / 2,
-        body.size.x,
-        body.size.y
-      )
+      drawRect(ctx, body, body.colour)
     })
   }
 }
 
 function initGame() {
-  //calendar.remove()
   main.removeChild(startBtn)
   game = new Game(canvas, ctx)
-  gameRunning = true
-  game.loop()
+  //gameRunning = true
+  canvas.style.opacity = 1
+  setTimeout(function () {
+    if (document.fonts.check('45px sprites')) {
+      gameRunning = true
+      game.loop()
+    }
+  }, 1000)
 }
 
 function createAliens(game) {
@@ -101,10 +134,19 @@ function createAliens(game) {
     } else {
       x += 60
     }
-    console.log(i, x, y)
     newAliens.push(new Alien(game, new Vec(x, y), type))
   }
+  newAliens = newAliens.filter(alien => alien.type !== 0)
   return newAliens
+}
+
+const typeLegend = {
+  0: ['black', 0],
+  1: ['rgb(253, 100, 100)', 30],
+  2: ['#04a2eb', 50],
+  3: ['magenta', 75],
+  4: ['white', 100],
+  5: ['pink', 200]
 }
 
 class Alien {
@@ -113,16 +155,23 @@ class Alien {
     this.center = center
     this.game = game
     this.type = type
-    const typeLegend = {
-      0: ['black', 0],
-      1: ['green', 30],
-      2: ['yellow', 50],
-      3: ['magenta', 75],
-      4: ['white', 100],
-      5: ['pink', 200]
-    }
+
     this.colour = typeLegend[type][0]
     this.points = typeLegend[type][1]
+    this.patrolX = 0
+    this.speed = new Vec(0.3, 0.01)
+  }
+
+  get name() {
+    return 'Alien'
+  }
+
+  update() {
+    if (this.patrolX < -150 || this.patrolX > 150) {
+      this.speed.x = -this.speed.x
+    }
+    this.center = this.center.plus(this.speed)
+    this.patrolX += this.speed.x
   }
 }
 
@@ -130,7 +179,11 @@ class Player {
   constructor(game, gameSize) {
     this.size = { x: 50, y: 50 }
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 2 }
-    this.colour = 'red'
+    this.colour = 'linen'
+  }
+
+  get name() {
+    return 'Player'
   }
 
   update() {
@@ -138,6 +191,39 @@ class Player {
       if (this.center.x > this.size.x / 2) this.center.x -= 2
     } else if (keyBoard.ArrowRight) {
       if (this.center.x < WIDTH - this.size.x / 2) this.center.x += 2
+    }
+    if (keyBoard.ArrowUp) {
+      let currentBullets = game.bodies.filter(body => body.name === 'Bullet')
+      console.log(ticker % 60 === 0)
+      if (ticker % 1800 === 0 || currentBullets.length === 0) {
+        let bullet = new Bullet(
+          new Vec(this.center.x, this.center.y - this.size.y - 10)
+        )
+        game.bodies.push(bullet)
+      }
+    }
+  }
+}
+
+class Bullet {
+  constructor(center, game) {
+    this.center = center
+    this.speed = new Vec(0, -7)
+    this.colour = 'blue'
+    this.size = new Vec(10, 10)
+  }
+
+  get name() {
+    return 'Bullet'
+  }
+
+  update() {
+    this.center.y += this.speed.y
+    let hit = game.bodies.filter(body => colliding(this, body))
+    if (hit.length > 0) {
+      let points = typeLegend[hit[0].type][1]
+      highScore += points
+      console.log(highScore)
     }
   }
 }
@@ -159,6 +245,16 @@ initGame()
 HELPER FUNCTIONS
 *********************************
 */
+
+function colliding(b1, b2) {
+  return !(
+    b1 === b2 ||
+    b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+    b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+    b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+    b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
+  )
+}
 
 function trackKeys(keysArray) {
   const down = Object.create(null)
@@ -184,4 +280,59 @@ function resizeCanvas() {
     window.innerHeight * 0.15 + 25
   )
   //gameRunning = true
+}
+
+function drawRect(ctx, body, colour) {
+  if (document.fonts.check('45px sprites')) {
+    calendar.style.opacity = 0
+    ctx.font = '45px sprites'
+    if (body.name === 'Player') {
+      ctx.fillStyle = 'black'
+      ctx.fillRect(
+        body.center.x - body.size.x / 2,
+        body.center.y - body.size.y / 2,
+        body.size.x,
+        body.size.y
+      )
+      ctx.fillStyle = colour
+      ctx.font = '90px sprites'
+      let text = 'w'
+      ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
+    }
+    if (body.name === 'Bullet') {
+      ctx.fillStyle = 'black'
+      ctx.fillRect(
+        body.center.x - body.size.x / 2,
+        body.center.y - body.size.y / 2,
+        body.size.x,
+        body.size.y
+      )
+      ctx.fillStyle = 'yellow'
+      ctx.font = '60px sprites'
+      let text = 'y'
+      ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
+    }
+    if (body.type) {
+      ctx.fillStyle = 'black'
+      ctx.fillRect(
+        body.center.x - body.size.x / 2,
+        body.center.y - body.size.y / 2,
+        body.size.x,
+        body.size.y
+      )
+      ctx.fillStyle = colour
+      let text
+      if (alienPicker) text = alienKeyCodes[body.type][0]
+      else text = alienKeyCodes[body.type][1]
+      let offset = 0
+      if (text == 'd' || text == 'e') {
+        offset = 8
+      }
+      ctx.fillText(
+        text,
+        offset + body.center.x - body.size.x / 2,
+        body.center.y + 18
+      )
+    }
+  }
 }
