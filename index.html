@@ -12,6 +12,7 @@
     <nav>
       <header>HELLO, USER</header>
       <ul id="habit-list"></ul>
+      <li class="habit1"></li>
       <div id="heatmap"></div>
       <div id="menu-bottom">
         <button id="plus-icon">+</button>
@@ -20,9 +21,24 @@
     <main>
       <canvas></canvas>
       <div id="calendar"></div>
-    </main>
+    </main>  
   </body>
+  <form class="hidden">
+    <div>
+      <h1>Create new habit</h1>
+      <hr><br>
+      <label><b>Name your new habit</b></label>
+      <br><br>
+      <input type="text" placeholder="Dream big!">
+      <br><br>  
+      <label><b>Days to track habit</b></label>
+      <br><br>
+      <input type="text" placeholder="More days=more points!">
+      <button class="saveHabit" type="submit">Save</button>
+    </div>
+  </form>  
   <script src="scripts/helpers.js"></script>
   <script src="scripts/calendar.js"></script>
   <script src="scripts/canvas.js"></script>
+  <script src="scripts/emma.js"></script>
 </html>
