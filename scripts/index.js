@@ -62,6 +62,7 @@ function addHabit(name, length) {
   let array = userData.habits
   array.push(newHabit)
 
+  // save userData
   // incomplete section!!!
   // create a list element
   const habitListItem = document.createElement('li')
