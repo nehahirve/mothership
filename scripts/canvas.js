@@ -134,10 +134,6 @@ class Alien {
     this.speed = speed
   }
 
-  get name() {
-    return 'Alien'
-  }
-
   changeType(center, type, speed) {
     return new Alien(this.game, center, type, speed)
   }
@@ -158,10 +154,6 @@ class Player {
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
     this.colour = typeLegend[this.type][0]
     this.letters = typeLegend[this.type][2]
-  }
-
-  get name() {
-    return 'Player'
   }
 
   update() {
@@ -219,18 +211,6 @@ class Bullet {
 
 /*
 *********************************
-ON CANVAS LOAD
-*********************************
-*/
-
-resizeCanvas()
-window.addEventListener('resize', resizeCanvas)
-const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
-
-initGame()
-
-/*
-*********************************
 HELPER FUNCTIONS
 *********************************
 */
@@ -245,22 +225,8 @@ function colliding(b1, b2) {
   )
 }
 
-function trackKeys(keysArray) {
-  const down = Object.create(null)
-  function track(e) {
-    if (keysArray.includes(e.key)) {
-      down[e.key] = e.type === 'keydown'
-      e.preventDefault()
-    }
-  }
-  window.addEventListener('keydown', track)
-  window.addEventListener('keyup', track)
-  return down
-}
-
 function resizeCanvas() {
   let scale = window.devicePixelRatio
-  //gameRunning = false
   canvas.width = Math.floor(window.innerWidth * 0.65 * scale)
   canvas.height = Math.floor(window.innerHeight * scale)
   WIDTH = canvas.width
@@ -269,7 +235,6 @@ function resizeCanvas() {
     (main.offsetWidth / 2 - 205 + 14) * scale,
     (window.innerHeight * 0.15 + 32) * scale
   )
-  //gameRunning = true
 }
 
 function drawBody(ctx, body) {
@@ -303,13 +268,12 @@ function drawBody(ctx, body) {
 }
 
 function createAliens(game) {
-  let numberOfAliens = aliens.length
   let newAliens = []
-  let start = new Vec(startPos.x, startPos.y)
+  const start = new Vec(startPos.x, startPos.y)
   let x = start.x
   let type
   let y = start.y - 120
-  for (let i = 0; i < numberOfAliens; i++) {
+  for (let i = 0; i < aliens.length; i++) {
     type = aliens[i]
     if (i % 7 === 0) {
       x = start.x

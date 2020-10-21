@@ -181,7 +181,12 @@ function loadStars() {
   }
 }
 
+const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
+
 function initGame() {
+  resizeCanvas()
+  window.addEventListener('resize', resizeCanvas)
+
   if (document.fonts.check('85px sprites')) {
     main.removeChild(startBtn)
     game = new Game(canvas, ctx)
@@ -208,4 +213,17 @@ function gameOver() {
   gameOver.className = 'game-over'
 
   console.log(main)
+}
+
+function trackKeys(keysArray) {
+  const down = Object.create(null)
+  function track(e) {
+    if (keysArray.includes(e.key)) {
+      down[e.key] = e.type === 'keydown'
+      e.preventDefault()
+    }
+  }
+  window.addEventListener('keydown', track)
+  window.addEventListener('keyup', track)
+  return down
 }
