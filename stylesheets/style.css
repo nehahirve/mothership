@@ -190,7 +190,7 @@ main {
 
 .countdown:focus, .countdown:hover {
     transition: 1s;
-    color: rgba(255, 241, 194, 0.959);
+    color: rgb(255, 241, 194);
     cursor: pointer;
 }
 
@@ -304,4 +304,12 @@ main {
     height: 100%;
   }
   
+  .score {
+    font-size: 2rem;
+    color: rgb(255, 241, 194);
+    z-index: 200;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+  }
   

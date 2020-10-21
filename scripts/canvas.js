@@ -4,7 +4,40 @@ SAMPLE STARTER DATA
 *********************************
 */
 
-let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2]
+const shootSound = document.createElement('audio')
+shootSound.src = 'media/shoot.wav'
+
+let aliens = [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  1,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  3,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  5
+]
 let highScore = 0
 
 /*
@@ -30,6 +63,7 @@ class Vec {
 
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+const score = document.createElement('div')
 let WIDTH, HEIGHT, game
 let gameRunning
 
@@ -40,6 +74,7 @@ GAME CLASSES
 */
 
 let ticker = Date.now()
+let delta = 0
 let alienPicker
 
 function GameOver() {
@@ -57,15 +92,17 @@ class Game {
   }
 
   loop() {
-    if (ticker % 60 === 0) {
+    if (delta % 60 === 0) {
       console.log('looping')
       if (alienPicker) alienPicker = false
       else alienPicker = true
+      self.bodies = self.bodies.filter(body => body.type !== 10)
     }
     self.draw()
     self.update()
     self.bodies.forEach(body => body.update())
-    ticker++
+    delta++
+    ticker = ticker - delta
     if (gameRunning) {
       requestAnimationFrame(self.loop)
     } else console.log('stop')
@@ -77,7 +114,7 @@ class Game {
     }
 
     self.bodies = self.bodies.filter(body => {
-      return notColliding(body)
+      return notColliding(body) || body.type === 10
     })
 
     function notColliding(b1) {
@@ -104,14 +141,17 @@ class Game {
 function initGame() {
   main.removeChild(startBtn)
   game = new Game(canvas, ctx)
+  main.appendChild(score)
+  score.innerText = ` HIGH SCORE : ${highScore}`
+  score.className = 'score'
   //gameRunning = true
-  canvas.style.opacity = 0.5
+  canvas.style.opacity = 1
   setTimeout(function () {
-    if (document.fonts.check('44.5px sprites')) {
+    if (document.fonts.check('80px sprites')) {
       gameRunning = true
       game.loop()
     }
-  }, 1000)
+  }, 500)
 }
 
 function createAliens(game) {
@@ -141,7 +181,8 @@ const typeLegend = {
   2: ['#04a2eb', 50],
   3: ['magenta', 75],
   4: ['white', 100],
-  5: ['pink', 200]
+  5: ['pink', 200],
+  10: ['yellow', 0]
 }
 
 class Alien {
@@ -154,7 +195,7 @@ class Alien {
     this.colour = typeLegend[type][0]
     this.points = typeLegend[type][1]
     this.patrolX = 0
-    this.speed = new Vec(0, 0)
+    this.speed = new Vec(0.5, 0.02)
   }
 
   get name() {
@@ -173,8 +214,8 @@ class Alien {
 class Player {
   constructor(game, gameSize) {
     this.size = { x: 50, y: 50 }
-    this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 2 }
-    this.colour = 'linen'
+    this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
+    this.colour = 'rgb(255, 241, 194)'
   }
 
   get name() {
@@ -189,23 +230,25 @@ class Player {
     }
     if (keyBoard.ArrowUp) {
       let currentBullets = game.bodies.filter(body => body.name === 'Bullet')
-      console.log(ticker % 60 === 0)
-      if (ticker % 1800 === 0 || currentBullets.length === 0) {
+      if (ticker % 1000 === 0 || currentBullets.length === 0) {
         let bullet = new Bullet(
-          new Vec(this.center.x, this.center.y - this.size.y - 10)
+          new Vec(this.center.x, this.center.y - this.size.y - 10),
+          new Vec(0, -7),
+          new Vec(10, 10)
         )
         game.bodies.push(bullet)
+        shootSound.play()
       }
     }
   }
 }
 
 class Bullet {
-  constructor(center, game) {
+  constructor(center, speed, size) {
     this.center = center
-    this.speed = new Vec(0, -7)
-    this.colour = 'blue'
-    this.size = new Vec(10, 10)
+    this.speed = speed
+    this.colour = 'yellow'
+    this.size = size
   }
 
   get name() {
@@ -216,8 +259,12 @@ class Bullet {
     this.center.y += this.speed.y
     let hit = game.bodies.filter(body => colliding(this, body))
     if (hit.length > 0) {
+      console.log(hit[0])
+      hit[0].type = 10
       let points = typeLegend[hit[0].type][1]
+
       highScore += points
+      score.innerText = ` HIGH SCORE : ${highScore}`
       console.log(highScore)
     }
   }
@@ -278,11 +325,9 @@ function resizeCanvas() {
   //gameRunning = true
 }
 
-resizeCanvas()
-
 function drawRect(ctx, body, colour) {
   if (document.fonts.check('100px sprites')) {
-    calendar.style.opacity = 1
+    calendar.style.opacity = 0
     ctx.font = '85px sprites'
     if (body.name === 'Player') {
       ctx.fillStyle = 'black'
@@ -293,7 +338,7 @@ function drawRect(ctx, body, colour) {
         body.size.y
       )
       ctx.fillStyle = colour
-      ctx.font = '90px sprites'
+      ctx.font = '150px sprites'
       let text = 'w'
       ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
     }
@@ -306,7 +351,7 @@ function drawRect(ctx, body, colour) {
         body.size.y
       )
       ctx.fillStyle = 'yellow'
-      ctx.font = '60px sprites'
+      ctx.font = '100px sprites'
       let text = 'y'
       ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
     }

@@ -55,7 +55,10 @@ const alienKeyCodes = {
   0: ['', ''],
   1: ['b', 'c'],
   2: ['d', 'e'],
-  3: ['l', 'm']
+  3: ['l', 'm'],
+  4: ['r', 's'],
+  5: ['f', 'g'],
+  10: ['z', 'z']
 }
 
 // BINARIES
@@ -153,6 +156,8 @@ function completeHabit() {
   } else if (streak > 14) {
     alienType += 1
   } else if (streak > 21) {
+    alienType += 1
+  } else if (streak > 28) {
     alienType += 1
   }
   this.className = `box past alien-${alienType} clicked`
