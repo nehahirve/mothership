@@ -50,12 +50,12 @@ NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
 ********/
 
 main {
-  outline: var(--white) dashed 0px;
-  float: right;
-  width: 65vw;
+  border: var(--white) dashed 2px;
+  width: 64vw;
   height: 100vh;
   font-family: 'sprites';
-  position: relative;
+  position: absolute;
+  right: 0;
 }
 
 #calendar {
