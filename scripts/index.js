@@ -10,10 +10,8 @@ console.log(userData)
 
 function loadUserData() {
   if (localStorage.getItem('locallyStored')) {
-    console.log('data exists')
     userData = JSON.parse(localStorage.getItem('locallyStored'))
   } else {
-    console.log('no data')
     userData = {
       name: 'Tuva',
       highScore: 0,
@@ -22,10 +20,6 @@ function loadUserData() {
     }
   }
 }
-
-// fake user data
-
-//window.addEventListener('beforeunload', saveUserData)
 
 function saveUserData() {
   localStorage.setItem('locallyStored', JSON.stringify(userData))
