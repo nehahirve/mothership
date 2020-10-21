@@ -11,7 +11,7 @@ html, body {
 } 
 
 nav {
-  outline: var(--white) solid 2px;
+  outline: var(--white) solid 0px;
   background: var(--background);
   overflow-y: hidden;
   position: relative;
@@ -29,28 +29,12 @@ header {
   border:crimson 2px dashed;
 }
 
-#habit-list {
-  background-color: aqua;
-  width: 100%;
-  position: absolute;
-  top: 5rem;
-}
-
 #heatmap {
   border:yellow 2px dashed;
   height: 15rem;
   width: 100%;
   position: absolute;
   bottom: 5rem;
-}
-
-#menu-bottom {
-  border:cyan 2px dashed;
-  height: 5rem;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 2rem 0 2rem;
 }
 
 button {
@@ -61,17 +45,12 @@ button {
   background: var(--white)
 }
 
-#plus-icon {
-  padding:4px 0 0 2px;
-  font-size: 2rem;
-}
-
 /********
 NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
 ********/
 
 main {
-  outline: var(--white) dashed 2px;
+  outline: var(--white) dashed 0px;
   float: right;
   width: 65vw;
   height: 100vh;
@@ -295,9 +274,25 @@ main {
     }
   }
 
-  .hidden {
-    display: none;
-  }
+.hidden {
+  display: none;
+}
+
+#menu-bottom {
+  height: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 2rem 0 2rem;
+}
+
+#plus-icon {
+  padding:0px 0 0 2px;
+  font-size: 2.5rem;
+  background: black;
+  color: #FC02EC;
+  animation: infinite pulse 5s ease-in-out;
+}
 
 form {
   display: flex;
@@ -345,7 +340,7 @@ input:focus {
   border: solid  2px #FC02EC;
 }
 
-.save-button, .cancel-button {
+.save-button, .cancel-button, .delete-button {
   display: flex;
   width: auto;
   height: auto;
@@ -357,16 +352,38 @@ input:focus {
   outline: none;
 }
 
-.save-button:active, .cancel-button:active {
+.save-button:active, .cancel-button:active, .delete-button:active, .habit-list-item:active {
   transform: translate(2px, 2px)
 }
-.save-button:hover, .cancel-button:hover {
+.save-button:hover, .cancel-button:hover, .delete-button:hover {
   color: #FC02EC;
 }
 
+#habit-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: black;
+  width: 100%;
+  padding: 20px;
+  position: absolute;
+  top: 5rem;
+}
+
 .habit-list-item {
-  display: block;
-  width: 200px;
-  height: 100px;
-  background-color: white;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px 10px 20px;
+  background-color: black;
+  box-shadow: 2px 2px 0 #FC02EC;
+  border: solid  2px rgba(255, 241, 194, 0.959);
+  border-top: solid  2px #FC02EC;
+  border-left: solid  2px #FC02EC;
+  color: rgba(255, 241, 194, 0.959);
+}
+
+.delete-button  {
+  font-size: 1.5rem;
 }
