@@ -1,50 +1,34 @@
 /*
 *********************************
-SAMPLE STARTER DATA
+DUMMY STARTER DATA
 *********************************
 */
 
-const shootSound = document.createElement('audio')
-shootSound.src = 'media/shoot.wav'
-
-let aliens = [
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  1,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
-  2,
-  3,
-  3,
-  3,
-  3,
-  3,
-  3,
-  3,
-  4,
-  4,
-  4,
-  4,
-  4,
-  4,
-  4,
-  5
-]
+let aliens = [1, 2, 3, 4, 5]
 let highScore = 0
+const typeLegend = {
+  0: ['black', 0, ['']],
+  1: ['rgb(253, 100, 100)', 30, ['b', 'c']],
+  2: ['#04a2eb', 50, ['d', 'e']],
+  3: ['magenta', 75, ['l', 'm']],
+  4: ['white', 100, ['r', 's']],
+  5: ['pink', 200, ['f', 'g']],
+  10: ['yellow', 0, ['z', 'z']],
+  20: ['rgb(255, 241, 194)', 0, ['w', 'w']],
+  30: ['yellow', 0, ['y', 'y']],
+  40: ['yellow', 0, ['y', 'y']]
+}
 
 /*
 *********************************
 HELPER CLASSES & VARIABLES
 *********************************
 */
+const shootSound = document.createElement('audio')
+shootSound.src = 'media/shoot.wav'
+const canvas = document.querySelector('canvas')
+const ctx = canvas.getContext('2d')
+const score = document.createElement('div')
 
 class Vec {
   constructor(x, y) {
@@ -61,26 +45,16 @@ class Vec {
   }
 }
 
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
-const score = document.createElement('div')
-let WIDTH, HEIGHT, game
-let gameRunning
+let WIDTH, HEIGHT, game, self, startPos
+let gameRunning, alienPicker
+let ticker = 0
+let delta = 0
 
 /*
 *********************************
 GAME CLASSES
 *********************************
 */
-
-let ticker = Date.now()
-let delta = 0
-let alienPicker
-
-function GameOver() {
-  gameRunning = false
-  main.remove(canvas)
-}
 
 class Game {
   constructor(canvas, context) {
@@ -92,27 +66,30 @@ class Game {
   }
 
   loop() {
+    // animations
     if (delta % 60 === 0) {
-      console.log('looping')
-      if (alienPicker) alienPicker = false
-      else alienPicker = true
+      alienPicker = alienPicker ? false : true
       self.bodies = self.bodies.filter(body => body.type !== 10)
     }
-    self.draw()
+
     self.update()
+    self.draw()
     self.bodies.forEach(body => body.update())
+
     delta++
-    ticker = ticker - delta
+    ticker += delta
+
     if (gameRunning) {
       requestAnimationFrame(self.loop)
     } else console.log('stop')
   }
 
   update() {
-    for (let body of self.bodies) {
+    // update all bodies
+    for (const body of self.bodies) {
       body.update()
     }
-
+    // filter out colliding bodies
     self.bodies = self.bodies.filter(body => {
       return notColliding(body) || body.type === 10
     })
@@ -124,7 +101,7 @@ class Game {
         }).length === 0
       )
     }
-
+    // filter out bullets out of frame
     self.bodies = self.bodies.filter(body => !(body.center.y < 0))
   }
 
@@ -133,65 +110,20 @@ class Game {
     this.ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
     this.bodies.forEach(body => {
-      drawRect(ctx, body, body.colour)
+      drawBody(ctx, body)
+      //drawRect(ctx, body)
     })
   }
 }
 
-function initGame() {
-  main.removeChild(startBtn)
-  game = new Game(canvas, ctx)
-  main.appendChild(score)
-  score.innerText = ` HIGH SCORE : ${highScore}`
-  score.className = 'score'
-  //gameRunning = true
-  canvas.style.opacity = 1
-  setTimeout(function () {
-    if (document.fonts.check('80px sprites')) {
-      gameRunning = true
-      game.loop()
-    }
-  }, 500)
-}
-
-function createAliens(game) {
-  let numberOfAliens = aliens.length
-  let newAliens = []
-  let start = new Vec(startPos.x, startPos.y)
-  let x = start.x
-  let type
-  let y = start.y - 120
-  for (let i = 0; i < numberOfAliens; i++) {
-    type = aliens[i]
-    if (i % 7 === 0) {
-      x = start.x
-      y += 120
-    } else {
-      x += 120
-    }
-    newAliens.push(new Alien(game, new Vec(x, y), type))
-  }
-  newAliens = newAliens.filter(alien => alien.type !== 0)
-  return newAliens
-}
-
-const typeLegend = {
-  0: ['black', 0],
-  1: ['rgb(253, 100, 100)', 30],
-  2: ['#04a2eb', 50],
-  3: ['magenta', 75],
-  4: ['white', 100],
-  5: ['pink', 200],
-  10: ['yellow', 0]
-}
-
 class Alien {
   constructor(game, center, type) {
-    this.size = { x: 50, y: 50 }
+    this.size = { x: 85, y: 85 }
     this.center = center
     this.game = game
     this.type = type
     this.colour = typeLegend[type][0]
+    this.letters = typeLegend[type][2]
     this.points = typeLegend[type][1]
     this.patrolX = 0
     this.speed = new Vec(0.5, 0.02)
@@ -213,8 +145,10 @@ class Alien {
 class Player {
   constructor(game, gameSize) {
     this.size = { x: 50, y: 50 }
+    this.type = 20
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
-    this.colour = 'rgb(255, 241, 194)'
+    this.colour = typeLegend[this.type][0]
+    this.letters = typeLegend[this.type][2]
   }
 
   get name() {
@@ -223,17 +157,19 @@ class Player {
 
   update() {
     if (keyBoard.ArrowLeft) {
+      // moves left and right
       if (this.center.x > this.size.x / 2) this.center.x -= 2
     } else if (keyBoard.ArrowRight) {
       if (this.center.x < WIDTH - this.size.x / 2) this.center.x += 2
     }
     if (keyBoard.ArrowUp) {
-      let currentBullets = game.bodies.filter(body => body.name === 'Bullet')
+      // shoots a bullet
       if (delta % 60 === 0) {
-        let bullet = new Bullet(
+        const bullet = new Bullet(
           new Vec(this.center.x, this.center.y - this.size.y - 10),
           new Vec(0, -7),
-          new Vec(10, 10)
+          new Vec(10, 10),
+          30
         )
         game.bodies.push(bullet)
         shootSound.play()
@@ -243,11 +179,13 @@ class Player {
 }
 
 class Bullet {
-  constructor(center, speed, size) {
+  constructor(center, speed, size, type) {
     this.center = center
+    this.type = type
     this.speed = speed
-    this.colour = 'yellow'
+    this.colour = typeLegend[type][1]
     this.size = size
+    this.letters = typeLegend[type][2]
   }
 
   get name() {
@@ -256,7 +194,7 @@ class Bullet {
 
   update() {
     this.center.y += this.speed.y
-    let hit = game.bodies.filter(body => colliding(this, body))
+    const hit = game.bodies.filter(body => colliding(this, body))
     if (hit.length > 0) {
       console.log(hit[0])
       hit[0].type = 10
@@ -324,9 +262,37 @@ function resizeCanvas() {
   //gameRunning = true
 }
 
-function drawRect(ctx, body, colour) {
+function drawBody(ctx, body) {
   if (document.fonts.check('100px sprites')) {
-    calendar.style.opacity = 0
+    let bodyType = body.type
+    ctx.fillStyle = 'red'
+    ctx.fillRect(
+      body.center.x - body.size.x / 2,
+      body.center.y - body.size.y / 2,
+      body.size.x,
+      body.size.y
+    )
+
+    ctx.font = '85px sprites'
+    ctx.fillStyle = body.color
+    let text
+    if (alienPicker) text = body.letters[0]
+    else text = body.letters[1]
+    let offset = 0
+    if (bodyType === 2) {
+      offset = 11
+    }
+
+    ctx.fillText(
+      text,
+      offset + body.center.x - body.size.x / 2,
+      body.center.y + 18
+    )
+  }
+}
+
+function drawRect(ctx, body) {
+  if (document.fonts.check('100px sprites')) {
     ctx.font = '85px sprites'
     if (body.name === 'Player') {
       ctx.fillStyle = 'black'
@@ -336,7 +302,7 @@ function drawRect(ctx, body, colour) {
         body.size.x,
         body.size.y
       )
-      ctx.fillStyle = colour
+      ctx.fillStyle = body.colour
       ctx.font = '150px sprites'
       let text = 'w'
       ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
@@ -362,10 +328,10 @@ function drawRect(ctx, body, colour) {
         body.size.x,
         body.size.y
       )
-      ctx.fillStyle = colour
+      ctx.fillStyle = body.colour
       let text
-      if (alienPicker) text = alienKeyCodes[body.type][0]
-      else text = alienKeyCodes[body.type][1]
+      if (alienPicker) text = body.letters[0]
+      else text = body.letters[1]
       let offset = 0
       if (text == 'd' || text == 'e') {
         offset = 11
@@ -377,4 +343,47 @@ function drawRect(ctx, body, colour) {
       )
     }
   }
+}
+
+function initGame() {
+  main.removeChild(startBtn)
+  game = new Game(canvas, ctx)
+  main.appendChild(score)
+  score.innerText = ` HIGH SCORE : ${highScore}`
+  score.className = 'score'
+  //gameRunning = true
+  canvas.style.opacity = 1
+  calendar.style.opacity = 0
+  setTimeout(function () {
+    if (document.fonts.check('80px sprites')) {
+      gameRunning = true
+      game.loop()
+    }
+  }, 500)
+}
+
+function createAliens(game) {
+  let numberOfAliens = aliens.length
+  let newAliens = []
+  let start = new Vec(startPos.x, startPos.y)
+  let x = start.x
+  let type
+  let y = start.y - 120
+  for (let i = 0; i < numberOfAliens; i++) {
+    type = aliens[i]
+    if (i % 7 === 0) {
+      x = start.x
+      y += 120
+    } else {
+      x += 120
+    }
+    newAliens.push(new Alien(game, new Vec(x, y), type))
+  }
+  newAliens = newAliens.filter(alien => alien.type !== 0)
+  return newAliens
+}
+
+function GameOver() {
+  gameRunning = false
+  main.remove(canvas)
 }
