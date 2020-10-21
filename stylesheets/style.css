@@ -316,3 +316,10 @@ form {
   padding: 5px;
   margin: 5px;
 }
+
+.habit-list-item {
+  display: block;
+  width: 200px;
+  height: 100px;
+  background-color: white;
+}
