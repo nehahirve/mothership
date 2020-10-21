@@ -16,7 +16,7 @@ const typeLegend = {
   10: ['yellow', 0, ['z', 'z']],
   20: ['rgb(255, 241, 194)', 0, ['w', 'w']],
   30: ['yellow', 0, ['y', 'y']],
-  40: ['yellow', 0, ['y', 'y']]
+  40: ['red', 0, ['y', 'y']]
 }
 
 /*
@@ -116,7 +116,16 @@ class Game {
 
     this.bodies.forEach(body => {
       drawBody(ctx, body)
-      //drawRect(ctx, body)
+    })
+  }
+
+  aliensBelow(alien) {
+    return this.bodies.filter(body => {
+      return (
+        body instanceof Alien &&
+        body.center.x === alien.center.x &&
+        body.center.y > alien.center.y
+      )
     })
   }
 }
@@ -144,12 +153,21 @@ class Alien {
     }
     this.center = this.center.plus(this.speed)
     this.patrolX += this.speed.x
+    if (game.aliensBelow(this) && Math.random() > 0.9994) {
+      const bullet = new Bullet(
+        new Vec(this.center.x, this.center.y + this.size.y + 100),
+        new Vec(0, 7),
+        new Vec(5, 5),
+        40
+      )
+      game.bodies.push(bullet)
+    }
   }
 }
 
 class Player {
   constructor(game, gameSize) {
-    this.size = { x: 50, y: 50 }
+    this.size = { x: 100, y: 100 }
     this.type = 20
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
     this.colour = typeLegend[this.type][0]
@@ -189,22 +207,22 @@ class Bullet {
     this.letters = typeLegend[type][2]
   }
 
-  get name() {
-    return 'Bullet'
-  }
-
   update() {
     this.center.y += this.speed.y
     let hit = game.bodies.filter(body => colliding(this, body))
 
     if (hit.length > 0) {
-      const points = typeLegend[hit[0].type][1]
-      highScore += points
-      score.innerText = ` HIGH SCORE : ${highScore}`
-      const speed = hit[0].speed
-      const center = hit[0].center
-      hit = hit[0].changeType(center, 10, speed)
-      game.bodies.push(hit)
+      if (hit[0] instanceof Player) {
+        gameOver()
+      } else if (!(hit[0] instanceof Bullet)) {
+        const points = typeLegend[hit[0].type][1]
+        highScore += points
+        score.innerText = ` HIGH SCORE : ${highScore}`
+        const speed = hit[0].speed
+        const center = hit[0].center
+        hit = hit[0].changeType(center, 10, speed)
+        game.bodies.push(hit)
+      }
     }
   }
 }
@@ -239,7 +257,7 @@ function resizeCanvas() {
 
 function drawBody(ctx, body) {
   let bodyType = body.type
-  if (body.name === 'Bullet') {
+  if (body instanceof Bullet) {
     ctx.fillStyle = 'black'
     ctx.fillStyle = body.color
     ctx.font = '100px sprites'
@@ -250,6 +268,7 @@ function drawBody(ctx, body) {
   ctx.font = '85px sprites'
   if (body.type === 20) ctx.font = '150px sprites'
   if (body.type === 30) ctx.font = '100px sprites'
+  if (body.type === 40) ctx.font = '70px sprites'
 
   ctx.fillStyle = body.colour
   let text

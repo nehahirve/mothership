@@ -200,7 +200,7 @@ function initGame() {
       gameRunning = true
       game.loop()
     }
-    window.addEventListener('keydown', gameOver)
+    //window.addEventListener('keydown', gameOver)
   }
 }
 
