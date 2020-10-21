@@ -27,24 +27,20 @@ function saveUserData() {
   localStorage.setItem('userDataJSON', userDataJSON)
 }
 
-// unhide 
-const form = document.querySelector('form');
-let plusIcon = document.getElementById('plus-icon');
-function showForm(){
-    form.classList.remove('hidden')
+// unhide
+const form = document.querySelector('form')
+let plusIcon = document.getElementById('plus-icon')
+function showForm() {
+  form.classList.remove('hidden')
 }
-plusIcon.addEventListener('click', showForm);
+plusIcon.addEventListener('click', showForm)
 
 // cancel button
 let cancelButton = document.querySelector('.cancelButton')
-cancelButton.addEventListener('click', cancelForm);
-function cancelForm(){
+cancelButton.addEventListener('click', cancelForm)
+function cancelForm() {
   console.log('The string should be canceled.')
 
   // add class of 'hidden' to the form
-  form.classList.add("hidden");
-
-
+  form.classList.add('hidden')
 }
-
-
