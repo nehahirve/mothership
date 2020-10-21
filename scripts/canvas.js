@@ -1,13 +1,60 @@
 /*
 *********************************
-DUMMY STARTER DATA
+SAMPLE USER DATA
 *********************************
 */
 
-let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 5]
-let highScore = 0
+const userData = {
+  name: 'Tuva',
+  highScore: 2000,
+  lastLogin: '20-10-05',
+  habits: [
+    {
+      habitName: 'brush teeth',
+      questLength: 31,
+      longestStreak: 10,
+      currentStreak: 10,
+      dateStarted: '20-10-07',
+      lastCompleted: '20-10-21',
+      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2]
+    },
+    {
+      habitName: 'drink vodka',
+      questLength: 50,
+      longestStreak: 7,
+      currentStreak: 1,
+      dateStarted: '20-09-25',
+      lastCompleted: '20-09-30',
+      alienList: [1, 1, 1, 0, 1, 1]
+    },
+    {
+      habitName: 'code',
+      questLength: 14,
+      longestStreak: 14,
+      currentStreak: 14,
+      dateStarted: '20-10-10',
+      lastCompleted: '20-10-20',
+      alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+    }
+  ]
+}
+
+const thisHabit = userData.habits[2]
+
+/*
+*********************************
+CALENDAR CONSTANTS
+*********************************
+*/
+
+const calendar = document.querySelector('#calendar')
+const main = document.querySelector('main')
+const playBtn = document.createElement('button')
+
+let currentHabitDay = 0
+
 const typeLegend = {
-  0: ['black', 0, ['']],
+  0: ['black', 0, ['', '']],
   1: ['rgb(253, 100, 100)', 30, ['b', 'c']],
   2: ['#04a2eb', 50, ['d', 'e']],
   3: ['magenta', 75, ['l', 'm']],
@@ -19,11 +66,120 @@ const typeLegend = {
   40: ['red', 0, ['y', 'y']]
 }
 
+// BINARIES
+let isReadyToPlay
+
 /*
 *********************************
-HELPER CLASSES & VARIABLES
+INIT
 *********************************
 */
+
+loadCalendar(thisHabit)
+
+/*
+*********************************
+MAIN FUNCTIONS
+*********************************
+*/
+function loadCalendar(habit) {
+  // UPDATE USER DATA DEPENDING ON LAST LOGIN
+  loadStars()
+  if (habit.alienList.length !== 0) {
+    fastForwardToToday(habit)
+  }
+
+  // DRAW CALENDAR BUTTONS
+  for (let i = 0; i < habit.questLength; i++) {
+    const box = document.createElement('button')
+    if (i < currentHabitDay) {
+      const alienType = habit.alienList[i]
+      console.log()
+      const text = getRandom(typeLegend[alienType][2])
+      box.className = `box past alien-${alienType}`
+      box.innerText = text
+      calendar.appendChild(box)
+    } else if (i === currentHabitDay) {
+      box.className = 'box current'
+      box.innerText = `${i + 1}`
+      calendar.appendChild(box)
+      box.addEventListener('click', completeHabit.bind(box, habit))
+    } else {
+      box.className = 'box future'
+      box.innerText = `${i + 1}`
+      calendar.appendChild(box)
+    }
+  }
+  // CHECK IF GAME IS READY TO PLAY
+  checkIfQuestComplete(habit)
+}
+
+function fastForwardToToday(habit) {
+  const elapsedDays = getDaysElapsedFromToday(habit.lastCompleted, getToday())
+  if (elapsedDays > 1) {
+    for (let i = 0; i < elapsedDays; i++) {
+      habit.alienList.push(0)
+    }
+    habit.lastCompleted = getToday(-1)
+    habit.currentStreak = 0
+  }
+  currentHabitDay = habit.alienList.length
+}
+
+function checkIfQuestComplete(habit) {
+  const daysRemaining = habit.questLength - currentHabitDay
+  if (daysRemaining === 0) isReadyToPlay = true
+  playBtn.className = 'game-start-button'
+  playBtn.innerText = `READY TO PLAY IN :`
+  playBtn.style.marginTop = '100px'
+
+  const count = document.createElement('div')
+  count.innerText = `${daysRemaining} DAYS`
+  count.className = 'countdown'
+  count.setAttribute('data-text', `${daysRemaining} DAYS`)
+
+  main.appendChild(playBtn)
+  main.appendChild(count)
+  if (isReadyToPlay) {
+    main.removeChild(count)
+    playBtn.innerText = 'PRESS TO PLAY'
+    playBtn.setAttribute('data-text', 'PRESS TO PLAY')
+    playBtn.classList.add('countdown')
+    playBtn.addEventListener('click', initGame.bind(playBtn, habit))
+  }
+}
+
+function completeHabit(habit) {
+  this.removeEventListener('click', completeHabit)
+  const streak = habit.currentStreak
+  let alienType = 1
+  if (streak > 7) {
+    alienType += 1
+  } else if (streak > 14) {
+    alienType += 1
+  } else if (streak > 21) {
+    alienType += 1
+  } else if (streak > 28) {
+    alienType += 1
+  }
+  this.className = `box past alien-${alienType} clicked`
+  this.innerText = getRandom(typeLegend[alienType][2])
+  habit.currentStreak += 1
+  if (habit.currentStreak > habit.longestStreak) {
+    habit.longestStreak = habit.currentStreak
+  }
+  habit.lastCompleted = getToday()
+  habit.alienList.push(alienType)
+}
+
+/*
+*********************************
+GAME CONSTANTS
+*********************************
+*/
+
+const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
+
 const shootSound = document.createElement('audio')
 shootSound.src = 'media/shoot.wav'
 const canvas = document.querySelector('canvas')
@@ -39,16 +195,48 @@ class Vec {
   plus(other) {
     return new Vec(this.x + other.x, this.y + other.y)
   }
-
-  times(factor) {
-    return new Vec(this.x * factor, this.y * factor)
-  }
 }
 
 let WIDTH, HEIGHT, game, self, startPos
-let gameRunning, alienPicker
-let ticker = 0
+let gameRunning, alienPicker, aliens, highScore
 let delta = 0
+
+/*
+*********************************
+MAIN GAME FUNCTIONS
+*********************************
+*/
+
+function initGame(habit) {
+  aliens = habit.alienList
+  highScore = userData.highScore
+  canvas.style.display = 'block'
+  resizeCanvas()
+  window.addEventListener('resize', resizeCanvas)
+
+  if (document.fonts.check('85px sprites')) {
+    main.removeChild(playBtn)
+    game = new Game(canvas, ctx)
+    main.appendChild(score)
+    score.innerText = ` HIGH SCORE : ${highScore}`
+    score.className = 'score'
+    canvas.style.opacity = 1
+    calendar.style.opacity = 0
+    if (document.fonts.check('80px sprites')) {
+      gameRunning = true
+      game.loop()
+    }
+  }
+}
+
+function gameOver() {
+  gameRunning = false
+  canvas.style.display = 'none'
+  const gameOver = document.createElement('div')
+  main.appendChild(gameOver)
+  gameOver.innerText = 'GAME OVER'
+  gameOver.className = 'game-over'
+}
 
 /*
 *********************************
@@ -76,7 +264,6 @@ class Game {
     self.bodies.forEach(body => body.update())
 
     delta++
-    ticker = ticker - delta
 
     if (gameRunning) {
       requestAnimationFrame(self.loop)
@@ -153,7 +340,7 @@ class Alien {
     }
     this.center = this.center.plus(this.speed)
     this.patrolX += this.speed.x
-    if (game.aliensBelow(this) && Math.random() > 0.9994) {
+    if (game.aliensBelow(this) && Math.random() > 0.9996) {
       const bullet = new Bullet(
         new Vec(this.center.x, this.center.y + this.size.y + 100),
         new Vec(0, 7),
@@ -182,8 +369,9 @@ class Player {
       if (this.center.x < WIDTH - this.size.x / 2) this.center.x += 2
     }
     if (keyBoard.ArrowUp) {
+      const currentBullets = game.bodies.filter(body => body instanceof Bullet)
       // shoots a bullet
-      if (delta % 60 === 0) {
+      if (delta % 50 === 0 || currentBullets.length === 0) {
         const bullet = new Bullet(
           new Vec(this.center.x, this.center.y - this.size.y - 10),
           new Vec(0, -7),
@@ -229,19 +417,9 @@ class Bullet {
 
 /*
 *********************************
-HELPER FUNCTIONS
+GAME HELPER FUNCTIONS
 *********************************
 */
-
-function colliding(b1, b2) {
-  return !(
-    b1 === b2 ||
-    b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
-    b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
-    b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
-    b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
-  )
-}
 
 function resizeCanvas() {
   let scale = window.devicePixelRatio
@@ -253,6 +431,26 @@ function resizeCanvas() {
     (main.offsetWidth / 2 - 205 + 14) * scale,
     (window.innerHeight * 0.15 + 32) * scale
   )
+}
+
+function createAliens(game) {
+  let newAliens = []
+  const start = new Vec(startPos.x, startPos.y)
+  let x = start.x
+  let type
+  let y = start.y - 120
+  for (let i = 0; i < aliens.length; i++) {
+    type = aliens[i]
+    if (i % 7 === 0) {
+      x = start.x
+      y += 120
+    } else {
+      x += 120
+    }
+    newAliens.push(new Alien(game, new Vec(x, y), type, new Vec(0.5, 0.04), 0))
+  }
+  newAliens = newAliens.filter(alien => alien.type !== 0)
+  return newAliens
 }
 
 function drawBody(ctx, body) {
@@ -286,22 +484,25 @@ function drawBody(ctx, body) {
   )
 }
 
-function createAliens(game) {
-  let newAliens = []
-  const start = new Vec(startPos.x, startPos.y)
-  let x = start.x
-  let type
-  let y = start.y - 120
-  for (let i = 0; i < aliens.length; i++) {
-    type = aliens[i]
-    if (i % 7 === 0) {
-      x = start.x
-      y += 120
-    } else {
-      x += 120
+function trackKeys(keysArray) {
+  const down = Object.create(null)
+  function track(e) {
+    if (keysArray.includes(e.key)) {
+      down[e.key] = e.type === 'keydown'
+      e.preventDefault()
     }
-    newAliens.push(new Alien(game, new Vec(x, y), type, new Vec(0.5, 0.04), 0))
   }
-  newAliens = newAliens.filter(alien => alien.type !== 0)
-  return newAliens
+  window.addEventListener('keydown', track)
+  window.addEventListener('keyup', track)
+  return down
+}
+
+function colliding(b1, b2) {
+  return !(
+    b1 === b2 ||
+    b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+    b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+    b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+    b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
+  )
 }
