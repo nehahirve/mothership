@@ -5,38 +5,30 @@ var mm = String(today.getMonth() + 1).padStart(2, '0')
 var yyyy = today.getFullYear()
 
 let userData
-
-let userDataJSON
 loadUserData()
+console.log(userData)
 
 function loadUserData() {
-  if (!localStorage.getItem('userDataJSON')) {
+  if (localStorage.getItem('locallyStored')) {
+    console.log('data exists')
+    userData = JSON.parse(localStorage.getItem('locallyStored'))
+  } else {
+    console.log('no data')
     userData = {
       name: 'Tuva',
       highScore: 0,
-      lastLogin: today,
+      lastLogin: getToday(),
       habits: []
     }
-  } else {
-    console.log('hey')
-    userData = JSON.parse(localStorage.getItem('userDataJSON'))
   }
 }
 
 // fake user data
-userData = {
-  name: 'Tuva',
-  highScore: 0,
-  lastLogin: today,
-  habits: []
-}
 
-saveUserData()
-window.addEventListener('beforeunload', saveUserData)
+//window.addEventListener('beforeunload', saveUserData)
 
 function saveUserData() {
-  userDataJSON = JSON.stringify('userData')
-  localStorage.setItem('userDataJSON', userDataJSON)
+  localStorage.setItem('locallyStored', JSON.stringify(userData))
 }
 
 // unhide
@@ -75,7 +67,6 @@ function addHabit(name, length) {
 
   let array = userData.habits
   array.push(newHabit)
-  console.log(userData.habits)
 
   // incomplete section!!!
   // create a list element
