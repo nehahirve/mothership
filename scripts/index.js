@@ -90,15 +90,3 @@ function addHabit(name, length) {
 }
 
 addHabit(name, length)
-
-let habitDiv = document.createElement('li')
-let list = document.querySelector('ul')
-list.appendChild(habitDiv)
-
-habitDiv.innerText = name
-
-let deleteButton = document.createElement('button')
-deleteButton.classList.add('delete-button')
-deleteButton.innerText = 'X'
-habitDiv.appendChild(deleteButton)
-habitDiv.className = 'habit-list-item'
