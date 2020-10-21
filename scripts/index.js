@@ -48,11 +48,12 @@ function showForm() {
 plusIcon.addEventListener('click', showForm)
 
 // cancel button
-let cancelButton = document.querySelector('.cancelButton')
+let cancelButton = document.querySelector('.cancel-button')
 cancelButton.addEventListener('click', cancelForm)
-function cancelForm() {
-  console.log('The string should be canceled.')
 
+function cancelForm(e) {
+  e.preventDefault()
+  console.log('The string should be canceled.')
   // add class of 'hidden' to the form
   form.classList.add('hidden')
 }
