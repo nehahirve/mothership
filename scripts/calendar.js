@@ -182,8 +182,30 @@ function loadStars() {
 }
 
 function initGame() {
-  //calendar.remove()
-  main.removeChild(startBtn)
-  const canvas = document.querySelector('canvas')
-  const ctx = canvas.getContext('2d')
+  if (document.fonts.check('85px sprites')) {
+    main.removeChild(startBtn)
+    game = new Game(canvas, ctx)
+    main.appendChild(score)
+    score.innerText = ` HIGH SCORE : ${highScore}`
+    score.className = 'score'
+    //gameRunning = true
+    canvas.style.opacity = 1
+    calendar.style.opacity = 0
+    if (document.fonts.check('80px sprites')) {
+      gameRunning = true
+      game.loop()
+    }
+    window.addEventListener('keydown', gameOver)
+  }
+}
+
+function gameOver() {
+  gameRunning = false
+  canvas.remove()
+  let gameOver = document.createElement('div')
+  main.appendChild(gameOver)
+  gameOver.innerText = 'GAME OVER '
+  gameOver.className = 'game-over'
+
+  console.log(main)
 }

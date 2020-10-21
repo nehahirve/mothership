@@ -299,7 +299,7 @@ main {
   canvas {
     position: absolute;
     opacity: 0;
-    transition: 0s;
+    transition: 1s;
     width: 100%;
     height: 100%;
   }
@@ -311,5 +311,15 @@ main {
     position: absolute;
     top: 2rem;
     left: 2rem;
+  }
+
+  .game-over {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    font-size: 3rem;
+    background: red;
+    color: rgb(255, 241, 194);
   }
   

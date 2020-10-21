@@ -4,7 +4,7 @@ DUMMY STARTER DATA
 *********************************
 */
 
-let aliens = [1, 2, 3, 4, 5]
+let aliens = [1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 5]
 let highScore = 0
 const typeLegend = {
   0: ['black', 0, ['']],
@@ -68,8 +68,7 @@ class Game {
   loop() {
     // animations
     if (delta % 60 === 0) {
-      alienPicker = alienPicker ? false : true
-      self.bodies = self.bodies.filter(body => body.type !== 10)
+      //alienPicker = alienPicker ? false : true
     }
 
     self.update()
@@ -77,7 +76,7 @@ class Game {
     self.bodies.forEach(body => body.update())
 
     delta++
-    ticker += delta
+    ticker = ticker - delta
 
     if (gameRunning) {
       requestAnimationFrame(self.loop)
@@ -85,6 +84,12 @@ class Game {
   }
 
   update() {
+    if (delta % 60 === 0) {
+      console.log(delta)
+      alienPicker = alienPicker ? false : true
+      self.bodies = self.bodies.filter(body => body.type !== 10)
+    }
+
     // update all bodies
     for (const body of self.bodies) {
       body.update()
@@ -117,20 +122,24 @@ class Game {
 }
 
 class Alien {
-  constructor(game, center, type) {
-    this.size = { x: 85, y: 85 }
+  constructor(game, center, type, speed) {
+    this.size = { x: 80, y: 80 }
     this.center = center
     this.game = game
     this.type = type
-    this.colour = typeLegend[type][0]
-    this.letters = typeLegend[type][2]
-    this.points = typeLegend[type][1]
+    this.colour = typeLegend[this.type][0]
+    this.letters = typeLegend[this.type][2]
+    this.points = typeLegend[this.type][1]
     this.patrolX = 0
-    this.speed = new Vec(0.5, 0.02)
+    this.speed = speed
   }
 
   get name() {
     return 'Alien'
+  }
+
+  changeType(center, type, speed) {
+    return new Alien(this.game, center, type, speed)
   }
 
   update() {
@@ -183,7 +192,7 @@ class Bullet {
     this.center = center
     this.type = type
     this.speed = speed
-    this.colour = typeLegend[type][1]
+    this.colour = typeLegend[type][0]
     this.size = size
     this.letters = typeLegend[type][2]
   }
@@ -194,15 +203,16 @@ class Bullet {
 
   update() {
     this.center.y += this.speed.y
-    const hit = game.bodies.filter(body => colliding(this, body))
-    if (hit.length > 0) {
-      console.log(hit[0])
-      hit[0].type = 10
-      let points = typeLegend[hit[0].type][1]
+    let hit = game.bodies.filter(body => colliding(this, body))
 
+    if (hit.length > 0) {
+      const points = typeLegend[hit[0].type][1]
       highScore += points
       score.innerText = ` HIGH SCORE : ${highScore}`
-      console.log(highScore)
+      const speed = hit[0].speed
+      const center = hit[0].center
+      hit = hit[0].changeType(center, 10, speed)
+      game.bodies.push(hit)
     }
   }
 }
@@ -263,103 +273,33 @@ function resizeCanvas() {
 }
 
 function drawBody(ctx, body) {
-  if (document.fonts.check('100px sprites')) {
-    let bodyType = body.type
-    ctx.fillStyle = 'red'
-    ctx.fillRect(
-      body.center.x - body.size.x / 2,
-      body.center.y - body.size.y / 2,
-      body.size.x,
-      body.size.y
-    )
-
-    ctx.font = '85px sprites'
+  let bodyType = body.type
+  if (body.name === 'Bullet') {
+    ctx.fillStyle = 'black'
     ctx.fillStyle = body.color
-    let text
-    if (alienPicker) text = body.letters[0]
-    else text = body.letters[1]
-    let offset = 0
-    if (bodyType === 2) {
-      offset = 11
-    }
-
-    ctx.fillText(
-      text,
-      offset + body.center.x - body.size.x / 2,
-      body.center.y + 18
-    )
+    ctx.font = '100px sprites'
+    let text = 'y'
+    ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
   }
-}
 
-function drawRect(ctx, body) {
-  if (document.fonts.check('100px sprites')) {
-    ctx.font = '85px sprites'
-    if (body.name === 'Player') {
-      ctx.fillStyle = 'black'
-      ctx.fillRect(
-        body.center.x - body.size.x / 2,
-        body.center.y - body.size.y / 2,
-        body.size.x,
-        body.size.y
-      )
-      ctx.fillStyle = body.colour
-      ctx.font = '150px sprites'
-      let text = 'w'
-      ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
-    }
-    if (body.name === 'Bullet') {
-      ctx.fillStyle = 'black'
-      ctx.fillRect(
-        body.center.x - body.size.x / 2,
-        body.center.y - body.size.y / 2,
-        body.size.x,
-        body.size.y
-      )
-      ctx.fillStyle = 'yellow'
-      ctx.font = '100px sprites'
-      let text = 'y'
-      ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
-    }
-    if (body.type) {
-      ctx.fillStyle = 'black'
-      ctx.fillRect(
-        body.center.x - body.size.x / 2,
-        body.center.y - body.size.y / 2,
-        body.size.x,
-        body.size.y
-      )
-      ctx.fillStyle = body.colour
-      let text
-      if (alienPicker) text = body.letters[0]
-      else text = body.letters[1]
-      let offset = 0
-      if (text == 'd' || text == 'e') {
-        offset = 11
-      }
-      ctx.fillText(
-        text,
-        offset + body.center.x - body.size.x / 2,
-        body.center.y + 18
-      )
-    }
+  ctx.font = '85px sprites'
+  if (body.type === 20) ctx.font = '150px sprites'
+  if (body.type === 30) ctx.font = '100px sprites'
+
+  ctx.fillStyle = body.colour
+  let text
+  if (alienPicker) text = body.letters[0]
+  else text = body.letters[1]
+  let offset = 0
+  if (bodyType === 2) {
+    offset = 11
   }
-}
 
-function initGame() {
-  main.removeChild(startBtn)
-  game = new Game(canvas, ctx)
-  main.appendChild(score)
-  score.innerText = ` HIGH SCORE : ${highScore}`
-  score.className = 'score'
-  //gameRunning = true
-  canvas.style.opacity = 1
-  calendar.style.opacity = 0
-  setTimeout(function () {
-    if (document.fonts.check('80px sprites')) {
-      gameRunning = true
-      game.loop()
-    }
-  }, 500)
+  ctx.fillText(
+    text,
+    offset + body.center.x - body.size.x / 2,
+    body.center.y + 18
+  )
 }
 
 function createAliens(game) {
@@ -377,13 +317,8 @@ function createAliens(game) {
     } else {
       x += 120
     }
-    newAliens.push(new Alien(game, new Vec(x, y), type))
+    newAliens.push(new Alien(game, new Vec(x, y), type, new Vec(0.5, 0.04), 0))
   }
   newAliens = newAliens.filter(alien => alien.type !== 0)
   return newAliens
-}
-
-function GameOver() {
-  gameRunning = false
-  main.remove(canvas)
 }
