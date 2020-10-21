@@ -39,7 +39,7 @@ const userData = {
   ]
 }
 
-const thisHabit = userData.habits[2]
+const thisHabit = userData.habits[0]
 
 /*
 *********************************
@@ -55,7 +55,7 @@ let currentHabitDay = 0
 
 const typeLegend = {
   0: ['black', 0, ['', '']],
-  1: ['rgb(253, 100, 100)', 30, ['b', 'c']],
+  1: ['#FF32A9', 30, ['b', 'c']],
   2: ['#04a2eb', 50, ['d', 'e']],
   3: ['magenta', 75, ['l', 'm']],
   4: ['white', 100, ['r', 's']],
@@ -90,11 +90,13 @@ function loadCalendar(habit) {
   }
 
   // DRAW CALENDAR BUTTONS
+  if (Array.from(calendar.children).length > 0) {
+    calendar.innerHTML = ''
+  }
   for (let i = 0; i < habit.questLength; i++) {
     const box = document.createElement('button')
     if (i < currentHabitDay) {
       const alienType = habit.alienList[i]
-      console.log()
       const text = getRandom(typeLegend[alienType][2])
       box.className = `box past alien-${alienType}`
       box.innerText = text
@@ -254,25 +256,19 @@ class Game {
   }
 
   loop() {
-    // animations
-    if (delta % 60 === 0) {
-      //alienPicker = alienPicker ? false : true
-    }
-
     self.update()
     self.draw()
     self.bodies.forEach(body => body.update())
-
     delta++
 
     if (gameRunning) {
       requestAnimationFrame(self.loop)
-    } else console.log('stop')
+    }
   }
 
   update() {
+    // animations
     if (delta % 60 === 0) {
-      console.log(delta)
       alienPicker = alienPicker ? false : true
       self.bodies = self.bodies.filter(body => body.type !== 10)
     }
