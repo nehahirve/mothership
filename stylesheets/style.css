@@ -301,9 +301,10 @@ main {
 
 form {
   display: flex;
-  position: fixed;
-  width: 400px;
-  height: 300px;
+  margin: auto;
+  margin-top: 15vh;
+  width: 410px;
+  height: 50vh;
   background-color: forestgreen;
   margin: 10px;
   padding: 15px;
