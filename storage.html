@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-    <title>Local Storage Test</title>
+
+<head>
+    <title>Onload Event Test</title>
     <meta charset="UTF-8">
     <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
+    <script>
 
-    <div class="npt-container">
-        <h1>user name</h1>
-        <input type="text" id="userinput">
-    </div>
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
 
-    <div class="user">
-    </div>
+        window.addEventListener('DOMContentLoaded', loadUserData);
+
+        let userData = {
+            name: 'Tuva',
+            highScore: 0,
+            lastLogin: today,
+            habits: []
+        };
+
+        function saveToStorage(userData) {
+            let loadUserData;
+            if (localStorage.getItem('loadUserData') === null) {
+                loadUserData = [];
+            } else {
+                listItem = JSON.parse(localStorage.getItem('laodUserData'));
+            }
+        }
 
 
-    <script src="./storage.js"></script>
+        function loadUserData() {
+            let userData;
+            if (localStorage.getItem('userData') === null) {
+                userData = [];
+            } else {
+                userData = JSON.stringify(localStorage.getItem('userData'));
+            }
+        }
 
+    </script>
 </body>
 
 </html>
