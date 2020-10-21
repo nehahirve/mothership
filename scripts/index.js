@@ -44,3 +44,7 @@ function cancelForm() {
   // add class of 'hidden' to the form
   form.classList.add('hidden')
 }
+
+// DUMMY DATA TEMPORARY
+let habitName = 'brush teeth'
+let length = 30
