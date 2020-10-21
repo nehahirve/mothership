@@ -27,3 +27,10 @@ function saveUserData() {
   localStorage.setItem('userDataJSON', userDataJSON)
 }
 
+// unhide 
+const form = document.querySelector('form');
+let plusIcon = document.getElementById('plus-icon');
+function showForm(){
+    form.classList.remove('hidden')
+}
+plusIcon.addEventListener('click', showForm);
