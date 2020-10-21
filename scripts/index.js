@@ -4,11 +4,13 @@ var dd = String(today.getDate()).padStart(2, '0')
 var mm = String(today.getMonth() + 1).padStart(2, '0')
 var yyyy = today.getFullYear()
 
-let userData, userDataJSON
+let userData = {}
+let userDataJSON
 loadUserData()
 
 function loadUserData() {
-  if (localStorage.getItem('userDataJSON') === null) {
+  if (!localStorage.getItem('userDataJSON')) {
+    console.log('doesnt exist')
     userData = {
       name: 'Tuva',
       highScore: 0,
@@ -20,6 +22,7 @@ function loadUserData() {
   }
 }
 
+saveUserData()
 window.addEventListener('beforeunload', saveUserData)
 
 function saveUserData() {
