@@ -191,7 +191,6 @@ class Alien {
     this.center = center
     this.game = game
     this.type = type
-
     this.colour = typeLegend[type][0]
     this.points = typeLegend[type][1]
     this.patrolX = 0
@@ -230,7 +229,7 @@ class Player {
     }
     if (keyBoard.ArrowUp) {
       let currentBullets = game.bodies.filter(body => body.name === 'Bullet')
-      if (ticker % 1000 === 0 || currentBullets.length === 0) {
+      if (delta % 60 === 0) {
         let bullet = new Bullet(
           new Vec(this.center.x, this.center.y - this.size.y - 10),
           new Vec(0, -7),
