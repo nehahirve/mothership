@@ -1,4 +1,4 @@
- // window will load
+// window will load
 var today = new Date()
 var dd = String(today.getDate()).padStart(2, '0')
 var mm = String(today.getMonth() + 1).padStart(2, '0')
@@ -17,9 +17,37 @@ function loadUserData() {
   } else {
     userData = {
       name: 'Tuva',
-      highScore: 0,
-      lastLogin: getToday(),
-      habits: []
+      highScore: 2000,
+      lastLogin: '20-10-05',
+      habits: [
+        {
+          habitName: 'brush teeth',
+          questLength: 31,
+          longestStreak: 10,
+          currentStreak: 10,
+          dateStarted: '20-10-07',
+          lastCompleted: '20-10-21',
+          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2]
+        },
+        {
+          habitName: 'drink vodka',
+          questLength: 50,
+          longestStreak: 7,
+          currentStreak: 1,
+          dateStarted: '20-09-25',
+          lastCompleted: '20-09-30',
+          alienList: [1, 1, 1, 0, 1, 1]
+        },
+        {
+          habitName: 'code',
+          questLength: 14,
+          longestStreak: 14,
+          currentStreak: 14,
+          dateStarted: '20-10-10',
+          lastCompleted: '20-10-20',
+          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+        }
+      ]
     }
   }
 }
@@ -49,10 +77,10 @@ function cancelForm(e) {
 }
 
 // DUMMY DATA TEMPORARY
-let name = 'code'
+let name = 'go to bed early'
 let length = 30
 
-let habitList = document.querySelector('ul');
+let habitList = document.querySelector('ul')
 
 function addHabit(name, length) {
   // create a habit object
@@ -72,8 +100,8 @@ function addHabit(name, length) {
   habitList.appendChild(habitListItem)
   habitListItem.innerText = name
   const deleteButton = document.createElement('button')
-  deleteButton.classList.add('delete-button');
-  deleteButton.innerText = 'X';
+  deleteButton.classList.add('delete-button')
+  deleteButton.innerText = 'X'
   habitListItem.appendChild(deleteButton)
   habitListItem.classList.add('habit-list-item')
   deleteButton.addEventListener('click', deleteHabit.bind(deleteButton, name)) // don't worry about this line
@@ -92,5 +120,3 @@ function addHabit(name, length) {
 }
 
 addHabit(name, length)
-
-
