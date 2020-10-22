@@ -1,4 +1,4 @@
-// window will load
+ // window will load
 var today = new Date()
 var dd = String(today.getDate()).padStart(2, '0')
 var mm = String(today.getMonth() + 1).padStart(2, '0')
@@ -6,7 +6,6 @@ var yyyy = today.getFullYear()
 
 let userData
 loadUserData()
-console.log(userData)
 let main = document.querySelector('main')
 let nav = document.querySelector('nav')
 loadStars(nav)
@@ -77,7 +76,21 @@ function addHabit(name, length) {
   deleteButton.innerText = 'X';
   habitListItem.appendChild(deleteButton)
   habitListItem.classList.add('habit-list-item')
+  deleteButton.addEventListener('click', deleteHabit.bind(deleteButton, name)) // don't worry about this line
+
+  function deleteHabit(name) {
+    habitListItem.remove()
+    let array = userData.habits
+    let newArray = []
+    for (let item of array) {
+      if (item.habitName !== name) {
+        newArray.push(item)
+      }
+    }
+    userData.habits = newArray
+  }
 }
 
 addHabit(name, length)
+
 
