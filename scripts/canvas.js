@@ -35,11 +35,20 @@ const userData = {
       dateStarted: '20-10-10',
       lastCompleted: '20-10-20',
       alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+    },
+    {
+      habitName: 'code',
+      questLength: 14,
+      longestStreak: 14,
+      currentStreak: 14,
+      dateStarted: '20-10-10',
+      lastCompleted: '20-10-20',
+      alienList: [1, 2, 2, 3, 3, 4, 5, 1, 2, 2, 3, 3, 4, 5]
     }
   ]
 }
 
-const thisHabit = userData.habits[0]
+const thisHabit = userData.habits[3]
 
 /*
 *********************************
@@ -56,15 +65,15 @@ let currentHabitDay = 0
 const typeLegend = {
   0: ['black', 0, ['', '']],
   1: ['#FF32A9', 30, ['b', 'c']],
-  2: ['#04a2eb', 50, ['d', 'e']],
-  3: ['magenta', 75, ['l', 'm']],
-  4: ['white', 100, ['r', 's']],
-  5: ['pink', 200, ['f', 'g']],
-  10: ['yellow', 0, ['z', 'z']],
-  20: ['rgb(255, 241, 194)', 0, ['w', 'w']],
-  25: ['rgb(255, 241, 194)', 0, ['x', 'x']],
-  30: ['yellow', 0, ['y', 'y']],
-  40: ['red', 0, ['y', 'y']]
+  2: ['#07E8E8', 50, ['d', 'e']],
+  3: ['#FF9526', 75, ['l', 'm']],
+  4: ['#6030f0', 100, ['r', 's']],
+  5: ['#c048ff', 200, ['f', 'g']],
+  10: ['#F9FE0E', 0, ['z', 'z']],
+  20: ['#fff1c2', 0, ['w', 'w']],
+  25: ['#fff1c2', 0, ['x', 'x']],
+  30: ['#F9FE0E', 0, ['y', 'y']],
+  40: ['#EF4423', 0, ['y', 'y']]
 }
 
 // BINARIES
@@ -185,6 +194,8 @@ const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
 
 const shootSound = document.createElement('audio')
 shootSound.src = 'media/shoot.wav'
+const deathSound = document.createElement('audio')
+deathSound.src = 'media/death.wav'
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 const score = document.createElement('div')
@@ -221,7 +232,7 @@ function initGame(habit) {
     main.removeChild(playBtn)
     game = new Game(canvas, ctx)
     main.appendChild(score)
-    score.innerText = ` HIGH SCORE : ${highScore}`
+    score.innerText = ` HI-SCORE < ${highScore} >`
     score.className = 'score'
     canvas.style.opacity = 1
     calendar.style.opacity = 0
@@ -276,7 +287,9 @@ class Game {
       )
     }
 
-    if (self.bodies.filter(body => body instanceof Player).length === 0) {
+    const remainingAliens = self.bodies.filter(body => body instanceof Alien)
+    const player = self.bodies.filter(body => body instanceof Player)
+    if (remainingAliens.length === 0 || player.length === 0) {
       gameOver()
     }
 
@@ -402,10 +415,11 @@ class Bullet {
       if (hit[0] instanceof Player) {
         hit[0].type = 25
         hit[0].letters = ['x', 'x']
+        deathSound.play()
       } else if (!(hit[0] instanceof Bullet)) {
         const points = typeLegend[hit[0].type][1]
         highScore += points
-        score.innerText = ` HIGH SCORE : ${highScore}`
+        score.innerText = ` HI-SCORE < ${highScore} >`
         hit[0].type = 10
         hit[0].colour = 'yellow'
         hit[0].letters = ['z', 'z']
@@ -446,7 +460,7 @@ function createAliens(game) {
     } else {
       x += 120
     }
-    newAliens.push(new Alien(game, new Vec(x, y), type, new Vec(0.5, 0.04), 0))
+    newAliens.push(new Alien(game, new Vec(x, y), type, new Vec(0.5, 0.05), 0))
   }
   newAliens = newAliens.filter(alien => alien.type !== 0)
   return newAliens

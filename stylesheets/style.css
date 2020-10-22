@@ -7,9 +7,9 @@ html, body {
   --white: linen;
   --alien-one: #FF32A9;
   --alien-two: #07E8E8;
-  --alien-three: #a204eb;
-  --alien-four: #a204eb;
-  --alien-five: #a204eb;
+  --alien-three: #c048ff;
+  --alien-four: #60ffc0;
+  --alien-five: #6030f0;
   background: var(--background);
 } 
 
