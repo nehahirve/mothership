@@ -50,7 +50,7 @@ NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
 ********/
 
 main {
-  border: var(--white) dashed 2px;
+  border: var(--white) dashed 0px;
   width: 64vw;
   height: 100vh;
   font-family: 'sprites';
@@ -334,7 +334,7 @@ form {
   border-top: solid  2px #FC02EC;
   border-left: solid  2px #FC02EC;
   box-shadow: 10px 10px 0 #FC02EC;
-  background: none;
+  background: black;
 }
 
 

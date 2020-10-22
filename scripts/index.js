@@ -7,6 +7,10 @@ var yyyy = today.getFullYear()
 let userData
 loadUserData()
 console.log(userData)
+let main = document.querySelector('main')
+let nav = document.querySelector('nav')
+loadStars(nav)
+loadStars(main)
 
 function loadUserData() {
   if (localStorage.getItem('locallyStored')) {
