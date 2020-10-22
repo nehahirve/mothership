@@ -31,6 +31,7 @@ function saveUserData() {
 
 // unhide
 const form = document.querySelector('form')
+
 let plusIcon = document.getElementById('plus-icon')
 function showForm() {
   form.classList.remove('hidden')
@@ -49,8 +50,10 @@ function cancelForm(e) {
 }
 
 // DUMMY DATA TEMPORARY
-let name = 'brush teeth'
+let name = 'code'
 let length = 30
+
+let habitList = document.querySelector('ul');
 
 function addHabit(name, length) {
   // create a habit object
@@ -66,17 +69,15 @@ function addHabit(name, length) {
   let array = userData.habits
   array.push(newHabit)
 
-  // save userData
-  // incomplete section!!!
-  // create a list element
   const habitListItem = document.createElement('li')
-  // create a button element
+  habitList.appendChild(habitListItem)
+  habitListItem.innerText = name
   const deleteButton = document.createElement('button')
-  // add the button element inside the list element
-  // give list element a class
-  // set the text of the list element to the habit name
-  // give the button elememt a class
-  // add the list elemen to the <ul> element
+  deleteButton.classList.add('delete-button');
+  deleteButton.innerText = 'X';
+  habitListItem.appendChild(deleteButton)
+  habitListItem.classList.add('habit-list-item')
 }
 
 addHabit(name, length)
+

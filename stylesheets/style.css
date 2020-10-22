@@ -407,6 +407,7 @@ input:focus {
 
 .delete-button  {
   font-size: 1.5rem;
+  background: 'yellow'
 }
 
 .save-button:active, .cancel-button:active, .delete-button:active, .habit-list-item:active {
