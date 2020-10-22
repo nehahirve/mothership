@@ -33,3 +33,17 @@ function getDaysElapsedFromToday(date, today) {
 function getRandom(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
+
+/*
+  This function loads a starfield
+*/
+
+function loadStars(element) {
+  for (let i = 0; i < 2; i++) {
+    const star = document.createElement('div')
+    star.className = `star${i + 1}`
+    star.style.position = 'absolute'
+    star.style.top = '0'
+    element.appendChild(star)
+  }
+}
