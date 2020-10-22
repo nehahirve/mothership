@@ -82,33 +82,29 @@ let length = 30
 
 let habitList = document.querySelector('ul')
 
-function addHabit(name, length) {
-  // create a habit object
-  let newHabit = {
-    habitName: name,
-    questLength: length,
-    longestStreak: 0,
-    currentStreak: 0,
-    dateStarted: getToday(),
-    alienList: []
+
+
+
+console.log(userData.habits)
+
+
+
+function loadExistingHabits () {
+  for (let item of userData.habits) {
+    console.log(item.habitName)
+    addHabitToPage(item.habitName)
   }
+}
 
+loadExistingHabits()
+
+
+
+
+
+
+function deleteHabitFromData(name) {
   let array = userData.habits
-  array.push(newHabit)
-
-  const habitListItem = document.createElement('li')
-  habitList.appendChild(habitListItem)
-  habitListItem.innerText = name
-  const deleteButton = document.createElement('button')
-  deleteButton.classList.add('delete-button')
-  deleteButton.innerText = 'X'
-  habitListItem.appendChild(deleteButton)
-  habitListItem.classList.add('habit-list-item')
-  deleteButton.addEventListener('click', deleteHabit.bind(deleteButton, name)) // don't worry about this line
-
-  function deleteHabit(name) {
-    habitListItem.remove()
-    let array = userData.habits
     let newArray = []
     for (let item of array) {
       if (item.habitName !== name) {
@@ -117,6 +113,37 @@ function addHabit(name, length) {
     }
     userData.habits = newArray
   }
+
+
+
+
+function addHabitToPage(name) {
+  const habitListItem = document.createElement('li')
+  habitList.appendChild(habitListItem)
+  habitListItem.innerText = name
+  const deleteButton = document.createElement('button')
+  deleteButton.classList.add('delete-button')
+  deleteButton.innerText = 'X'
+  habitListItem.appendChild(deleteButton)
+  habitListItem.classList.add('habit-list-item')
+  deleteButton.addEventListener('click', deleteHabitFromPage.bind(deleteButton, name))
 }
 
-addHabit(name, length)
+function deleteHabitFromPage(name) {
+  this.parentNode.remove()
+  deleteHabitFromData(name)
+  console.log(userData.habits)
+}
+
+function addHabitToData(name, length) {
+  let newHabit = {
+    habitName: name,
+    questLength: length,
+    longestStreak: 0,
+    currentStreak: 0,
+    dateStarted: getToday(),
+    alienList: []
+  }
+  let array = userData.habits
+  array.push(newHabit)
+}
