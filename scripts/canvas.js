@@ -62,6 +62,7 @@ const typeLegend = {
   5: ['pink', 200, ['f', 'g']],
   10: ['yellow', 0, ['z', 'z']],
   20: ['rgb(255, 241, 194)', 0, ['w', 'w']],
+  25: ['rgb(255, 241, 194)', 0, ['x', 'x']],
   30: ['yellow', 0, ['y', 'y']],
   40: ['red', 0, ['y', 'y']]
 }
@@ -142,7 +143,7 @@ function checkIfQuestComplete(habit) {
 
   main.appendChild(playBtn)
   main.appendChild(count)
-  if (isReadyToPlay) {
+  if (!isReadyToPlay) {
     main.removeChild(count)
     playBtn.innerText = 'PRESS TO PLAY'
     playBtn.setAttribute('data-text', 'PRESS TO PLAY')
@@ -268,9 +269,15 @@ class Game {
 
   update() {
     // animations
-    if (delta % 60 === 0) {
+    if (delta % 80 === 0) {
       alienPicker = alienPicker ? false : true
-      self.bodies = self.bodies.filter(body => body.type !== 10)
+      self.bodies = self.bodies.filter(
+        body => body.type !== 10 && body.type !== 25
+      )
+    }
+
+    if (self.bodies.filter(body => body instanceof Player).length === 0) {
+      gameOver()
     }
 
     // update all bodies
@@ -279,7 +286,7 @@ class Game {
     }
     // filter out colliding bodies
     self.bodies = self.bodies.filter(body => {
-      return notColliding(body) || body.type === 10
+      return notColliding(body) || body.type === 10 || body.type === 25
     })
 
     function notColliding(b1) {
@@ -324,10 +331,6 @@ class Alien {
     this.points = typeLegend[this.type][1]
     this.patrolX = 0
     this.speed = speed
-  }
-
-  changeType(center, type, speed) {
-    return new Alien(this.game, center, type, speed)
   }
 
   update() {
@@ -397,15 +400,15 @@ class Bullet {
 
     if (hit.length > 0) {
       if (hit[0] instanceof Player) {
-        gameOver()
+        hit[0].type = 25
+        hit[0].letters = ['x', 'x']
       } else if (!(hit[0] instanceof Bullet)) {
         const points = typeLegend[hit[0].type][1]
         highScore += points
         score.innerText = ` HIGH SCORE : ${highScore}`
-        const speed = hit[0].speed
-        const center = hit[0].center
-        hit = hit[0].changeType(center, 10, speed)
-        game.bodies.push(hit)
+        hit[0].type = 10
+        hit[0].colour = 'yellow'
+        hit[0].letters = ['z', 'z']
       }
     }
   }
