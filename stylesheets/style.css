@@ -414,6 +414,7 @@ input:focus {
   border-top: solid  2px #FC02EC;
   border-left: solid  2px #FC02EC;
   color: rgba(255, 241, 194, 0.959);
+  margin-bottom: 20px;
 }
 
 .delete-button  {
