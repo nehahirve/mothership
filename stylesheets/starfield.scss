@@ -1,0 +1,67 @@
+$star-colour: rgba(255, 241, 194, 0.959);
+
+// n is number of stars required
+@function multiple-box-shadow ($n) {
+  $value: '#{random(2000)}px #{random(2000)}px #{$star-colour}';
+  @for $i from 2 through $n {
+    $value: '#{$value} , #{random(2000)}px #{random(2000)}px #{$star-colour}';
+  }
+  @return unquote($value)
+}
+
+$shadows-small:  multiple-box-shadow(700);
+$shadows-big:    multiple-box-shadow(100);
+
+main, body {
+  background: black;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+} 
+
+
+.star1 {
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  box-shadow: $shadows-small;
+  animation: animStar 300s linear infinite;
+  &::after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $shadows-small;
+  }
+}
+
+.star2 {
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  box-shadow: $shadows-big;
+  animation: animStar 200s linear infinite;
+  &::after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 4px;
+    height: 4px;
+    background: transparent;
+    box-shadow: $shadows-big;
+  }
+}
+   
+@keyframes animStar {
+  from {
+    transform: translateY(0px);
+  }	
+  to {
+
+    transform: translateY(-2000px);
+  }		
+}
+
+    
