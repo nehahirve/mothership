@@ -47,6 +47,3 @@ function loadStars(element) {
     element.appendChild(star)
   }
 }
-
-const main = document.querySelector('main')
-loadStars(main)
