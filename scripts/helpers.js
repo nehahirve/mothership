@@ -38,7 +38,6 @@ function getRandom(array) {
   This function loads a starfield
 */
 
-
 function loadStars(element) {
   for (let i = 0; i < 2; i++) {
     const star = document.createElement('div')
@@ -46,6 +45,8 @@ function loadStars(element) {
     star.style.position = 'absolute'
     star.style.top = '0'
     element.appendChild(star)
-
   }
 }
+
+const main = document.querySelector('main')
+loadStars(main)
