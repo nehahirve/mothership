@@ -1,4 +1,9 @@
 // window will load
+
+function noenter() {
+  return !(window.event && window.event.keyCode == 13)
+}
+
 var today = new Date()
 var dd = String(today.getDate()).padStart(2, '0')
 var mm = String(today.getMonth() + 1).padStart(2, '0')
@@ -52,23 +57,40 @@ function loadUserData() {
   }
 }
 
-const splash = document.querySelector('#splash')
-
 function saveUserData() {
   localStorage.setItem('locallyStored', JSON.stringify(userData))
 }
 
-// unhide
+// GRAB THE IMPORTANT ELEMENTS FROM THE HTML PAGE
+const splash = document.querySelector('#splash')
 const form = document.querySelector('form')
+const plusIcon = document.getElementById('plus-icon')
+const cancelButton = document.querySelector('.cancel-button')
+const habitList = document.querySelector('ul')
+const saveButton = document.querySelector('.save-button')
+const nameInput = document.querySelector('#input-name')
+const lengthInput = document.querySelector('#input-length')
 
-let plusIcon = document.getElementById('plus-icon')
+// LOAD THE PRE EXISTING HABITS
+
+loadExistingHabits()
+
+function loadExistingHabits() {
+  for (let item of userData.habits) {
+    console.log(item.habitName)
+    addHabitToPage(item.habitName)
+  }
+}
+
+
+// OPEN THE FORM WHEN PLUS ICON IS CLICKED
+plusIcon.addEventListener('click', showForm)
+
 function showForm() {
   form.classList.remove('hidden')
 }
-plusIcon.addEventListener('click', showForm)
 
-// cancel button
-let cancelButton = document.querySelector('.cancel-button')
+// CLOSE THE FORM WHEN CANCEL BUTTON IS CLICKED
 cancelButton.addEventListener('click', cancelForm)
 
 function cancelForm(e) {
@@ -78,33 +100,27 @@ function cancelForm(e) {
   form.classList.add('hidden')
 }
 
-// DUMMY DATA TEMPORARY
-let name = 'go to bed early'
-let length = 30
+// SAVE THE FORM INPUT WHEN SAVE IS PRESSED
+form.addEventListener('submit', saveHabitData)
 
-let habitList = document.querySelector('ul')
+let name
+let length
 
-console.log(userData.habits)
-
-function loadExistingHabits() {
-  for (let item of userData.habits) {
-    console.log(item.habitName)
-    addHabitToPage(item.habitName)
+function saveHabitData (e) {
+  e.preventDefault()
+  name = nameInput.value
+  length = lengthInput.value
+  console.log(length, +length)
+  // if nameInput has smth && lengthInput has smth && lenghtInput is a number
+  // only then
+  if (name && +length) {
+    addHabitToPage (name)
+    addHabitToData (name, length)
   }
 }
 
-loadExistingHabits()
 
-function deleteHabitFromData(name) {
-  let array = userData.habits
-  let newArray = []
-  for (let item of array) {
-    if (item.habitName !== name) {
-      newArray.push(item)
-    }
-  }
-  userData.habits = newArray
-}
+// ADD AND DELETE HABITS
 
 function addHabitToPage(name) {
   const habitListItem = document.createElement('li')
@@ -119,13 +135,7 @@ function addHabitToPage(name) {
     'click',
     deleteHabitFromPage.bind(deleteButton, name)
   )
-}
-
-function deleteHabitFromPage(name, e) {
-  e.stopPropagation()
-  this.parentNode.remove()
-  deleteHabitFromData(name)
-  console.log(userData.habits)
+  habitListItem.addEventListener('click', showCalendar.bind(deleteButton, name))
 }
 
 function addHabitToData(name, length) {
@@ -140,6 +150,44 @@ function addHabitToData(name, length) {
   let array = userData.habits
   array.push(newHabit)
 }
+
+function deleteHabitFromPage(name, e) {
+  e.stopPropagation()
+  this.parentNode.remove()
+  deleteHabitFromData(name)
+  console.log(userData.habits)
+}
+
+function deleteHabitFromData(name) {
+  let array = userData.habits
+  let newArray = []
+  for (let item of array) {
+    if (item.habitName !== name) {
+      newArray.push(item)
+    }
+  }
+  userData.habits = newArray
+}
+
+// CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION 
+
+function showCalendar(name) {
+  // INSTRUCIONS
+  console.log(userData.habits)
+
+  let array = userData.habits
+  // access the userData.habits array
+  for (let item of array) {
+    console.log(item.habitName)
+     // search for the matching name
+    if (name === item.habitName) {
+      // take that habit object, and pass it on to loadcalendar
+      loadCalendar(item)
+    }
+  }
+
+}
+
 
 /*
 *********************************
@@ -191,6 +239,8 @@ INIT
 MAIN FUNCTIONS
 *********************************
 */
+
+
 function loadCalendar(habit) {
   if (!splash.classList.contains('hidden')) {
     splash.style.display = 'none'
