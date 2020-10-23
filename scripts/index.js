@@ -121,7 +121,8 @@ function addHabitToPage(name) {
   )
 }
 
-function deleteHabitFromPage(name) {
+function deleteHabitFromPage(name, e) {
+  e.stopPropagation()
   this.parentNode.remove()
   deleteHabitFromData(name)
   console.log(userData.habits)
@@ -194,6 +195,7 @@ function loadCalendar(habit) {
   if (!splash.classList.contains('hidden')) {
     splash.style.display = 'none'
   }
+
   // UPDATE USER DATA DEPENDING ON LAST LOGIN
   if (habit.alienList.length !== 0) {
     fastForwardToToday(habit)
