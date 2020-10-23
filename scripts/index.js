@@ -119,7 +119,26 @@ function addHabitToPage(name) {
     'click',
     deleteHabitFromPage.bind(deleteButton, name)
   )
+  habitListItem.addEventListener('click', showCalendar.bind(deleteButton, name))
 }
+
+function showCalendar(name) {
+  // INSTRUCIONS
+  console.log(userData.habits)
+
+  let array = userData.habits
+  // access the userData.habits array
+  for (let item of array) {
+    console.log(item.habitName)
+     // search for the matching name
+    if (name === item.habitName) {
+      // take that habit object, and pass it on to loadcalendar
+      loadCalendar(item)
+    }
+  }
+
+}
+
 
 function deleteHabitFromPage(name, e) {
   e.stopPropagation()
@@ -191,6 +210,8 @@ INIT
 MAIN FUNCTIONS
 *********************************
 */
+
+
 function loadCalendar(habit) {
   if (!splash.classList.contains('hidden')) {
     splash.style.display = 'none'
