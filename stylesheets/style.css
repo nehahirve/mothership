@@ -5,8 +5,11 @@ COLOUR PALLETTE
 html, body {
   --background: black;
   --white: linen;
-  --colour-one: hotpink;
-  --colour-two: cyan;
+  --alien-one: #FF32A9;
+  --alien-two: #07E8E8;
+  --alien-three: #c048ff;
+  --alien-four: #60ffc0;
+  --alien-five: #6030f0;
   background: var(--background);
 } 
 
@@ -60,7 +63,8 @@ main {
 
 #calendar {
     display: grid;
-    flex-wrap: wrap;
+    opacity: 1;
+    transition: 0s;
     margin: auto;
     width: 410px;
     margin-top: 15vh;
@@ -94,7 +98,7 @@ main {
     padding: 0.3rem 0 0 0.2rem;
     color: rgba(255, 241, 194, 0.959);
     animation: infinite pulse 5s ease-in-out;
-    text-shadow: 2px 2px 6px rgb(253, 100, 100);
+    text-shadow: 2px 2px 6px #FF32A9;
     cursor: pointer;
 }
 
@@ -125,15 +129,21 @@ main {
 }
 
 .alien-1 {
-    color: rgb(253, 100, 100);
+    color: var(--alien-one);
 }
 
 .alien-2 {
-    color:#04a2eb;
+    color: var(--alien-two);
 }
 
 .alien-3 {
-    color: #a204eb;
+    color:var(--alien-three) ;
+}
+.alien-4 {
+  color:var(--alien-four) ;
+}
+.alien-5 {
+  color:var(--alien-five) ;
 }
 
 .clicked {
@@ -160,7 +170,7 @@ main {
     font-family: 'space_invaders';
     width: 100%;
     display: flex;
-    color: rgb(253, 100, 100);
+    color: #FF32A9;
     justify-content: center;
     text-shadow: 2px 2px 6px #ff00a0;
 }
@@ -168,7 +178,7 @@ main {
 
 .countdown:focus, .countdown:hover {
     transition: 1s;
-    color: rgba(255, 241, 194, 0.959);
+    color: rgb(255, 241, 194);
     cursor: pointer;
 }
 
@@ -273,6 +283,35 @@ main {
       transform: translateY(-2000px);
     }
   }
+
+
+  canvas {
+    position: absolute;
+    opacity: 0;
+    transition: 1s;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .score {
+    font-size: 2rem;
+    color: rgb(255, 241, 194);
+    z-index: 200;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+  }
+
+  .game-over {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    font-size: 3rem;
+    background: red;
+    color: rgb(255, 241, 194);
+  }
+  
 
 .hidden {
   display: none;
@@ -425,3 +464,4 @@ input:focus {
   transition: 0ms;
   box-shadow: 2px 2px 0 #FC02EC;
 }
+
