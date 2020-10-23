@@ -14,7 +14,7 @@ html, body {
 } 
 
 nav {
-  outline: var(--white) solid 2px;
+  outline: var(--white) solid 0px;
   background: var(--background);
   overflow-y: hidden;
   position: relative;
@@ -32,28 +32,12 @@ header {
   border:crimson 2px dashed;
 }
 
-#habit-list {
-  background-color: aqua;
-  width: 100%;
-  position: absolute;
-  top: 5rem;
-}
-
 #heatmap {
   border:yellow 2px dashed;
   height: 15rem;
   width: 100%;
   position: absolute;
   bottom: 5rem;
-}
-
-#menu-bottom {
-  border:cyan 2px dashed;
-  height: 5rem;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 2rem 0 2rem;
 }
 
 button {
@@ -64,22 +48,17 @@ button {
   background: var(--white)
 }
 
-#plus-icon {
-  padding:4px 0 0 2px;
-  font-size: 2rem;
-}
-
 /********
 NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
 ********/
 
 main {
-  outline: var(--white) dashed 2px;
-  float: right;
-  width: 65vw;
+  border: var(--white) dashed 0px;
+  width: 64vw;
   height: 100vh;
   font-family: 'sprites';
-  position: relative;
+  position: absolute;
+  right: 0;
 }
 
 #calendar {
@@ -305,6 +284,7 @@ main {
     }
   }
 
+
   canvas {
     position: absolute;
     opacity: 0;
@@ -332,3 +312,156 @@ main {
     color: rgb(255, 241, 194);
   }
   
+
+.hidden {
+  display: none;
+}
+
+#menu-bottom {
+  height: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 2rem 0 2rem;
+}
+
+#plus-icon {
+  padding:0px 0 0 2px;
+  font-size: 2.5rem;
+  background: black;
+  color: #FC02EC;
+  animation: infinite pulse 5s ease-in-out;
+}
+
+#splash {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  left: 50%;
+  top: 15vh;
+  width: 410px;
+  height: 50vh;
+  transform: translateX(-50%);
+}
+
+
+img {
+  width: 100%;
+}
+
+span {
+  font-size: 2rem;
+  color: rgba(255, 241, 194, 0.959);
+}
+
+form {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  top: 15vh;
+  width: 410px;
+  height: 50vh;
+  transform: translateX(-50%);
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+  padding: 25px;
+  color: rgba(255, 241, 194, 0.959);
+  border: solid  2px rgba(255, 241, 194, 0.959);
+  border-top: solid  2px #FC02EC;
+  border-left: solid  2px #FC02EC;
+  box-shadow: 10px 10px 0 #FC02EC;
+  background: black;
+}
+
+
+
+form h1 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+#form-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+input {
+  font-family: 'space_invaders';
+  background: black;
+  padding-left: 10px;
+  height: 50px;
+  color: rgba(255, 241, 194, 0.959);
+  box-shadow: none;
+  border: solid  2px rgba(255, 241, 194, 0.959);
+}
+
+input:focus {
+  outline: none; 
+  border: solid  2px #FC02EC;
+}
+
+.save-button, .cancel-button, .delete-button {
+  display: flex;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  margin: 5px;
+  background: black;
+  color: rgba(255, 241, 194, 0.959);
+  box-shadow: 2px 2px 0 #FC02EC;
+  outline: none;
+}
+
+
+
+#habit-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: black;
+  width: 100%;
+  padding: 20px;
+  position: absolute;
+  top: 5rem;
+}
+
+.habit-list-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px 10px 20px;
+  background-color: black;
+  box-shadow: 2px 2px 0 #FC02EC;
+  border: solid  2px rgba(255, 241, 194, 0.959);
+  border-top: solid  2px #FC02EC;
+  border-left: solid  2px #FC02EC;
+  color: rgba(255, 241, 194, 0.959);
+}
+
+.delete-button  {
+  font-size: 1.5rem;
+  background: 'yellow'
+}
+
+.save-button:active, .cancel-button:active, .delete-button:active, .habit-list-item:active {
+  transform: translate(2px, 2px);
+  transition: 100ms;
+  box-shadow: 1px 1px 0 #FC02EC; 
+}
+
+.save-button:hover, .cancel-button:hover, .delete-button:hover {
+  color: #FC02EC;
+}
+
+.habit-list-item:focus-within {
+  transform: translate(0px, 0px);
+  transition: 0ms;
+  box-shadow: 2px 2px 0 #FC02EC;
+}
+

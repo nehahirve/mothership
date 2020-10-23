@@ -38,12 +38,14 @@ function getRandom(array) {
   This function loads a starfield
 */
 
-function loadStars() {
+
+function loadStars(element) {
   for (let i = 0; i < 2; i++) {
     const star = document.createElement('div')
     star.className = `star${i + 1}`
     star.style.position = 'absolute'
     star.style.top = '0'
-    main.appendChild(star)
+    element.appendChild(star)
+
   }
 }
