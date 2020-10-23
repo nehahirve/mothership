@@ -94,7 +94,6 @@ MAIN FUNCTIONS
 */
 function loadCalendar(habit) {
   // UPDATE USER DATA DEPENDING ON LAST LOGIN
-  loadStars()
   if (habit.alienList.length !== 0) {
     fastForwardToToday(habit)
   }
