@@ -2,198 +2,191 @@
 COLOUR PALLETTE
 ********/
 
-html, body {
-  --background: black;
-  --white: linen;
-  --alien-one: #FF32A9;
-  --alien-two: #07E8E8;
+html,
+body {
+  --black: #0b0b0b;
+  --white: rgb(255, 241, 194);
+  --alien-one: #ff32a9;
+  --alien-two: #07e8e8;
   --alien-three: #c048ff;
   --alien-four: #60ffc0;
   --alien-five: #6030f0;
-  background: var(--background);
-} 
+  --yellow: yellow;
+  --red: red;
+  background: var(--black);
+}
 
 .hidden {
   display: none;
 }
 
+button {
+  outline: none;
+}
+
+img {
+  width: 100%;
+}
+
 nav {
-  outline: var(--white) solid 0px;
-  background: var(--background);
-  overflow-y: hidden;
+  background: var(--black);
   position: relative;
   float: left;
   width: 35vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 header {
+  color: var(--white);
+  padding-top: 20px;
   width: 100%;
   height: 5rem;
-  border:crimson 2px dashed;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #heatmap {
-  border:yellow 2px dashed;
+  border: white 2px dashed;
   height: 15rem;
   width: 100%;
   position: absolute;
   bottom: 5rem;
 }
 
-button {
-  border: none;
-  outline: none;
-  width: 2rem;
-  height: 2rem;
-  background: var(--white)
-}
-
-/********
-NEHA -- MAKE ALL OTHER CSS CHANGES ABOVE THIS LINE
-********/
-
 main {
-  border: var(--white) dashed 0px;
+  position: absolute;
+  right: 0;
   width: 64vw;
   height: 100vh;
   font-family: 'sprites';
-  position: absolute;
-  right: 0;
 }
 
 #calendar {
-    display: grid;
-    opacity: 1;
-    transition: 0s;
-    margin: auto;
-    width: 410px;
-    margin-top: 15vh;
-    grid-template-columns: repeat(auto-fill, 50px);
-    grid-gap: 10px;
+  display: grid;
+  opacity: 1;
+  margin: auto;
+  width: 410px;
+  margin-top: 15vh;
+  grid-template-columns: repeat(auto-fill, 50px);
+  grid-gap: 10px;
 }
 
 .box {
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: none;
-    width: 50px;
-    height: 50px;
-    
-}
-
-.future {
-    font-family: 'space_invaders';
-    font-size: 1.7rem;
-    color: lightgrey;
-    opacity: 0.2;
-    padding: 0.3rem 0 0 0.2rem;
-}
-
-.current {
-    font-family: 'space_invaders';
-    font-size: 1.7rem;
-    padding: 0.3rem 0 0 0.2rem;
-    color: rgba(255, 241, 194, 0.959);
-    animation: infinite pulse 5s ease-in-out;
-    text-shadow: 2px 2px 6px #FF32A9;
-    cursor: pointer;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(0.95);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-}
-
-@keyframes rainbow {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  width: 50px;
+  height: 50px;
 }
 
 .past {
-    font-family: 'sprites';
-    padding: 0.3rem 0 0 0.3rem;
-    font-size: 2.7rem;
-    background: black;
-    
+  background: var(--black);
+  font-family: 'sprites';
+  padding: 0.3rem 0 0 0.3rem;
+  font-size: 2.7rem;
+}
+
+.future {
+  font-family: 'space_invaders';
+  font-size: 1.7rem;
+  color: var(--white);
+  opacity: 0.2;
+  padding: 0.3rem 0 0 0.2rem;
+}
+
+.current {
+  color: var(--white);
+  font-family: 'space_invaders';
+  font-size: 1.7rem;
+  padding: 0.3rem 0 0 0.2rem;
+  animation: infinite pulse 5s ease-in-out;
+  text-shadow: 2px 2px 6px var(--alien-one);
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.25);
+  }
 }
 
 .alien-1 {
-    color: var(--alien-one);
+  color: var(--alien-one);
 }
 
 .alien-2 {
-    color: var(--alien-two);
+  color: var(--alien-two);
 }
 
 .alien-3 {
-    color:var(--alien-three) ;
+  color: var(--alien-three);
 }
 .alien-4 {
-  color:var(--alien-four) ;
+  color: var(--alien-four);
 }
 .alien-5 {
-  color:var(--alien-five) ;
+  color: var(--alien-five);
 }
 
 .clicked {
-    animation: rainbow 1s ease-in-out;
+  animation: fadeIn 1s ease-in-out;
 }
 
-
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 .game-start-button {
-    outline: none; 
-    border: none;
-    margin: 100px 0 10px 0;
-    width: 100%;
-    background: none;
-    color: rgba(255, 241, 194, 0.959);
-    font-size:  2.6rem;
-    font-family: 'space_invaders';
-    position: relative;
+  border: none;
+  margin: 100px 0 10px 0;
+  width: 100%;
+  background: none;
+  color: var(--white);
+  font-size: 2.6rem;
+  font-family: 'space_invaders';
+  position: relative;
 }
 
 .countdown {
-    position: relative;
-    font-size:  2.6rem;
-    font-family: 'space_invaders';
-    width: 100%;
-    display: flex;
-    color: #FF32A9;
-    justify-content: center;
-    text-shadow: 2px 2px 6px #ff00a0;
+  position: relative;
+  font-size: 2.6rem;
+  font-family: 'space_invaders';
+  width: 100%;
+  display: flex;
+  color: var(--alien-one);
+  justify-content: center;
+  text-shadow: 2px 2px 6px var(--alien-one);
 }
 
-
-.countdown:focus, .countdown:hover {
-    transition: 1s;
-    color: rgb(255, 241, 194);
-    cursor: pointer;
+.countdown:focus,
+.countdown:hover {
+  transition: 1s;
+  color: var(--white);
+  cursor: pointer;
 }
 
-.countdown:hover:before { 
-    opacity: 1;   
-    animation: noise-anim-2 2s infinite linear alternate-reverse;
+.countdown:hover:before {
+  opacity: 1;
+  animation: noise-anim-2 2s infinite linear alternate-reverse;
 }
 
 .countdown:hover:after {
-    opacity: 1;
-    animation: noise-anim-1 2s infinite linear alternate-reverse;
+  opacity: 1;
+  animation: noise-anim-1 2s infinite linear alternate-reverse;
 }
 
 .countdown::before,
@@ -203,93 +196,89 @@ main {
 }
 
 .countdown::before {
-    left: 2px;
-    opacity: 0;
-    transform: translateX(100%);
-    text-shadow: -1px 0 #a204eb;
-    background: black;
+  left: 2px;
+  opacity: 0;
+  transform: translateX(100%);
+  text-shadow: -1px 0 var(--alien-three);
+  background: var(--black);
 }
 
 .countdown::after {
-    text-shadow: -1px 0 #04a2eb;
-    left: -2px;
-    opacity: 0;
-    transform: translateX(-100%);
-    background: black;
-    clip-path: rect(44px, 450px, 56px, 0);
+  text-shadow: -1px 0 var(--alien-two);
+  left: -2px;
+  opacity: 0;
+  transform: translateX(-100%);
+  background: var(--black);
+  clip-path: rect(44px, 450px, 56px, 0);
 }
 
-
 @keyframes noise-anim-1 {
-    0% {
-      clip-path: inset(40% 0 61% 0);
-    }
-    20% {
-      clip-path: inset(92% 0 1% 0);
-    }
-    40% {
-      clip-path: inset(43% 0 1% 0);
-    }
-    60% {
-      clip-path: inset(25% 0 58% 0);
-    }
-    80% {
-      clip-path: inset(54% 0 7% 0);
-    }
-    100% {
-      clip-path: inset(58% 0 43% 0);
-    }
+  0% {
+    clip-path: inset(40% 0 61% 0);
   }
-  @keyframes noise-anim-2 {
-    0% {
-      clip-path: inset(20% 0 41% 0);
-    }
-    20% {
-      clip-path: inset(52% 0 1% 0);
-    }
-    40% {
-      clip-path: inset(47% 0 22% 0);
-    }
-    60% {
-      clip-path: inset(30% 0 88% 0);
-    }
-    80% {
-      clip-path: inset(78% 0 7% 0);
-    }
-    100% {
-      clip-path: inset(29% 0 37% 0);
-    }
+  20% {
+    clip-path: inset(92% 0 1% 0);
   }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+  }
+}
+@keyframes noise-anim-2 {
+  0% {
+    clip-path: inset(20% 0 41% 0);
+  }
+  20% {
+    clip-path: inset(52% 0 1% 0);
+  }
+  40% {
+    clip-path: inset(47% 0 22% 0);
+  }
+  60% {
+    clip-path: inset(30% 0 88% 0);
+  }
+  80% {
+    clip-path: inset(78% 0 7% 0);
+  }
+  100% {
+    clip-path: inset(29% 0 37% 0);
+  }
+}
 
-  canvas {
-    position: absolute;
-    opacity: 0;
-    transition: 1s;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .score {
-    font-size: 2rem;
-    color: rgb(255, 241, 194);
-    z-index: 200;
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-  }
+canvas {
+  position: absolute;
+  opacity: 0;
+  transition: 1s;
+  width: 100%;
+  background: transparent;
+  height: 100%;
+}
 
-  .game-over {
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    text-align: center;
-    font-size: 3rem;
-    background: red;
-    color: rgb(255, 241, 194);
-  }
-  
+.score {
+  font-size: 2rem;
+  color: var(--white);
+  z-index: 200;
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+}
 
-
+.game-over {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  text-align: center;
+  font-size: 3rem;
+  color: var(--white);
+}
 
 #menu-bottom {
   height: 5rem;
@@ -300,11 +289,12 @@ main {
 }
 
 #plus-icon {
-  padding:0px 0 0 2px;
+  padding: 0px 0 0 2px;
   font-size: 2.5rem;
-  background: black;
-  color: #FC02EC;
+  background: var(--black);
+  color: var(--alien-one);
   animation: infinite pulse 5s ease-in-out;
+  cursor: pointer;
 }
 
 #splash {
@@ -320,17 +310,13 @@ main {
   transform: translateX(-50%);
 }
 
-
-img {
-  width: 100%;
-}
-
 span {
   font-size: 2rem;
-  color: rgba(255, 241, 194, 0.959);
+  color: var(--white);
 }
 
 form {
+  z-index: 100;
   display: flex;
   position: absolute;
   left: 50%;
@@ -342,12 +328,12 @@ form {
   justify-content: space-between;
   margin: auto;
   padding: 25px;
-  color: rgba(255, 241, 194, 0.959);
-  border: solid  2px rgba(255, 241, 194, 0.959);
-  border-top: solid  2px #FC02EC;
-  border-left: solid  2px #FC02EC;
-  box-shadow: 10px 10px 0 #FC02EC;
-  background: black;
+  color: var(--white);
+  border: solid 2px var(--white);
+  border-top: solid 2px var(--alien-one);
+  border-left: solid 2px var(--alien-one);
+  box-shadow: 10px 10px 0 var(--alien-one);
+  background: var(--black);
 }
 
 form h1 {
@@ -355,46 +341,26 @@ form h1 {
   text-align: center;
 }
 
-#form-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
-}
-
 input {
   font-family: 'space_invaders';
-  background: black;
+  background: var(--black);
   padding-left: 10px;
   height: 50px;
-  color: rgba(255, 241, 194, 0.959);
+  color: var(--white);
   box-shadow: none;
-  border: solid  2px rgba(255, 241, 194, 0.959);
+  border: solid 2px var(--white);
 }
 
 input:focus {
-  outline: none; 
-  border: solid  2px #FC02EC;
-}
-
-.save-button, .cancel-button, .delete-button {
-  display: flex;
-  width: auto;
-  height: auto;
-  padding: 5px;
-  margin: 5px;
-  background: black;
-  color: rgba(255, 241, 194, 0.959);
-  box-shadow: 2px 2px 0 #FC02EC;
   outline: none;
+  border: solid 2px var(--white);
 }
-
-
 
 #habit-list {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: black;
+  background-color: none;
   width: 100%;
   padding: 20px;
   position: absolute;
@@ -408,35 +374,55 @@ input:focus {
   justify-content: space-between;
   align-items: center;
   padding: 10px 10px 10px 20px;
-  background-color: black;
-  box-shadow: 2px 2px 0 #FC02EC;
-  border: solid  2px rgba(255, 241, 194, 0.959);
-  border-top: solid  2px #FC02EC;
-  border-left: solid  2px #FC02EC;
-  color: rgba(255, 241, 194, 0.959);
+  background-color: var(--black);
+  box-shadow: 2px 2px 0 var(--alien-one);
+  border: solid 2px var(--white);
+  border-top: solid 2px var(--alien-one);
+  border-left: solid 2px var(--alien-one);
+  color: var(--white);
   margin-bottom: 20px;
-}
-
-.delete-button  {
-  font-size: 1.5rem;
-  background: 'yellow'
-}
-
-.save-button:active, .cancel-button:active, .delete-button:active, .habit-list-item:active {
-  transform: translate(2px, 2px);
-  transition: 100ms;
-  box-shadow: 1px 1px 0 #FC02EC; 
-}
-
-.save-button:hover, .cancel-button:hover, .delete-button:hover {
-  color: #FC02EC;
 }
 
 .habit-list-item:focus-within {
   transform: translate(0px, 0px);
-  transition: 0ms;
-  box-shadow: 2px 2px 0 #FC02EC;
+  box-shadow: 2px 2px 0 var(--alien-one);
 }
 
+.delete-button {
+  font-size: 1.5rem;
+}
 
+#form-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
 
+.save-button,
+.cancel-button,
+.delete-button {
+  display: flex;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  margin: 5px;
+  background: var(--black);
+  color: var(--white);
+  box-shadow: 2px 2px 0 var(--alien-one);
+  outline: none;
+}
+
+.save-button:active,
+.cancel-button:active,
+.delete-button:active,
+.habit-list-item:active {
+  transform: translate(2px, 2px);
+  transition: 100ms;
+  box-shadow: 1px 1px 0 var(--alien-one);
+}
+
+.save-button:hover,
+.cancel-button:hover,
+.delete-button:hover {
+  color: var(--alien-one);
+}

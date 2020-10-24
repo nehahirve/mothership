@@ -1,16 +1,13 @@
 // window will load
 
-function noenter() {
-  return !(window.event && window.event.keyCode == 13)
-}
-
-var today = new Date()
-var dd = String(today.getDate()).padStart(2, '0')
-var mm = String(today.getMonth() + 1).padStart(2, '0')
-var yyyy = today.getFullYear()
+var today = getToday()
+// var dd = String(today.getDate()).padStart(2, '0')
+// var mm = String(today.getMonth() + 1).padStart(2, '0')
+// var yyyy = today.getFullYear()
 
 let userData
 loadUserData()
+
 let main = document.querySelector('main')
 let nav = document.querySelector('nav')
 loadStars(nav)
@@ -23,14 +20,14 @@ function loadUserData() {
     userData = {
       name: 'Tuva',
       highScore: 2000,
-      lastLogin: '20-10-05',
+      lastLogin: today,
       habits: [
         {
           habitName: 'brush teeth',
           questLength: 31,
           longestStreak: 10,
           currentStreak: 10,
-          dateStarted: '20-10-07',
+          dateStarted: '20-10-11',
           lastCompleted: '20-10-21',
           alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2]
         },
@@ -67,7 +64,6 @@ const form = document.querySelector('form')
 const plusIcon = document.getElementById('plus-icon')
 const cancelButton = document.querySelector('.cancel-button')
 const habitList = document.querySelector('ul')
-const saveButton = document.querySelector('.save-button')
 const nameInput = document.querySelector('#input-name')
 const lengthInput = document.querySelector('#input-length')
 
@@ -77,11 +73,9 @@ loadExistingHabits()
 
 function loadExistingHabits() {
   for (let item of userData.habits) {
-    console.log(item.habitName)
     addHabitToPage(item.habitName)
   }
 }
-
 
 // OPEN THE FORM WHEN PLUS ICON IS CLICKED
 plusIcon.addEventListener('click', showForm)
@@ -95,7 +89,6 @@ cancelButton.addEventListener('click', cancelForm)
 
 function cancelForm(e) {
   e.preventDefault()
-  console.log('The string should be canceled.')
   // add class of 'hidden' to the form
   form.classList.add('hidden')
 }
@@ -106,19 +99,17 @@ form.addEventListener('submit', saveHabitData)
 let name
 let length
 
-function saveHabitData (e) {
+function saveHabitData(e) {
   e.preventDefault()
   name = nameInput.value
   length = lengthInput.value
-  console.log(length, +length)
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
   if (name && +length) {
-    addHabitToPage (name)
-    addHabitToData (name, length)
+    addHabitToPage(name)
+    addHabitToData(name, length)
   }
 }
-
 
 // ADD AND DELETE HABITS
 
@@ -155,7 +146,6 @@ function deleteHabitFromPage(name, e) {
   e.stopPropagation()
   this.parentNode.remove()
   deleteHabitFromData(name)
-  console.log(userData.habits)
 }
 
 function deleteHabitFromData(name) {
@@ -169,25 +159,23 @@ function deleteHabitFromData(name) {
   userData.habits = newArray
 }
 
-// CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION 
+// CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION
 
 function showCalendar(name) {
   // INSTRUCIONS
-  console.log(userData.habits)
-
+  if (!form.classList.contains('hidden')) {
+    form.classList.add('hidden')
+  }
   let array = userData.habits
   // access the userData.habits array
   for (let item of array) {
-    console.log(item.habitName)
-     // search for the matching name
+    // search for the matching name
     if (name === item.habitName) {
       // take that habit object, and pass it on to loadcalendar
       loadCalendar(item)
     }
   }
-
 }
-
 
 /*
 *********************************
@@ -210,7 +198,7 @@ const playBtn = document.createElement('button')
 let currentHabitDay = 0
 
 const typeLegend = {
-  0: ['black', 0, ['', '']],
+  0: ['#0b0b0b', 0, ['', '']],
   1: ['#FF32A9', 30, ['b', 'c']],
   2: ['#07E8E8', 50, ['d', 'e']],
   3: ['#FF9526', 75, ['l', 'm']],
@@ -240,7 +228,6 @@ MAIN FUNCTIONS
 *********************************
 */
 
-
 function loadCalendar(habit) {
   if (!splash.classList.contains('hidden')) {
     splash.style.display = 'none'
@@ -263,7 +250,7 @@ function loadCalendar(habit) {
       box.className = `box past alien-${alienType}`
       box.innerText = text
       calendar.appendChild(box)
-    } else if (i === currentHabitDay) {
+    } else if (i === currentHabitDay && habit.lastCompleted !== today) {
       box.className = 'box current'
       box.innerText = `${i + 1}`
       calendar.appendChild(box)
@@ -332,7 +319,7 @@ function completeHabit(habit) {
   if (habit.currentStreak > habit.longestStreak) {
     habit.longestStreak = habit.currentStreak
   }
-  habit.lastCompleted = getToday()
+  habit.lastCompleted = today
   habit.alienList.push(alienType)
 }
 
@@ -466,9 +453,7 @@ class Game {
   }
 
   draw() {
-    this.ctx.fillStyle = 'black'
-    this.ctx.fillRect(0, 0, WIDTH, HEIGHT)
-
+    this.ctx.clearRect(0, 0, WIDTH, HEIGHT)
     this.bodies.forEach(body => {
       drawBody(ctx, body)
     })
@@ -621,7 +606,7 @@ function createAliens(game) {
 function drawBody(ctx, body) {
   let bodyType = body.type
   if (body instanceof Bullet) {
-    ctx.fillStyle = 'black'
+    ctx.fillStyle = typeLegend[0][0]
     ctx.fillStyle = body.color
     ctx.font = '100px sprites'
     let text = 'y'

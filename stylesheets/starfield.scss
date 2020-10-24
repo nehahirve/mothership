@@ -1,4 +1,4 @@
-$star-colour: rgba(255, 241, 194, 0.959);
+$star-colour: rgb(255, 241, 194);
 
 // n is number of stars required
 @function multiple-box-shadow ($n) {
@@ -12,8 +12,7 @@ $star-colour: rgba(255, 241, 194, 0.959);
 $shadows-small:  multiple-box-shadow(700);
 $shadows-big:    multiple-box-shadow(100);
 
-main, body {
-  background: black;
+main, body, nav {
   width: 100vw;
   height: 100vh;
   overflow: hidden;

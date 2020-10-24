@@ -44,6 +44,6 @@ function loadStars(element) {
     star.className = `star${i + 1}`
     star.style.position = 'absolute'
     star.style.top = '0'
-    element.appendChild(star)
+    element.prepend(star)
   }
 }
