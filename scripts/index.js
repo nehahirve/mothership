@@ -94,7 +94,7 @@ function fastForwardHeatMap() {
   if (days === 0) {
     loadHeatMap()
   } else {
-    for (let i = 0; i < days - 1; i++) {
+    for (let i = 0; i < days; i++) {
       userData.heatMap.push(0)
     }
     loadHeatMap()
