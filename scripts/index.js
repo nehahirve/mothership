@@ -1,6 +1,7 @@
 // window will load
 
 var today = getToday()
+let firstWeekDay
 // var dd = String(today.getDate()).padStart(2, '0')
 // var mm = String(today.getMonth() + 1).padStart(2, '0')
 // var yyyy = today.getFullYear()
@@ -51,6 +52,7 @@ function loadUserData() {
         }
       ]
     }
+    firstWeekDay = new Date().getDay()
   }
 }
 
@@ -66,8 +68,19 @@ const cancelButton = document.querySelector('.cancel-button')
 const habitList = document.querySelector('ul')
 const nameInput = document.querySelector('#input-name')
 const lengthInput = document.querySelector('#input-length')
+const heatMap = document.querySelector('#heatmap')
 
 // LOAD THE PRE EXISTING HABITS
+
+loadHeatMap()
+
+function loadHeatMap() {
+  for (let i = 0; i < 30; i++) {
+    let div = document.createElement('div')
+    div.classList.add('heatmap-div')
+    heatMap.appendChild(div)
+  }
+}
 
 loadExistingHabits()
 

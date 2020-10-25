@@ -50,11 +50,23 @@ header {
 }
 
 #heatmap {
-  border: white 2px dashed;
-  height: 15rem;
-  width: 100%;
+  border: white 0px dashed;
+  height: 9rem;
+  width: 60%;
   position: absolute;
-  bottom: 5rem;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(auto-fit, 15px);
+  grid-template-columns: repeat(auto-fit, 15px);
+  grid-gap: 0.3rem;
+  bottom: 8rem;
+}
+
+.heatmap-div {
+  width: 15px;
+  height: 15px;
 }
 
 main {
