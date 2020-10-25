@@ -150,10 +150,10 @@ function cancelForm(e) {
   e.preventDefault()
   // add class of 'hidden' to the form
   form.classList.add('hidden')
-  splash.style.display = 'flex'
-  Array.from(habitList.children).forEach(item =>
-    item.classList.remove('clicked-habit')
-  )
+  let array = Array.from(habitList.children)
+  if (!array.some(item => item.classList.contains('clicked-habit'))) {
+    splash.style.display = 'flex'
+  }
 }
 
 // SAVE THE FORM INPUT WHEN SAVE IS PRESSED
@@ -175,7 +175,11 @@ function saveHabitData(e) {
     let array = Array.from(habitList.children)
     if (!array.some(item => item.classList.contains('clicked-habit'))) {
       splash.style.display = 'flex'
+      Array.from(habitList.children).forEach(item =>
+        item.classList.remove('clicked-habit')
+      )
     }
+    //splash.style.display = 'flex'
   }
 }
 
@@ -215,8 +219,10 @@ function deleteHabitFromPage(name, e) {
   e.stopPropagation()
   this.parentNode.remove()
   deleteHabitFromData(name)
-  calendarWrapper.innerHTML = ''
-  splash.style.display = 'flex'
+  if (this.parentNode.classList.contains('clicked-habit')) {
+    calendarWrapper.innerHTML = ''
+    splash.style.display = 'flex'
+  }
 }
 
 function deleteHabitFromData(name) {
