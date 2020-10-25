@@ -56,7 +56,6 @@ function loadUserData() {
       ]
     }
   }
-  console.log(userData)
 }
 
 function saveUserData() {
@@ -102,7 +101,6 @@ function fastForwardHeatMap() {
       userData.heatMap.push(0)
     }
     loadHeatMap()
-    console.log(userData.heatMap)
   }
 
   saveUserData()
@@ -174,6 +172,10 @@ function saveHabitData(e) {
     addHabitToPage(name)
     addHabitToData(name, length)
     form.classList.add('hidden')
+    let array = Array.from(habitList.children)
+    if (!array.some(item => item.classList.contains('clicked-habit'))) {
+      splash.style.display = 'flex'
+    }
   }
 }
 
@@ -267,8 +269,6 @@ const calendar = document.createElement('div')
 calendar.setAttribute('id', 'calendar')
 const calendarWrapper = document.querySelector('#calendar-wrapper')
 
-const playBtn = document.createElement('button')
-
 let currentHabitDay = 0
 
 const typeLegend = {
@@ -317,6 +317,7 @@ function loadCalendar(habit) {
   calendar.innerHTML = ''
   calendarWrapper.appendChild(calendar)
   canvas.style.display = 'none'
+  calendarWrapper.style.display = 'flex'
   if (!form.classList.contains('hidden')) {
     form.classList.add('hidden')
   }
@@ -327,10 +328,9 @@ function loadCalendar(habit) {
     main.appendChild(loadGameOverSplash(habit))
     return
   }
-  console.log(main.children, habit)
   if (habit.alienList.length !== 0) {
     fastForwardToToday(habit)
-  }
+  } else currentHabitDay = 0
 
   // draw calendar
   for (let i = 0; i < habit.questLength; i++) {
@@ -372,13 +372,15 @@ function fastForwardToToday(habit) {
     habit.lastCompleted = getToday(-1)
     habit.currentStreak = 0
   }
-  currentHabitDay = habit.alienList.length || 1
+  currentHabitDay = habit.alienList.length
   saveUserData()
 }
 
 function checkIfQuestComplete(habit) {
+  const playBtn = document.createElement('button')
   const daysRemaining = habit.questLength - currentHabitDay
   if (daysRemaining === 0) isReadyToPlay = true
+  playBtn.style.display = 'flex'
   playBtn.className = 'game-start-button'
   playBtn.innerText = 'READY TO PLAY IN :'
   playBtn.style.marginTop = '100px'
@@ -467,22 +469,23 @@ MAIN GAME FUNCTIONS
 */
 
 function initGame(habit) {
+  if (game) {
+    game.self = null
+  }
   aliens = habit.alienList
   canvas.style.display = 'block'
   resizeCanvas()
   window.addEventListener('resize', resizeCanvas)
 
   if (document.fonts.check('85px sprites')) {
-    playBtn.style.display = 'none'
     game = new Game(canvas, ctx, habit)
     main.appendChild(score)
     score.innerText = ` HI-SCORE < ${userData.highScore} >`
     score.className = 'score'
 
-    calendar.style.display = 'none'
+    calendarWrapper.style.display = 'none'
     if (document.fonts.check('80px sprites')) {
-      gameRunning = true
-      game.loop()
+      game.start()
     }
   }
 }
@@ -495,7 +498,6 @@ function gameOver(habit) {
   canvas.style.display = 'none'
   main.appendChild(loadGameOverSplash(habit))
   habit.gameOver = true
-  console.log(userData)
   saveUserData()
 }
 
@@ -504,6 +506,8 @@ function restart(habit) {
   habit.gameOver = false
   habit.alienList = []
   habit.currentStreak = 0
+  habit.dateStarted = today
+  habit.lastCompleted = null
   console.log(userData)
   saveUserData()
   loadCalendar(habit)
@@ -525,6 +529,19 @@ class Game {
     this.habit = habit
   }
 
+  reset(habit) {
+    let resetGame = new Game(canvas, ctx, habit)
+    resetGame.bodies = []
+    gameRunning = false
+    return resetGame
+  }
+
+  start() {
+    gameRunning = true
+
+    this.loop()
+  }
+
   loop() {
     self.update()
     self.draw()
@@ -543,6 +560,7 @@ class Game {
       self.bodies = self.bodies.filter(
         body => body.type !== 10 && body.type !== 25
       )
+      console.log('running')
     }
 
     const remainingAliens = self.bodies.filter(body => body instanceof Alien)
