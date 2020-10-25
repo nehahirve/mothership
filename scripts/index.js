@@ -42,12 +42,12 @@ function loadUserData() {
         },
         {
           habitName: 'code',
-          questLength: 14,
-          longestStreak: 14,
-          currentStreak: 14,
+          questLength: 18,
+          longestStreak: 13,
+          currentStreak: 13,
           dateStarted: '20-10-10',
-          lastCompleted: '20-10-20',
-          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+          lastCompleted: '20-10-23',
+          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]
         }
       ]
     }
@@ -229,8 +229,13 @@ MAIN FUNCTIONS
 */
 
 function loadCalendar(habit) {
-  if (!splash.classList.contains('hidden')) {
+  if (splash.style.display !== 'none') {
     splash.style.display = 'none'
+  }
+
+  if (habit.gameOver) {
+    gameOver(habit)
+    return
   }
 
   // UPDATE USER DATA DEPENDING ON LAST LOGIN
@@ -281,7 +286,7 @@ function checkIfQuestComplete(habit) {
   const daysRemaining = habit.questLength - currentHabitDay
   if (daysRemaining === 0) isReadyToPlay = true
   playBtn.className = 'game-start-button'
-  playBtn.innerText = `READY TO PLAY IN :`
+  playBtn.innerText = 'READY TO PLAY IN :'
   playBtn.style.marginTop = '100px'
 
   const count = document.createElement('div')
@@ -304,13 +309,18 @@ function completeHabit(habit) {
   this.removeEventListener('click', completeHabit)
   const streak = habit.currentStreak
   let alienType = 1
-  if (streak > 7) {
+  if (streak > 6) {
     alienType += 1
-  } else if (streak > 14) {
+    console.log(alienType)
+  }
+  if (streak > 13) {
     alienType += 1
-  } else if (streak > 21) {
+    console.log(alienType)
+  }
+  if (streak > 20) {
     alienType += 1
-  } else if (streak > 28) {
+  }
+  if (streak > 27) {
     alienType += 1
   }
   this.className = `box past alien-${alienType} clicked`
@@ -368,8 +378,8 @@ function initGame(habit) {
   window.addEventListener('resize', resizeCanvas)
 
   if (document.fonts.check('85px sprites')) {
-    main.removeChild(playBtn)
-    game = new Game(canvas, ctx)
+    playBtn.style.display = 'none'
+    game = new Game(canvas, ctx, habit)
     main.appendChild(score)
     score.innerText = ` HI-SCORE < ${highScore} >`
     score.className = 'score'
@@ -382,13 +392,14 @@ function initGame(habit) {
   }
 }
 
-function gameOver() {
+function gameOver(habit) {
   gameRunning = false
   canvas.style.display = 'none'
-  const gameOver = document.createElement('div')
-  main.appendChild(gameOver)
-  gameOver.innerText = 'GAME OVER'
-  gameOver.className = 'game-over'
+  splash.children[0].src = '../media/gameover.svg'
+  splash.children[1] = document.createElement('button')
+  splash.children[1].innerText = 'REPEAT MISSION ?'
+  splash.style.display = 'flex'
+  habit.gameOver = true
 }
 
 /*
@@ -398,12 +409,13 @@ GAME CLASSES
 */
 
 class Game {
-  constructor(canvas, context) {
+  constructor(canvas, context, habit) {
     this.gameSize = new Vec(WIDTH, HEIGHT)
     this.canvas = canvas
     this.ctx = context
     this.bodies = [new Player(this, this.gameSize)].concat(createAliens(this))
     self = this
+    this.habit = habit
   }
 
   loop() {
@@ -429,7 +441,7 @@ class Game {
     const remainingAliens = self.bodies.filter(body => body instanceof Alien)
     const player = self.bodies.filter(body => body instanceof Player)
     if (remainingAliens.length === 0 || player.length === 0) {
-      gameOver()
+      gameOver(this.habit)
     }
 
     // update all bodies
@@ -631,28 +643,5 @@ function drawBody(ctx, body) {
     text,
     offset + body.center.x - body.size.x / 2,
     body.center.y + 18
-  )
-}
-
-function trackKeys(keysArray) {
-  const down = Object.create(null)
-  function track(e) {
-    if (keysArray.includes(e.key)) {
-      down[e.key] = e.type === 'keydown'
-      e.preventDefault()
-    }
-  }
-  window.addEventListener('keydown', track)
-  window.addEventListener('keyup', track)
-  return down
-}
-
-function colliding(b1, b2) {
-  return !(
-    b1 === b2 ||
-    b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
-    b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
-    b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
-    b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
   )
 }
