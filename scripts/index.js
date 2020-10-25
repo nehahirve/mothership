@@ -21,7 +21,8 @@ function loadUserData() {
     userData = {
       name: 'Tuva',
       highScore: 2000,
-      lastLogin: today,
+      lastLogin: '20-10-25',
+      heatMap: [1,0,0,4,3,2,6,5,0,1,1,1,0,4,6],
       habits: [
         {
           habitName: 'brush teeth',
@@ -70,17 +71,43 @@ const nameInput = document.querySelector('#input-name')
 const lengthInput = document.querySelector('#input-length')
 const heatMap = document.querySelector('#heatmap')
 
+const colorMapping = {
+  1: "#F2FF83",
+  2: "#BDFF77",
+  3: "#9CFF32",
+  4: "#6CD100",
+  5: "#509B00"
+}
+
 // LOAD THE PRE EXISTING HABITS
+
+function fastForwardHeatMap() {
+  let login = userData.lastLogin;
+  let days = getDaysElapsedFromToday(login, today);
+  if(days === 0) {
+    loadHeatMap();
+  } else { 
+   for( let i = 0; i < days - 1; i++) {
+     userData.heatMap.push(0);
+   }
+    loadHeatMap()
+  }
+
+
+  console.log(days);
+}
+fastForwardHeatMap()
 
 loadHeatMap()
 
 function loadHeatMap() {
-  for (let i = 0; i < 30; i++) {
-    let div = document.createElement('div')
-    div.classList.add('heatmap-div')
-    heatMap.appendChild(div)
-  }
-}
+userData.heatMap.forEach(dataPoint => {
+  let box = document.createElement('div');
+  heatMap.appendChild(box);
+  box.classList.add('heatmap-div');
+  box.style.background = colorMapping[dataPoint];
+})};
+
 
 loadExistingHabits()
 
