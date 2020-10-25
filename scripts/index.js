@@ -83,10 +83,10 @@ const colorMapping = {
 
 fastForwardHeatMap()
 
-let box = document.createElement('div')
-heatMap.appendChild(box)
-box.style.background = 'pink'
-box.classList.add('heatmap-div')
+// let box = document.createElement('div')
+// heatMap.appendChild(box)
+// box.style.background = 'pink'
+// box.classList.add('heatmap-div')
 
 function fastForwardHeatMap() {
   let login = userData.lastLogin
@@ -101,10 +101,11 @@ function fastForwardHeatMap() {
     console.log(userData.heatMap)
   }
 
-userData.lastLogin = today;
+  userData.lastLogin = today
 }
 
 function loadHeatMap() {
+  heatmap.innerHTML = ''
   userData.heatMap.forEach(dataPoint => {
     let box = document.createElement('div')
     heatMap.appendChild(box)
@@ -378,6 +379,9 @@ function completeHabit(habit) {
   }
   habit.lastCompleted = today
   habit.alienList.push(alienType)
+
+  userData.heatMap[userData.heatMap.length - 1]++
+  loadHeatMap()
 }
 
 /*
