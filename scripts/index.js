@@ -101,7 +101,7 @@ function fastForwardHeatMap() {
     console.log(userData.heatMap)
   }
 
-  console.log(days)
+userData.lastLogin = today;
 }
 
 function loadHeatMap() {
