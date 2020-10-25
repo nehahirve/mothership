@@ -103,6 +103,8 @@ function fastForwardHeatMap() {
   }
 
   userData.lastLogin = today
+
+  saveUserData()
 }
 
 function loadHeatMap() {
@@ -195,6 +197,7 @@ function addHabitToData(name, length) {
   }
   let array = userData.habits
   array.push(newHabit)
+  saveUserData();
 }
 
 function deleteHabitFromPage(name, e) {
@@ -212,6 +215,7 @@ function deleteHabitFromData(name) {
     }
   }
   userData.habits = newArray
+  saveUserData();
 }
 
 // CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION
@@ -237,8 +241,6 @@ function showCalendar(name) {
 NEHA'S PART DON'T WRITE CODE BELOW THIS LINE
 *********************************
 */
-
-const thisHabit = userData.habits[1]
 
 /*
 *********************************
@@ -335,6 +337,7 @@ function fastForwardToToday(habit) {
     habit.currentStreak = 0
   }
   currentHabitDay = habit.alienList.length
+  saveUserData();
 }
 
 function checkIfQuestComplete(habit) {
@@ -388,7 +391,8 @@ function completeHabit(habit) {
   habit.alienList.push(alienType)
 
   userData.heatMap[userData.heatMap.length - 1]++
-  loadHeatMap()
+  saveUserData();
+  loadHeatMap();
 }
 
 /*
@@ -419,7 +423,7 @@ class Vec {
 }
 
 let WIDTH, HEIGHT, game, self, startPos
-let gameRunning, alienPicker, aliens, highScore
+let gameRunning, alienPicker, aliens
 let delta = 0
 
 /*
@@ -430,7 +434,6 @@ MAIN GAME FUNCTIONS
 
 function initGame(habit) {
   aliens = habit.alienList
-  highScore = userData.highScore
   canvas.style.display = 'block'
   resizeCanvas()
   window.addEventListener('resize', resizeCanvas)
@@ -439,7 +442,7 @@ function initGame(habit) {
     playBtn.style.display = 'none'
     game = new Game(canvas, ctx, habit)
     main.appendChild(score)
-    score.innerText = ` HI-SCORE < ${highScore} >`
+    score.innerText = ` HI-SCORE < ${userData.highScore} >`
     score.className = 'score'
     canvas.style.opacity = 1
     calendar.style.opacity = 0
@@ -625,8 +628,9 @@ class Bullet {
         deathSound.play()
       } else if (!(hit[0] instanceof Bullet)) {
         const points = typeLegend[hit[0].type][1]
-        highScore += points
-        score.innerText = ` HI-SCORE < ${highScore} >`
+        userData.highScore += points
+        saveUserData();
+        score.innerText = ` HI-SCORE < ${userData.highScore} >`
         hit[0].type = 10
         hit[0].colour = 'yellow'
         hit[0].letters = ['z', 'z']
