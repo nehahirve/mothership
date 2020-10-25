@@ -16,10 +16,6 @@ body {
   background: var(--black);
 }
 
-.hidden {
-  display: none;
-}
-
 button {
   outline: none;
 }
@@ -67,6 +63,12 @@ header {
 .heatmap-div {
   width: 15px;
   height: 15px;
+  background-color: var(--alien-one);
+  box-shadow: 2px 2px 3px var(--alien-one);
+}
+
+.heatmap-div-placeholder {
+  box-shadow: none;
 }
 
 main {
@@ -77,9 +79,14 @@ main {
   font-family: 'sprites';
 }
 
+#calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #calendar {
   display: grid;
-  opacity: 1;
   margin: auto;
   width: 410px;
   margin-top: 15vh;
@@ -174,6 +181,8 @@ main {
 }
 
 .countdown {
+  text-align: center;
+  line-height: 1.2;
   position: relative;
   font-size: 2.6rem;
   font-family: 'space_invaders';
@@ -267,7 +276,6 @@ main {
 
 canvas {
   position: absolute;
-  opacity: 0;
   transition: 1s;
   width: 100%;
   background: transparent;
@@ -309,7 +317,8 @@ canvas {
   cursor: pointer;
 }
 
-#splash {
+#splash,
+#game-over {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -395,6 +404,13 @@ input:focus {
   margin-bottom: 20px;
 }
 
+.clicked-habit {
+  box-shadow: 2px 2px 0 var(--white);
+  border-top: solid 2px var(--white);
+  border-left: solid 2px var(--white);
+  transform: translate(2px, 2px);
+}
+
 .habit-list-item:focus-within {
   transform: translate(0px, 0px);
   box-shadow: 2px 2px 0 var(--alien-one);
@@ -437,4 +453,8 @@ input:focus {
 .cancel-button:hover,
 .delete-button:hover {
   color: var(--alien-one);
+}
+
+.hidden {
+  display: none;
 }
