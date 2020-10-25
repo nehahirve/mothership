@@ -21,8 +21,8 @@ function loadUserData() {
     userData = {
       name: 'Tuva',
       highScore: 2000,
-      lastLogin: '20-10-25',
-      heatMap: [1,0,0,4,3,2,6,5,0,1,1,1,0,4,6],
+      lastLogin: '20-10-20',
+      heatMap: [1, 0, 0, 4, 3, 2, 6, 5, 0, 1, 1, 1, 0, 4, 6],
       habits: [
         {
           habitName: 'brush teeth',
@@ -72,42 +72,49 @@ const lengthInput = document.querySelector('#input-length')
 const heatMap = document.querySelector('#heatmap')
 
 const colorMapping = {
-  1: "#F2FF83",
-  2: "#BDFF77",
-  3: "#9CFF32",
-  4: "#6CD100",
-  5: "#509B00"
+  1: 'yellow',
+  2: 'purple',
+  3: 'green',
+  4: 'orange',
+  5: 'red'
 }
 
 // LOAD THE PRE EXISTING HABITS
 
-function fastForwardHeatMap() {
-  let login = userData.lastLogin;
-  let days = getDaysElapsedFromToday(login, today);
-  if(days === 0) {
-    loadHeatMap();
-  } else { 
-   for( let i = 0; i < days - 1; i++) {
-     userData.heatMap.push(0);
-   }
-    loadHeatMap()
-  }
-
-
-  console.log(days);
-}
 fastForwardHeatMap()
 
-loadHeatMap()
+let box = document.createElement('div')
+heatMap.appendChild(box)
+box.style.background = 'pink'
+box.classList.add('heatmap-div')
+
+function fastForwardHeatMap() {
+  let login = userData.lastLogin
+  let days = getDaysElapsedFromToday(login, today)
+  if (days === 0) {
+    loadHeatMap()
+  } else {
+    for (let i = 0; i < days - 1; i++) {
+      userData.heatMap.push(0)
+    }
+    loadHeatMap()
+    console.log(userData.heatMap)
+  }
+
+  console.log(days)
+}
 
 function loadHeatMap() {
-userData.heatMap.forEach(dataPoint => {
-  let box = document.createElement('div');
-  heatMap.appendChild(box);
-  box.classList.add('heatmap-div');
-  box.style.background = colorMapping[dataPoint];
-})};
-
+  userData.heatMap.forEach(dataPoint => {
+    let box = document.createElement('div')
+    heatMap.appendChild(box)
+    box.classList.add('heatmap-div')
+    if (dataPoint > 5) {
+      dataPoint = 5
+    }
+    box.style.background = colorMapping[dataPoint]
+  })
+}
 
 loadExistingHabits()
 
