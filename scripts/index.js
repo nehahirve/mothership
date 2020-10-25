@@ -53,7 +53,8 @@ function loadUserData() {
         }
       ]
     }
-    firstWeekDay = new Date().getDay()
+    //firstWeekDay = new Date().getDay()
+    firstWeekDay = 3
   }
 }
 
@@ -106,6 +107,12 @@ function fastForwardHeatMap() {
 
 function loadHeatMap() {
   heatmap.innerHTML = ''
+  for( let i = 0; i < firstWeekDay; i++) {
+    let box = document.createElement('div');
+    heatMap.appendChild(box);
+    box.classList.add('heatmap-div');
+    box.style.background = 'none';
+  }
   userData.heatMap.forEach(dataPoint => {
     let box = document.createElement('div')
     heatMap.appendChild(box)
