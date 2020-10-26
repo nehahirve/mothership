@@ -291,6 +291,12 @@ canvas {
   left: 2rem;
 }
 
+.hi-score {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+}
+
 .game-over {
   width: 100%;
   position: absolute;

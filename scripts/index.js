@@ -11,6 +11,8 @@ loadUserData()
 
 let main = document.querySelector('main')
 let nav = document.querySelector('nav')
+const hiScore = document.querySelector('.hi-score')
+hiScore.innerText = `HI-SCORE : < ${userData.highScore} >`
 loadStars(nav)
 loadStars(main)
 
@@ -486,7 +488,7 @@ function initGame(habit) {
   if (document.fonts.check('85px sprites')) {
     game = new Game(canvas, ctx, habit)
     main.appendChild(score)
-    score.innerText = ` HI-SCORE < ${userData.highScore} >`
+    score.innerText = ` SCORE < 0 >`
     score.className = 'score'
 
     calendarWrapper.style.display = 'none'
@@ -496,10 +498,12 @@ function initGame(habit) {
   }
 }
 
-function gameOver(habit) {
+function gameOver(habit, game) {
   if (document.getElementById('game-over')) {
     main.removeChild(document.getElementById('game-over'))
   }
+  userData.highScore += game.score
+  hiScore.innerText = `HI-SCORE : < ${userData.highScore} >`
   gameRunning = false
   canvas.style.display = 'none'
   main.appendChild(loadGameOverSplash(habit))
@@ -533,6 +537,7 @@ class Game {
     this.bodies = [new Player(this, this.gameSize)].concat(createAliens(this))
     self = this
     this.habit = habit
+    this.score = 0
   }
 
   reset(habit) {
@@ -572,7 +577,7 @@ class Game {
     const remainingAliens = self.bodies.filter(body => body instanceof Alien)
     const player = self.bodies.filter(body => body instanceof Player)
     if (remainingAliens.length === 0 || player.length === 0) {
-      gameOver(this.habit)
+      gameOver(this.habit, this)
     }
 
     // update all bodies
@@ -698,9 +703,9 @@ class Bullet {
         deathSound.play()
       } else if (!(hit[0] instanceof Bullet)) {
         const points = typeLegend[hit[0].type][1]
-        userData.highScore += points
+        game.score += points
         saveUserData()
-        score.innerText = ` HI-SCORE < ${userData.highScore} >`
+        score.innerText = `SCORE < ${game.score} >`
         hit[0].type = 10
         hit[0].colour = 'yellow'
         hit[0].letters = ['z', 'z']
