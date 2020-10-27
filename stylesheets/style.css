@@ -2,20 +2,6 @@
 COLOUR PALLETTE
 ********/
 
-html,
-body {
-  --black: #0b0b0b;
-  --white: rgb(255, 241, 194);
-  --alien-one: #ff32a9;
-  --alien-two: #07e8e8;
-  --alien-three: #c048ff;
-  --alien-four: #60ffc0;
-  --alien-five: #6030f0;
-  --yellow: yellow;
-  --red: red;
-  background: var(--black);
-}
-
 button {
   outline: none;
 }
@@ -383,9 +369,13 @@ input {
   border: solid 2px var(--white);
 }
 
+#input-length {
+  border: none;
+}
+
 input:focus {
   outline: none;
-  border: solid 2px var(--white);
+  border: solid 2px var(--alien-one);
 }
 
 #habit-list {

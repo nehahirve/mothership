@@ -208,18 +208,23 @@ function saveHabitData (e) {
       Array.from(habitList.children).forEach(item =>
         item.classList.remove('clicked-habit')
       )
+    } else {
+      const currentHabit = array.filter(item =>
+        item.classList.contains('clicked-habit')
+      )[0].childNodes[0].textContent
+  
+      connectCorrectCalendar(currentHabit)
     }
   }
 }
 
 let slider = document.querySelector('#input-length')
 let output = document.querySelector('#slider-length')
-output.innerHTML = slider.value
+output.innerHTML = `${slider.value} DAYS`
 
 slider.addEventListener('change', countDays)
 function countDays(e) {
-  console.log(this.value)
-  output.innerHTML = e.target.value
+  output.innerHTML = `${e.target.value} DAYS`
 }
 
 
@@ -354,12 +359,12 @@ function resetCal () {
 
 const typeLegend = {
   // legend for the various bodies in game and calendar
-  0: ['#0b0b0b', 0, ['', '']], // black space
-  1: ['#FF32A9', 30, ['b', 'c']], // alien level 1
-  2: ['#07E8E8', 50, ['d', 'e']],
-  3: ['#FF9526', 75, ['l', 'm']],
-  4: ['#6030f0', 100, ['r', 's']],
-  5: ['#c048ff', 200, ['f', 'g']],
+  0: ['#00000', 0, ['', '']], // black space
+  1: ['#fa138f', 30, ['b', 'c']], // alien level 1
+  2: ['#00eeff', 50, ['d', 'e']],
+  3: ['#c048ff', 75, ['l', 'm']],
+  4: ['#60ffc0', 100, ['r', 's']],
+  5: ['#ffb55a', 200, ['f', 'g']],
   10: ['#F9FE0E', 0, ['z', 'z']], // explosion
   20: ['#fff1c2', 0, ['w', 'w']], // player
   25: ['#fff1c2', 0, ['x', 'x']], // player dead
@@ -489,6 +494,7 @@ function completeHabit (habit) {
   userData.heatMap[userData.heatMap.length - 1]++
   saveUserData()
   loadHeatMap()
+  loadCalendar(habit)
 }
 
 function loadGameOverSplash (habit) {
