@@ -11,5 +11,5 @@ Contributors:
 
 A Hyper Island Student Project
 
-starfield mixin based off of this guy -->
+starfield function based off of this guy -->
 https://codepen.io/saransh/pen/BKJun
