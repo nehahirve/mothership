@@ -211,15 +211,16 @@ function saveHabitData (e) {
     }
   }
 }
+
 let slider = document.querySelector('#input-length')
-  let output = document.querySelector('#kittens')
-  
-  function countDays(e) {
-  output.innerHTML = slider.value
-  slider.oninput = countDays(); {
-  output.innerHTML = this.value
-} 
-  }
+let output = document.querySelector('#slider-length')
+output.innerHTML = slider.value
+
+slider.addEventListener('change', countDays)
+function countDays(e) {
+  console.log(this.value)
+  output.innerHTML = e.target.value
+}
 
 
 // ADD AND DELETE HABITS
