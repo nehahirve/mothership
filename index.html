@@ -42,12 +42,14 @@
         <input type="text" placeholder="Dream big!" id="input-name" />
         <br /><br />
         <label><b>Mission Length :</b></label>
-        <br /><br />
+        <br />
         <input
-          type="number"
-          placeholder="More days=more points!"
+          type="range"
+          min="1"
+          max="50"
           id="input-length"
         />  <!-- changed from text to number-->
+        <p>Quest length in days: <span id="kittens"></span></p>
         <div id="form-buttons">
           <button class="save-button" type="submit">Save</button>
           <button class="cancel-button">Cancel</button>
