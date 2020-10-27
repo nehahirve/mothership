@@ -169,9 +169,10 @@ function saveHabitData(e) {
   e.preventDefault()
   let name = nameInput.value
   let length = lengthInput.value
+  let maxQuestLength = 51
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
-  if (name && +length) {
+ if (name && length && length < maxQuestLength) {
     addHabitToPage(name)
     addHabitToData(name, length)
     form.classList.add('hidden')
@@ -184,6 +185,7 @@ function saveHabitData(e) {
     }
   }
 }
+
 
 
 // ADD AND DELETE HABITS
