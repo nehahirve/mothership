@@ -5,7 +5,6 @@ const main = document.querySelector('main')
 const nav = document.querySelector('nav')
 const hiScore = document.querySelector('.hi-score')
 const splash = document.querySelector('#splash')
-const gameOverSplash = document.querySelector('#game-over')
 const form = document.querySelector('form')
 const plusIcon = document.getElementById('plus-icon')
 const cancelButton = document.querySelector('.cancel-button')
@@ -13,6 +12,8 @@ const habitList = document.querySelector('ul')
 const nameInput = document.querySelector('#input-name')
 const lengthInput = document.querySelector('#input-length')
 const heatMap = document.querySelector('#heatmap')
+let calendar = document.querySelector('#calendar')
+const calendarWrapper = document.querySelector('#calendar-wrapper')
 
 // GET TODAY'S DATE
 var today = getToday()
@@ -23,7 +24,7 @@ let userData
 // loads the correct user data
 loadUserData()
 
-function loadUserData() {
+function loadUserData () {
   if (localStorage.getItem('locallyStored')) {
     userData = JSON.parse(localStorage.getItem('locallyStored'))
   } else {
@@ -41,7 +42,29 @@ function loadUserData() {
           currentStreak: 10,
           dateStarted: '20-10-11',
           lastCompleted: '20-10-21',
-          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 0]
+          alienList: [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ]
         },
         {
           habitName: 'drink vodka',
@@ -67,10 +90,9 @@ function loadUserData() {
 }
 
 // OVERWRITE THE LOCAL STORAGE WITH THE NEW USER DATA
-function saveUserData() {
+function saveUserData () {
   localStorage.setItem('locallyStored', JSON.stringify(userData))
 }
-
 
 // SET HIGH SCORE
 hiScore.innerText = `HI-SCORE : < ${userData.highScore} >`
@@ -80,7 +102,7 @@ loadStars(main)
 
 // MAPS THE HEATMAP ARRAY VALUES TO CSS OPACITY VALUES FOR THE HEATMAP DIV
 const colorMapping = {
-  0: 0.1,
+  0: 0.05,
   1: 0.2,
   2: 0.4,
   3: 0.6,
@@ -88,14 +110,12 @@ const colorMapping = {
   5: 1
 }
 
-let firstWeekDay
-
 // LOAD THE HEAT MAP
 fastForwardHeatMap()
 
-function fastForwardHeatMap() {
-  let login = userData.lastLogin
-  let days = getDaysElapsedFromToday(login, today)
+function fastForwardHeatMap () {
+  const login = userData.lastLogin
+  const days = getDaysElapsedFromToday(login, today)
   if (days === 0) {
     loadHeatMap()
   } else {
@@ -111,16 +131,16 @@ function fastForwardHeatMap() {
 }
 
 // DRAW THE HEATMAP
-function loadHeatMap() {
-  heatmap.innerHTML = ''
+function loadHeatMap () {
+  heatMap.innerHTML = ''
   for (let i = 0; i < userData.firstWeekDay; i++) {
-    let box = document.createElement('div')
+    const box = document.createElement('div')
     heatMap.appendChild(box)
     box.className = 'heatmap-div-placeholder heatmap-div'
     box.style.background = 'none'
   }
   userData.heatMap.forEach(dataPoint => {
-    let box = document.createElement('div')
+    const box = document.createElement('div')
     heatMap.appendChild(box)
     box.classList.add('heatmap-div')
     if (dataPoint > 5) {
@@ -130,12 +150,11 @@ function loadHeatMap() {
   })
 }
 
-
 // LOAD THE PRE EXISTING HABITS
 loadExistingHabits()
 
-function loadExistingHabits() {
-  for (let item of userData.habits) {
+function loadExistingHabits () {
+  for (const item of userData.habits) {
     addHabitToPage(item.habitName)
   }
 }
@@ -144,38 +163,44 @@ function loadExistingHabits() {
 plusIcon.addEventListener('click', showForm)
 
 // SHOW THE FORM
-function showForm() {
-  calendarWrapper.innerHTML = '' // clearing any existing calendars
+function showForm () {
+  resetCal() // clearing any existing calendars
   form.classList.remove('hidden')
 }
 
 // CLOSE THE FORM WHEN CANCEL BUTTON IS CLICKED
 cancelButton.addEventListener('click', cancelForm)
 
-function cancelForm(e) {
+function cancelForm (e) {
   e.preventDefault()
   // add class of 'hidden' to the form
   form.classList.add('hidden')
-  let array = Array.from(habitList.children)
+  const array = Array.from(habitList.children)
   if (!array.some(item => item.classList.contains('clicked-habit'))) {
     splash.style.display = 'flex'
+  } else {
+    const currentHabit = array.filter(item =>
+      item.classList.contains('clicked-habit')
+    )[0].childNodes[0].textContent
+
+    connectCorrectCalendar(currentHabit)
   }
 }
 
 // SAVE THE FORM INPUT WHEN SAVE IS PRESSED
 form.addEventListener('submit', saveHabitData)
 
-function saveHabitData(e) {
+function saveHabitData (e) {
   e.preventDefault()
-  let name = nameInput.value
-  let length = lengthInput.value
+  const name = nameInput.value
+  const length = lengthInput.value
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
   if (name && +length) {
     addHabitToPage(name)
     addHabitToData(name, length)
     form.classList.add('hidden')
-    let array = Array.from(habitList.children)
+    const array = Array.from(habitList.children)
     if (!array.some(item => item.classList.contains('clicked-habit'))) {
       splash.style.display = 'flex'
       Array.from(habitList.children).forEach(item =>
@@ -185,10 +210,9 @@ function saveHabitData(e) {
   }
 }
 
-
 // ADD AND DELETE HABITS
 
-function addHabitToPage(name) {
+function addHabitToPage (name) {
   const habitListItem = document.createElement('li')
   habitList.appendChild(habitListItem)
   habitListItem.innerText = name
@@ -197,15 +221,15 @@ function addHabitToPage(name) {
   deleteButton.innerText = 'X'
   habitListItem.appendChild(deleteButton)
   habitListItem.classList.add('habit-list-item')
-  deleteButton.addEventListener(
+  deleteButton.addEventListener('click', prompt.bind(deleteButton, name))
+  habitListItem.addEventListener(
     'click',
-    deleteHabitFromPage.bind(deleteButton, name)
+    connectCorrectCalendar.bind(deleteButton, name)
   )
-  habitListItem.addEventListener('click', showCalendar.bind(deleteButton, name))
 }
 
-function addHabitToData(name, length) {
-  let newHabit = {
+function addHabitToData (name, length) {
+  const newHabit = {
     habitName: name,
     questLength: length,
     longestStreak: 0,
@@ -213,25 +237,62 @@ function addHabitToData(name, length) {
     dateStarted: getToday(),
     alienList: []
   }
-  let array = userData.habits
+  const array = userData.habits
   array.push(newHabit)
   saveUserData()
 }
 
-function deleteHabitFromPage(name, e) {
+function prompt (name, e) {
   e.stopPropagation()
-  this.parentNode.remove()
+  const deleteButton = this
+  const el = document.createElement('div')
+  el.className = 'prompt'
+  main.append(el)
+  const prompt = document.createElement('h1')
+  prompt.innerText = `
+  
+  
+  ABORT MISSION ?`
+  el.appendChild(prompt)
+  prompt.setAttribute('id', 'prompt')
+  const yes = document.createElement('button')
+  const no = document.createElement('button')
+  const buttons = document.createElement('div')
+  buttons.setAttribute('id', 'form-buttons')
+  buttons.appendChild(yes)
+  buttons.appendChild(no)
+  el.appendChild(buttons)
+  yes.className = 'save-button'
+  no.className = 'cancel-button'
+  yes.innerText = 'YES'
+  no.innerText = 'NO'
+  yes.addEventListener(
+    'click',
+    deleteHabitFromPage.bind(yes, deleteButton, name)
+  )
+  no.addEventListener('click', cancelPrompt)
+}
+
+function cancelPrompt () {
+  this.parentNode.parentNode.remove()
+}
+
+function deleteHabitFromPage (element, name, e) {
+  e.stopPropagation()
+  this.parentNode.parentNode.remove()
+  element.parentNode.remove()
   deleteHabitFromData(name)
-  if (this.parentNode.classList.contains('clicked-habit')) {
-    calendarWrapper.innerHTML = ''
+  if (element.parentNode.classList.contains('clicked-habit')) {
+    console.log('yes')
+    resetCal()
     splash.style.display = 'flex'
   }
 }
 
-function deleteHabitFromData(name) {
-  let array = userData.habits
-  let newArray = []
-  for (let item of array) {
+function deleteHabitFromData (name) {
+  const array = userData.habits
+  const newArray = []
+  for (const item of array) {
     if (item.habitName !== name) {
       newArray.push(item)
     }
@@ -242,18 +303,21 @@ function deleteHabitFromData(name) {
 
 // CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION
 
-function showCalendar(name) {
+function connectCorrectCalendar (name) {
   // INSTRUCIONS
-  Array.from(habitList.children).forEach(item => {
-    item.classList.remove('clicked-habit')
-  })
-  this.parentNode.classList.add('clicked-habit')
+  if (this.classList) {
+    Array.from(habitList.children).forEach(item => {
+      item.classList.remove('clicked-habit')
+    })
+    this.parentNode.classList.add('clicked-habit')
+  }
+
   if (!form.classList.contains('hidden')) {
     form.classList.add('hidden')
   }
-  let array = userData.habits
+  const array = userData.habits
   // access the userData.habits array
-  for (let item of array) {
+  for (const item of array) {
     // search for the matching name
     if (name === item.habitName) {
       // take that habit object, and pass it on to loadcalendar
@@ -264,17 +328,19 @@ function showCalendar(name) {
 
 /*
 *********************************
-CALENDAR CONSTANTS
+CALENDAR
 *********************************
 */
 
-const calendar = document.createElement('div')
-calendar.setAttribute('id', 'calendar')
-const calendarWrapper = document.querySelector('#calendar-wrapper')
-
-let currentHabitDay = 0
+function resetCal () {
+  calendarWrapper.innerHTML = ''
+  calendar = document.createElement('div')
+  calendarWrapper.appendChild(calendar)
+  calendar.setAttribute('id', 'calendar')
+}
 
 const typeLegend = {
+  // legend for the various bodies in game and calendar
   0: ['#0b0b0b', 0, ['', '']], // black space
   1: ['#FF32A9', 30, ['b', 'c']], // alien level 1
   2: ['#07E8E8', 50, ['d', 'e']],
@@ -288,22 +354,15 @@ const typeLegend = {
   40: ['#EF4423', 0, ['y', 'y']] // bullet from aliens
 }
 
-// BINARIES
+// INIT VALUES
 let isReadyToPlay
+let currentHabitDay = 0
 
-/*
-*********************************
-INIT
-*********************************
-*/
-
-function loadCalendar(habit) {
+function loadCalendar (habit) {
   if (document.getElementById('game-over')) {
     main.removeChild(document.getElementById('game-over'))
   }
-  calendarWrapper.innerHTML = ''
-  calendar.innerHTML = ''
-  calendarWrapper.appendChild(calendar)
+  resetCal()
   canvas.style.display = 'none'
   calendarWrapper.style.display = 'flex'
   if (!form.classList.contains('hidden')) {
@@ -321,6 +380,25 @@ function loadCalendar(habit) {
   } else currentHabitDay = 0
 
   // draw calendar
+  drawCalendar(habit)
+  // check if ready to play
+  checkIfQuestComplete(habit)
+}
+
+function fastForwardToToday (habit) {
+  const elapsedDays = getDaysElapsedFromToday(habit.lastCompleted, getToday())
+  if (elapsedDays > 1) {
+    for (let i = 0; i < elapsedDays; i++) {
+      habit.alienList.push(0)
+    }
+    habit.lastCompleted = getToday(-1)
+    habit.currentStreak = 0
+  }
+  currentHabitDay = habit.alienList.length
+  saveUserData()
+}
+
+function drawCalendar (habit) {
   for (let i = 0; i < habit.questLength; i++) {
     const box = document.createElement('button')
     if (i < currentHabitDay) {
@@ -340,51 +418,15 @@ function loadCalendar(habit) {
       calendar.appendChild(box)
     }
   }
-  // check if ready to play
-  checkIfQuestComplete(habit)
-  // load correct buttons
 }
 
-/*
-*********************************
-MAIN FUNCTIONS
-*********************************
-*/
-
-function loadGameOverSplash(habit) {
-  const gameOverSplash = document.createElement('div')
-  gameOverSplash.setAttribute('id', 'game-over')
-  const image = document.createElement('img')
-  image.src = '../media/gameover.svg'
-  const span = document.createElement('span')
-  span.innerText = 'RESTART MISSION'
-  span.setAttribute('data-text', 'RESTART MISSION')
-  span.classList.add('countdown')
-  gameOverSplash.appendChild(image)
-  gameOverSplash.appendChild(span)
-  span.addEventListener('click', restart.bind(span, habit))
-  return gameOverSplash
-}
-
-function fastForwardToToday(habit) {
-  const elapsedDays = getDaysElapsedFromToday(habit.lastCompleted, getToday())
-  if (elapsedDays > 1) {
-    for (let i = 0; i < elapsedDays; i++) {
-      habit.alienList.push(0)
-    }
-    habit.lastCompleted = getToday(-1)
-    habit.currentStreak = 0
-  }
-  currentHabitDay = habit.alienList.length
-  saveUserData()
-}
-
-function checkIfQuestComplete(habit) {
+function checkIfQuestComplete (habit) {
   const playBtn = document.createElement('button')
   const daysRemaining = habit.questLength - currentHabitDay
   if (daysRemaining === 0) isReadyToPlay = true
+  else isReadyToPlay = false
   playBtn.style.display = 'flex'
-  playBtn.className = 'game-start-button'
+  playBtn.className = 'game-start-button ready-in'
   playBtn.innerText = 'READY TO PLAY IN :'
   playBtn.style.marginTop = '100px'
 
@@ -396,7 +438,8 @@ function checkIfQuestComplete(habit) {
   calendarWrapper.appendChild(playBtn)
   playBtn.appendChild(count)
   if (isReadyToPlay) {
-    calendarWrapper.removeChild(count)
+    console.log('yes')
+    playBtn.className = 'game-start-button'
     playBtn.innerText = 'PRESS TO PLAY'
     playBtn.setAttribute('data-text', 'PRESS TO PLAY')
     playBtn.classList.add('countdown')
@@ -404,7 +447,7 @@ function checkIfQuestComplete(habit) {
   }
 }
 
-function completeHabit(habit) {
+function completeHabit (habit) {
   this.removeEventListener('click', completeHabit)
   const streak = habit.currentStreak
   let alienType = 1
@@ -435,14 +478,28 @@ function completeHabit(habit) {
   loadHeatMap()
 }
 
+function loadGameOverSplash (habit) {
+  const gameOverSplash = document.createElement('div')
+  gameOverSplash.setAttribute('id', 'game-over')
+  const image = document.createElement('img')
+  image.src = '../media/gameover.svg'
+  const span = document.createElement('span')
+  span.innerText = 'RESTART MISSION'
+  span.setAttribute('data-text', 'RESTART MISSION')
+  span.classList.add('countdown')
+  gameOverSplash.appendChild(image)
+  gameOverSplash.appendChild(span)
+  span.addEventListener('click', restart.bind(span, habit))
+  return gameOverSplash
+}
+
 /*
 *********************************
-GAME CONSTANTS
+GAME
 *********************************
 */
 
 const keyBoard = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp'])
-
 const shootSound = document.createElement('audio')
 shootSound.src = 'media/shoot.wav'
 const deathSound = document.createElement('audio')
@@ -452,12 +509,12 @@ const ctx = canvas.getContext('2d')
 const score = document.createElement('div')
 
 class Vec {
-  constructor(x, y) {
+  constructor (x, y) {
     this.x = x
     this.y = y
   }
 
-  plus(other) {
+  plus (other) {
     return new Vec(this.x + other.x, this.y + other.y)
   }
 }
@@ -472,7 +529,7 @@ MAIN GAME FUNCTIONS
 *********************************
 */
 
-function initGame(habit) {
+function initGame (habit) {
   if (game) {
     game.self = null
   }
@@ -484,7 +541,7 @@ function initGame(habit) {
   if (document.fonts.check('85px sprites')) {
     game = new Game(canvas, ctx, habit)
     main.appendChild(score)
-    score.innerText = ` SCORE < 0 >`
+    score.innerText = 'SCORE < 0 >'
     score.className = 'score'
 
     calendarWrapper.style.display = 'none'
@@ -494,7 +551,7 @@ function initGame(habit) {
   }
 }
 
-function gameOver(habit, game) {
+function gameOver (habit, game) {
   if (document.getElementById('game-over')) {
     main.removeChild(document.getElementById('game-over'))
   }
@@ -507,14 +564,13 @@ function gameOver(habit, game) {
   saveUserData()
 }
 
-function restart(habit) {
-  console.log(habit)
+function restart (habit) {
   habit.gameOver = false
   habit.alienList = []
   habit.currentStreak = 0
   habit.dateStarted = today
   habit.lastCompleted = null
-  console.log(userData)
+
   saveUserData()
   loadCalendar(habit)
 }
@@ -526,7 +582,7 @@ GAME CLASSES
 */
 
 class Game {
-  constructor(canvas, context, habit) {
+  constructor (canvas, context, habit) {
     this.gameSize = new Vec(WIDTH, HEIGHT)
     this.canvas = canvas
     this.ctx = context
@@ -536,20 +592,20 @@ class Game {
     this.score = 0
   }
 
-  reset(habit) {
-    let resetGame = new Game(canvas, ctx, habit)
+  reset (habit) {
+    const resetGame = new Game(canvas, ctx, habit)
     resetGame.bodies = []
     gameRunning = false
     return resetGame
   }
 
-  start() {
+  start () {
     gameRunning = true
 
     this.loop()
   }
 
-  loop() {
+  loop () {
     self.update()
     self.draw()
     self.bodies.forEach(body => body.update())
@@ -560,14 +616,13 @@ class Game {
     }
   }
 
-  update() {
+  update () {
     // animations
     if (delta % 80 === 0) {
-      alienPicker = alienPicker ? false : true
+      alienPicker = !!alienPicker
       self.bodies = self.bodies.filter(
         body => body.type !== 10 && body.type !== 25
       )
-      console.log('running')
     }
 
     const remainingAliens = self.bodies.filter(body => body instanceof Alien)
@@ -585,7 +640,7 @@ class Game {
       return notColliding(body) || body.type === 10 || body.type === 25
     })
 
-    function notColliding(b1) {
+    function notColliding (b1) {
       return (
         self.bodies.filter(function (b2) {
           return colliding(b1, b2)
@@ -596,14 +651,14 @@ class Game {
     self.bodies = self.bodies.filter(body => !(body.center.y < 0))
   }
 
-  draw() {
+  draw () {
     this.ctx.clearRect(0, 0, WIDTH, HEIGHT)
     this.bodies.forEach(body => {
       drawBody(ctx, body)
     })
   }
 
-  aliensBelow(alien) {
+  aliensBelow (alien) {
     return this.bodies.filter(body => {
       return (
         body instanceof Alien &&
@@ -615,7 +670,7 @@ class Game {
 }
 
 class Alien {
-  constructor(game, center, type, speed) {
+  constructor (game, center, type, speed) {
     this.size = { x: 80, y: 80 }
     this.center = center
     this.game = game
@@ -627,7 +682,7 @@ class Alien {
     this.speed = speed
   }
 
-  update() {
+  update () {
     if (this.patrolX < -150 || this.patrolX > 150) {
       this.speed.x = -this.speed.x
     }
@@ -646,7 +701,7 @@ class Alien {
 }
 
 class Player {
-  constructor(game, gameSize) {
+  constructor (game, gameSize) {
     this.size = { x: 100, y: 100 }
     this.type = 20
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
@@ -654,7 +709,7 @@ class Player {
     this.letters = typeLegend[this.type][2]
   }
 
-  update() {
+  update () {
     if (keyBoard.ArrowLeft) {
       // moves left and right
       if (this.center.x > this.size.x / 2) this.center.x -= 2
@@ -679,7 +734,7 @@ class Player {
 }
 
 class Bullet {
-  constructor(center, speed, size, type) {
+  constructor (center, speed, size, type) {
     this.center = center
     this.type = type
     this.speed = speed
@@ -688,9 +743,9 @@ class Bullet {
     this.letters = typeLegend[type][2]
   }
 
-  update() {
+  update () {
     this.center.y += this.speed.y
-    let hit = game.bodies.filter(body => colliding(this, body))
+    const hit = game.bodies.filter(body => colliding(this, body))
 
     if (hit.length > 0) {
       if (hit[0] instanceof Player) {
@@ -716,8 +771,8 @@ GAME HELPER FUNCTIONS
 *********************************
 */
 
-function resizeCanvas() {
-  let scale = window.devicePixelRatio
+function resizeCanvas () {
+  const scale = window.devicePixelRatio
   canvas.width = Math.floor(window.innerWidth * 0.65 * scale)
   canvas.height = Math.floor(window.innerHeight * scale)
   WIDTH = canvas.width
@@ -728,7 +783,7 @@ function resizeCanvas() {
   )
 }
 
-function createAliens(game) {
+function createAliens (game) {
   let newAliens = []
   const start = new Vec(startPos.x, startPos.y)
   let x = start.x
@@ -748,13 +803,14 @@ function createAliens(game) {
   return newAliens
 }
 
-function drawBody(ctx, body) { // draws the bodies to the canvas
-  let bodyType = body.type
+function drawBody (ctx, body) {
+  // draws the bodies to the canvas
+  const bodyType = body.type
   if (body instanceof Bullet) {
     ctx.fillStyle = typeLegend[0][0]
     ctx.fillStyle = body.color
     ctx.font = '100px sprites'
-    let text = 'y'
+    const text = 'y'
     ctx.fillText(text, body.center.x - body.size.x / 2, body.center.y + 18)
   }
 
