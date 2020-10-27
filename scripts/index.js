@@ -29,62 +29,12 @@ function loadUserData () {
     userData = JSON.parse(localStorage.getItem('locallyStored'))
   } else {
     userData = {
-      name: 'Tuva',
-      highScore: 2000,
-      lastLogin: '20-10-20',
-      heatMap: [1, 0, 0, 4],
-      firstWeekDay: 3,
-      habits: [
-        {
-          habitName: 'brush teeth',
-          questLength: 31,
-          longestStreak: 10,
-          currentStreak: 10,
-          dateStarted: '20-10-11',
-          lastCompleted: '20-10-21',
-          alienList: [
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            2,
-            3,
-            3,
-            3,
-            3,
-            3,
-            3,
-            0
-          ]
-        },
-        {
-          habitName: 'drink vodka',
-          questLength: 50,
-          longestStreak: 7,
-          currentStreak: 1,
-          dateStarted: '20-09-25',
-          lastCompleted: '20-09-30',
-          alienList: [1, 1, 1, 0, 1, 1]
-        },
-        {
-          habitName: 'code',
-          questLength: 18,
-          longestStreak: 13,
-          currentStreak: 13,
-          dateStarted: '20-10-10',
-          lastCompleted: '20-10-23',
-          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2]
-        }
-      ]
+      name: '',
+      highScore: 0,
+      lastLogin: today,
+      heatMap: [0],
+      firstWeekDay: new Date().getDay(),
+      habits: []
     }
   }
 }
