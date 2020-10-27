@@ -42,6 +42,15 @@ function loadUserData () {
         startDate: getToday(-34),
         lastCompleted: getToday(-1),
         alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5]
+      },
+      {
+        habitName: 'code',
+        questLength: 31,
+        currentStreak: 34,
+        longestStreak: 34,
+        startDate: getToday(-10),
+        lastCompleted: getToday(-3),
+        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1]
       }]
     }
   }
