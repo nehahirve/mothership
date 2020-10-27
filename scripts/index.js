@@ -189,6 +189,7 @@ function cancelForm (e) {
 
 // SAVE THE FORM INPUT WHEN SAVE IS PRESSED
 form.addEventListener('submit', saveHabitData)
+form.addEventListener('change', countDays)
 
 function saveHabitData (e) {
   e.preventDefault()
@@ -196,7 +197,8 @@ function saveHabitData (e) {
   const length = lengthInput.value
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
-  if (name && +length) {
+ 
+ if (name && length) {
     addHabitToPage(name)
     addHabitToData(name, length)
     form.classList.add('hidden')
@@ -209,6 +211,16 @@ function saveHabitData (e) {
     }
   }
 }
+let slider = document.querySelector('#input-length')
+  let output = document.querySelector('#kittens')
+  
+  function countDays(e) {
+  output.innerHTML = slider.value
+  slider.oninput = countDays(); {
+  output.innerHTML = this.value
+} 
+  }
+
 
 // ADD AND DELETE HABITS
 
