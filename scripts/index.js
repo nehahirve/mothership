@@ -394,7 +394,7 @@ function checkIfQuestComplete(habit) {
   count.setAttribute('data-text', `${daysRemaining} DAYS`)
 
   calendarWrapper.appendChild(playBtn)
-  calendarWrapper.appendChild(count)
+  playBtn.appendChild(count)
   if (isReadyToPlay) {
     calendarWrapper.removeChild(count)
     playBtn.innerText = 'PRESS TO PLAY'
