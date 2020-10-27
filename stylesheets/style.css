@@ -178,6 +178,7 @@ main {
   font-size: 2.6rem;
   font-family: 'space_invaders';
   position: relative;
+  flex-direction: column;
 }
 
 .countdown {

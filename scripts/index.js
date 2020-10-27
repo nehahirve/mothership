@@ -1,20 +1,27 @@
-// window will load
+// WINDOW LOADS
 
-var today = getToday()
-let firstWeekDay
-// var dd = String(today.getDate()).padStart(2, '0')
-// var mm = String(today.getMonth() + 1).padStart(2, '0')
-// var yyyy = today.getFullYear()
-
-let userData
-loadUserData()
-
-let main = document.querySelector('main')
-let nav = document.querySelector('nav')
+// GET DOM ELEMENTS
+const main = document.querySelector('main')
+const nav = document.querySelector('nav')
 const hiScore = document.querySelector('.hi-score')
-hiScore.innerText = `HI-SCORE : < ${userData.highScore} >`
-loadStars(nav)
-loadStars(main)
+const splash = document.querySelector('#splash')
+const gameOverSplash = document.querySelector('#game-over')
+const form = document.querySelector('form')
+const plusIcon = document.getElementById('plus-icon')
+const cancelButton = document.querySelector('.cancel-button')
+const habitList = document.querySelector('ul')
+const nameInput = document.querySelector('#input-name')
+const lengthInput = document.querySelector('#input-length')
+const heatMap = document.querySelector('#heatmap')
+
+// GET TODAY'S DATE
+var today = getToday()
+
+// ON WINDOW LOAD
+let userData
+
+// loads the correct user data
+loadUserData()
 
 function loadUserData() {
   if (localStorage.getItem('locallyStored')) {
@@ -25,7 +32,6 @@ function loadUserData() {
       highScore: 2000,
       lastLogin: '20-10-20',
       heatMap: [1, 0, 0, 4],
-      //firstWeekDay: new Date().getDay()
       firstWeekDay: 3,
       habits: [
         {
@@ -35,7 +41,7 @@ function loadUserData() {
           currentStreak: 10,
           dateStarted: '20-10-11',
           lastCompleted: '20-10-21',
-          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2]
+          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 0]
         },
         {
           habitName: 'drink vodka',
@@ -60,21 +66,19 @@ function loadUserData() {
   }
 }
 
+// OVERWRITE THE LOCAL STORAGE WITH THE NEW USER DATA
 function saveUserData() {
   localStorage.setItem('locallyStored', JSON.stringify(userData))
 }
 
-// GRAB THE IMPORTANT ELEMENTS FROM THE HTML PAGE
-const splash = document.querySelector('#splash')
-const gameOverSplash = document.querySelector('#game-over')
-const form = document.querySelector('form')
-const plusIcon = document.getElementById('plus-icon')
-const cancelButton = document.querySelector('.cancel-button')
-const habitList = document.querySelector('ul')
-const nameInput = document.querySelector('#input-name')
-const lengthInput = document.querySelector('#input-length')
-const heatMap = document.querySelector('#heatmap')
 
+// SET HIGH SCORE
+hiScore.innerText = `HI-SCORE : < ${userData.highScore} >`
+// CREATE STARFIELD
+loadStars(nav)
+loadStars(main)
+
+// MAPS THE HEATMAP ARRAY VALUES TO CSS OPACITY VALUES FOR THE HEATMAP DIV
 const colorMapping = {
   0: 0.1,
   1: 0.2,
@@ -84,14 +88,10 @@ const colorMapping = {
   5: 1
 }
 
-// LOAD THE PRE EXISTING HABITS
+let firstWeekDay
 
+// LOAD THE HEAT MAP
 fastForwardHeatMap()
-
-// let box = document.createElement('div')
-// heatMap.appendChild(box)
-// box.style.background = 'pink'
-// box.classList.add('heatmap-div')
 
 function fastForwardHeatMap() {
   let login = userData.lastLogin
@@ -106,10 +106,11 @@ function fastForwardHeatMap() {
   }
 
   saveUserData()
-  userData.lastLogin = today
+  userData.lastLogin = today // RESET THE LAST LOGIN
   saveUserData()
 }
 
+// DRAW THE HEATMAP
 function loadHeatMap() {
   heatmap.innerHTML = ''
   for (let i = 0; i < userData.firstWeekDay; i++) {
@@ -129,6 +130,8 @@ function loadHeatMap() {
   })
 }
 
+
+// LOAD THE PRE EXISTING HABITS
 loadExistingHabits()
 
 function loadExistingHabits() {
@@ -140,8 +143,9 @@ function loadExistingHabits() {
 // OPEN THE FORM WHEN PLUS ICON IS CLICKED
 plusIcon.addEventListener('click', showForm)
 
+// SHOW THE FORM
 function showForm() {
-  calendarWrapper.innerHTML = ''
+  calendarWrapper.innerHTML = '' // clearing any existing calendars
   form.classList.remove('hidden')
 }
 
@@ -161,13 +165,10 @@ function cancelForm(e) {
 // SAVE THE FORM INPUT WHEN SAVE IS PRESSED
 form.addEventListener('submit', saveHabitData)
 
-let name
-let length
-
 function saveHabitData(e) {
   e.preventDefault()
-  name = nameInput.value
-  length = lengthInput.value
+  let name = nameInput.value
+  let length = lengthInput.value
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
   if (name && +length) {
@@ -181,9 +182,9 @@ function saveHabitData(e) {
         item.classList.remove('clicked-habit')
       )
     }
-    //splash.style.display = 'flex'
   }
 }
+
 
 // ADD AND DELETE HABITS
 
@@ -263,12 +264,6 @@ function showCalendar(name) {
 
 /*
 *********************************
-NEHA'S PART DON'T WRITE CODE BELOW THIS LINE
-*********************************
-*/
-
-/*
-*********************************
 CALENDAR CONSTANTS
 *********************************
 */
@@ -280,36 +275,21 @@ const calendarWrapper = document.querySelector('#calendar-wrapper')
 let currentHabitDay = 0
 
 const typeLegend = {
-  0: ['#0b0b0b', 0, ['', '']],
-  1: ['#FF32A9', 30, ['b', 'c']],
+  0: ['#0b0b0b', 0, ['', '']], // black space
+  1: ['#FF32A9', 30, ['b', 'c']], // alien level 1
   2: ['#07E8E8', 50, ['d', 'e']],
   3: ['#FF9526', 75, ['l', 'm']],
   4: ['#6030f0', 100, ['r', 's']],
   5: ['#c048ff', 200, ['f', 'g']],
-  10: ['#F9FE0E', 0, ['z', 'z']],
-  20: ['#fff1c2', 0, ['w', 'w']],
-  25: ['#fff1c2', 0, ['x', 'x']],
-  30: ['#F9FE0E', 0, ['y', 'y']],
-  40: ['#EF4423', 0, ['y', 'y']]
+  10: ['#F9FE0E', 0, ['z', 'z']], // explosion
+  20: ['#fff1c2', 0, ['w', 'w']], // player
+  25: ['#fff1c2', 0, ['x', 'x']], // player dead
+  30: ['#F9FE0E', 0, ['y', 'y']], // bullet from player
+  40: ['#EF4423', 0, ['y', 'y']] // bullet from aliens
 }
 
 // BINARIES
 let isReadyToPlay
-
-function loadGameOverSplash(habit) {
-  const gameOverSplash = document.createElement('div')
-  gameOverSplash.setAttribute('id', 'game-over')
-  const image = document.createElement('img')
-  image.src = '../media/gameover.svg'
-  const span = document.createElement('span')
-  span.innerText = 'RESTART MISSION'
-  span.setAttribute('data-text', 'RESTART MISSION')
-  span.classList.add('countdown')
-  gameOverSplash.appendChild(image)
-  gameOverSplash.appendChild(span)
-  span.addEventListener('click', restart.bind(span, habit))
-  return gameOverSplash
-}
 
 /*
 *********************************
@@ -371,6 +351,21 @@ MAIN FUNCTIONS
 *********************************
 */
 
+function loadGameOverSplash(habit) {
+  const gameOverSplash = document.createElement('div')
+  gameOverSplash.setAttribute('id', 'game-over')
+  const image = document.createElement('img')
+  image.src = '../media/gameover.svg'
+  const span = document.createElement('span')
+  span.innerText = 'RESTART MISSION'
+  span.setAttribute('data-text', 'RESTART MISSION')
+  span.classList.add('countdown')
+  gameOverSplash.appendChild(image)
+  gameOverSplash.appendChild(span)
+  span.addEventListener('click', restart.bind(span, habit))
+  return gameOverSplash
+}
+
 function fastForwardToToday(habit) {
   const elapsedDays = getDaysElapsedFromToday(habit.lastCompleted, getToday())
   if (elapsedDays > 1) {
@@ -400,7 +395,7 @@ function checkIfQuestComplete(habit) {
 
   calendarWrapper.appendChild(playBtn)
   calendarWrapper.appendChild(count)
-  if (!isReadyToPlay) {
+  if (isReadyToPlay) {
     calendarWrapper.removeChild(count)
     playBtn.innerText = 'PRESS TO PLAY'
     playBtn.setAttribute('data-text', 'PRESS TO PLAY')
@@ -434,6 +429,7 @@ function completeHabit(habit) {
   habit.lastCompleted = today
   habit.alienList.push(alienType)
 
+  // UPDATE THE HEATMAP
   userData.heatMap[userData.heatMap.length - 1]++
   saveUserData()
   loadHeatMap()
@@ -752,7 +748,7 @@ function createAliens(game) {
   return newAliens
 }
 
-function drawBody(ctx, body) {
+function drawBody(ctx, body) { // draws the bodies to the canvas
   let bodyType = body.type
   if (body instanceof Bullet) {
     ctx.fillStyle = typeLegend[0][0]
