@@ -30,11 +30,28 @@ function loadUserData () {
   } else {
     userData = {
       name: '',
-      highScore: 0,
-      lastLogin: today,
-      heatMap: [0],
-      firstWeekDay: new Date().getDay(),
-      habits: []
+      highScore: 3000,
+      lastLogin: getToday(),
+      heatMap: [1, 8, 8, 8, 6, 6, 6, 3, 3, 2, 0, 0, 1, 1, 1, 2, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 0, 0],
+      firstWeekDay: 3,
+      habits: [{
+        habitName: 'drink vodka',
+        questLength: 35,
+        currentStreak: 34,
+        longestStreak: 34,
+        startDate: getToday(-34),
+        lastCompleted: getToday(-1),
+        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5]
+      },
+      {
+        habitName: 'code',
+        questLength: 31,
+        currentStreak: 34,
+        longestStreak: 34,
+        startDate: getToday(-10),
+        lastCompleted: getToday(-3),
+        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1]
+      }]
     }
   }
 }
@@ -52,7 +69,7 @@ loadStars(main)
 
 // MAPS THE HEATMAP ARRAY VALUES TO CSS OPACITY VALUES FOR THE HEATMAP DIV
 const colorMapping = {
-  0: 0.05,
+  0: 0.1,
   1: 0.2,
   2: 0.4,
   3: 0.6,
@@ -634,7 +651,7 @@ class Game {
         body.center.x === alien.center.x &&
         body.center.y > alien.center.y
       )
-    })
+    }).length === 0
   }
 }
 
@@ -652,11 +669,6 @@ class Alien {
   }
 
   update () {
-    if (this.patrolX < -150 || this.patrolX > 150) {
-      this.speed.x = -this.speed.x
-    }
-    this.center = this.center.plus(this.speed)
-    this.patrolX += this.speed.x
     if (game.aliensBelow(this) && Math.random() > 0.9996) {
       const bullet = new Bullet(
         new Vec(this.center.x, this.center.y + this.size.y + 100),
@@ -666,6 +678,13 @@ class Alien {
       )
       game.bodies.push(bullet)
     }
+    console.log(game.aliensBelow(this))
+    if (this.patrolX < -150 || this.patrolX > 150) {
+      this.speed.x = -this.speed.x
+    }
+    this.center = this.center.plus(this.speed)
+    this.patrolX += this.speed.x
+    
   }
 }
 
