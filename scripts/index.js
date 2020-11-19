@@ -24,7 +24,7 @@ let userData
 // loads the correct user data
 loadUserData()
 
-function loadUserData () {
+function loadUserData() {
   if (localStorage.getItem('locallyStored')) {
     userData = JSON.parse(localStorage.getItem('locallyStored'))
   } else {
@@ -32,32 +32,99 @@ function loadUserData () {
       name: '',
       highScore: 3000,
       lastLogin: getToday(),
-      heatMap: [1, 8, 8, 8, 6, 6, 6, 3, 3, 2, 0, 0, 1, 1, 1, 2, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 0, 0],
+      heatMap: [
+        1,
+        8,
+        8,
+        8,
+        6,
+        6,
+        6,
+        3,
+        3,
+        2,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        0,
+        0
+      ],
       firstWeekDay: 3,
-      habits: [{
-        habitName: 'drink vodka',
-        questLength: 35,
-        currentStreak: 34,
-        longestStreak: 34,
-        startDate: getToday(-34),
-        lastCompleted: getToday(-1),
-        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5]
-      },
-      {
-        habitName: 'code',
-        questLength: 31,
-        currentStreak: 34,
-        longestStreak: 34,
-        startDate: getToday(-10),
-        lastCompleted: getToday(-2),
-        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1, 1]
-      }]
+      habits: [
+        {
+          habitName: 'drink vodka',
+          questLength: 35,
+          currentStreak: 34,
+          longestStreak: 34,
+          startDate: getToday(-34),
+          lastCompleted: getToday(-1),
+          alienList: [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ]
+        },
+        {
+          habitName: 'code',
+          questLength: 31,
+          currentStreak: 34,
+          longestStreak: 34,
+          startDate: getToday(-10),
+          lastCompleted: getToday(-2),
+          alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1, 1]
+        }
+      ]
     }
   }
 }
 
 // OVERWRITE THE LOCAL STORAGE WITH THE NEW USER DATA
-function saveUserData () {
+function saveUserData() {
   localStorage.setItem('locallyStored', JSON.stringify(userData))
 }
 
@@ -80,7 +147,7 @@ const colorMapping = {
 // LOAD THE HEAT MAP
 fastForwardHeatMap()
 
-function fastForwardHeatMap () {
+function fastForwardHeatMap() {
   const login = userData.lastLogin
   const days = getDaysElapsedFromToday(login, today)
   if (days === 0) {
@@ -98,7 +165,7 @@ function fastForwardHeatMap () {
 }
 
 // DRAW THE HEATMAP
-function loadHeatMap () {
+function loadHeatMap() {
   heatMap.innerHTML = ''
   for (let i = 0; i < userData.firstWeekDay; i++) {
     const box = document.createElement('div')
@@ -120,7 +187,7 @@ function loadHeatMap () {
 // LOAD THE PRE EXISTING HABITS
 loadExistingHabits()
 
-function loadExistingHabits () {
+function loadExistingHabits() {
   for (const item of userData.habits) {
     addHabitToPage(item.habitName)
   }
@@ -130,7 +197,7 @@ function loadExistingHabits () {
 plusIcon.addEventListener('click', showForm)
 
 // SHOW THE FORM
-function showForm () {
+function showForm() {
   resetCal() // clearing any existing calendars
   form.classList.remove('hidden')
 }
@@ -138,7 +205,7 @@ function showForm () {
 // CLOSE THE FORM WHEN CANCEL BUTTON IS CLICKED
 cancelButton.addEventListener('click', cancelForm)
 
-function cancelForm (e) {
+function cancelForm(e) {
   e.preventDefault()
   // add class of 'hidden' to the form
   form.classList.add('hidden')
@@ -158,14 +225,14 @@ function cancelForm (e) {
 form.addEventListener('submit', saveHabitData)
 form.addEventListener('change', countDays)
 
-function saveHabitData (e) {
+function saveHabitData(e) {
   e.preventDefault()
   const name = nameInput.value
   const length = lengthInput.value
   // if nameInput has smth && lengthInput has smth && lenghtInput is a number
   // only then
- 
- if (name && length) {
+
+  if (name && length) {
     addHabitToPage(name)
     addHabitToData(name, length)
     form.classList.add('hidden')
@@ -179,7 +246,7 @@ function saveHabitData (e) {
       const currentHabit = array.filter(item =>
         item.classList.contains('clicked-habit')
       )[0].childNodes[0].textContent
-  
+
       connectCorrectCalendar(currentHabit)
     }
   }
@@ -194,10 +261,9 @@ function countDays(e) {
   output.innerHTML = `${e.target.value} DAYS`
 }
 
-
 // ADD AND DELETE HABITS
 
-function addHabitToPage (name) {
+function addHabitToPage(name) {
   const habitListItem = document.createElement('li')
   habitList.appendChild(habitListItem)
   habitListItem.innerText = name
@@ -213,7 +279,7 @@ function addHabitToPage (name) {
   )
 }
 
-function addHabitToData (name, length) {
+function addHabitToData(name, length) {
   const newHabit = {
     habitName: name,
     questLength: length,
@@ -227,7 +293,7 @@ function addHabitToData (name, length) {
   saveUserData()
 }
 
-function prompt (name, e) {
+function prompt(name, e) {
   e.stopPropagation()
   const deleteButton = this
   const el = document.createElement('div')
@@ -258,11 +324,11 @@ function prompt (name, e) {
   no.addEventListener('click', cancelPrompt)
 }
 
-function cancelPrompt () {
+function cancelPrompt() {
   this.parentNode.parentNode.remove()
 }
 
-function deleteHabitFromPage (element, name, e) {
+function deleteHabitFromPage(element, name, e) {
   e.stopPropagation()
   this.parentNode.parentNode.remove()
   element.parentNode.remove()
@@ -274,7 +340,7 @@ function deleteHabitFromPage (element, name, e) {
   }
 }
 
-function deleteHabitFromData (name) {
+function deleteHabitFromData(name) {
   const array = userData.habits
   const newArray = []
   for (const item of array) {
@@ -288,7 +354,7 @@ function deleteHabitFromData (name) {
 
 // CONNECT THE CORRECT HABIT TO THE CALENDAR LOAD FUNCTION
 
-function connectCorrectCalendar (name) {
+function connectCorrectCalendar(name) {
   // INSTRUCIONS
   if (this.classList) {
     Array.from(habitList.children).forEach(item => {
@@ -317,7 +383,7 @@ CALENDAR
 *********************************
 */
 
-function resetCal () {
+function resetCal() {
   calendarWrapper.innerHTML = ''
   calendar = document.createElement('div')
   calendarWrapper.appendChild(calendar)
@@ -343,7 +409,7 @@ const typeLegend = {
 let isReadyToPlay
 let currentHabitDay = 0
 
-function loadCalendar (habit) {
+function loadCalendar(habit) {
   if (document.getElementById('game-over')) {
     main.removeChild(document.getElementById('game-over'))
   }
@@ -370,7 +436,7 @@ function loadCalendar (habit) {
   checkIfQuestComplete(habit)
 }
 
-function fastForwardToToday (habit) {
+function fastForwardToToday(habit) {
   const elapsedDays = getDaysElapsedFromToday(habit.lastCompleted, getToday())
   if (elapsedDays > 1) {
     for (let i = 0; i < elapsedDays; i++) {
@@ -383,7 +449,7 @@ function fastForwardToToday (habit) {
   saveUserData()
 }
 
-function drawCalendar (habit) {
+function drawCalendar(habit) {
   for (let i = 0; i < habit.questLength; i++) {
     const box = document.createElement('button')
     if (i < currentHabitDay) {
@@ -405,7 +471,7 @@ function drawCalendar (habit) {
   }
 }
 
-function checkIfQuestComplete (habit) {
+function checkIfQuestComplete(habit) {
   const playBtn = document.createElement('button')
   const daysRemaining = habit.questLength - currentHabitDay
   if (daysRemaining === 0) isReadyToPlay = true
@@ -432,7 +498,7 @@ function checkIfQuestComplete (habit) {
   }
 }
 
-function completeHabit (habit) {
+function completeHabit(habit) {
   this.removeEventListener('click', completeHabit)
   const streak = habit.currentStreak
   let alienType = 1
@@ -464,11 +530,11 @@ function completeHabit (habit) {
   loadCalendar(habit)
 }
 
-function loadGameOverSplash (habit) {
+function loadGameOverSplash(habit) {
   const gameOverSplash = document.createElement('div')
   gameOverSplash.setAttribute('id', 'game-over')
   const image = document.createElement('img')
-  image.src = '../media/gameover.svg'
+  image.src = '../gameover.svg'
   const span = document.createElement('span')
   span.innerText = 'RESTART MISSION'
   span.setAttribute('data-text', 'RESTART MISSION')
@@ -495,12 +561,12 @@ const ctx = canvas.getContext('2d')
 const score = document.createElement('div')
 
 class Vec {
-  constructor (x, y) {
+  constructor(x, y) {
     this.x = x
     this.y = y
   }
 
-  plus (other) {
+  plus(other) {
     return new Vec(this.x + other.x, this.y + other.y)
   }
 }
@@ -515,7 +581,7 @@ MAIN GAME FUNCTIONS
 *********************************
 */
 
-function initGame (habit) {
+function initGame(habit) {
   if (game) {
     game.self = null
   }
@@ -537,7 +603,7 @@ function initGame (habit) {
   }
 }
 
-function gameOver (habit, game) {
+function gameOver(habit, game) {
   if (document.getElementById('game-over')) {
     main.removeChild(document.getElementById('game-over'))
   }
@@ -550,7 +616,7 @@ function gameOver (habit, game) {
   saveUserData()
 }
 
-function restart (habit) {
+function restart(habit) {
   habit.gameOver = false
   habit.alienList = []
   habit.currentStreak = 0
@@ -568,7 +634,7 @@ GAME CLASSES
 */
 
 class Game {
-  constructor (canvas, context, habit) {
+  constructor(canvas, context, habit) {
     this.gameSize = new Vec(WIDTH, HEIGHT)
     this.canvas = canvas
     this.ctx = context
@@ -578,20 +644,20 @@ class Game {
     this.score = 0
   }
 
-  reset (habit) {
+  reset(habit) {
     const resetGame = new Game(canvas, ctx, habit)
     resetGame.bodies = []
     gameRunning = false
     return resetGame
   }
 
-  start () {
+  start() {
     gameRunning = true
 
     this.loop()
   }
 
-  loop () {
+  loop() {
     self.update()
     self.draw()
     self.bodies.forEach(body => body.update())
@@ -602,7 +668,7 @@ class Game {
     }
   }
 
-  update () {
+  update() {
     // animations
     if (delta % 80 === 0) {
       alienPicker = !!alienPicker
@@ -626,7 +692,7 @@ class Game {
       return notColliding(body) || body.type === 10 || body.type === 25
     })
 
-    function notColliding (b1) {
+    function notColliding(b1) {
       return (
         self.bodies.filter(function (b2) {
           return colliding(b1, b2)
@@ -637,26 +703,28 @@ class Game {
     self.bodies = self.bodies.filter(body => !(body.center.y < 0))
   }
 
-  draw () {
+  draw() {
     this.ctx.clearRect(0, 0, WIDTH, HEIGHT)
     this.bodies.forEach(body => {
       drawBody(ctx, body)
     })
   }
 
-  aliensBelow (alien) {
-    return this.bodies.filter(body => {
-      return (
-        body instanceof Alien &&
-        body.center.x === alien.center.x &&
-        body.center.y > alien.center.y
-      )
-    }).length === 0
+  aliensBelow(alien) {
+    return (
+      this.bodies.filter(body => {
+        return (
+          body instanceof Alien &&
+          body.center.x === alien.center.x &&
+          body.center.y > alien.center.y
+        )
+      }).length === 0
+    )
   }
 }
 
 class Alien {
-  constructor (game, center, type, speed) {
+  constructor(game, center, type, speed) {
     this.size = { x: 80, y: 80 }
     this.center = center
     this.game = game
@@ -668,7 +736,7 @@ class Alien {
     this.speed = speed
   }
 
-  update () {
+  update() {
     if (game.aliensBelow(this) && Math.random() > 0.9996) {
       const bullet = new Bullet(
         new Vec(this.center.x, this.center.y + this.size.y + 100),
@@ -684,12 +752,11 @@ class Alien {
     }
     this.center = this.center.plus(this.speed)
     this.patrolX += this.speed.x
-    
   }
 }
 
 class Player {
-  constructor (game, gameSize) {
+  constructor(game, gameSize) {
     this.size = { x: 100, y: 100 }
     this.type = 20
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 4 }
@@ -697,7 +764,7 @@ class Player {
     this.letters = typeLegend[this.type][2]
   }
 
-  update () {
+  update() {
     if (keyBoard.ArrowLeft) {
       // moves left and right
       if (this.center.x > this.size.x / 2) this.center.x -= 2
@@ -722,7 +789,7 @@ class Player {
 }
 
 class Bullet {
-  constructor (center, speed, size, type) {
+  constructor(center, speed, size, type) {
     this.center = center
     this.type = type
     this.speed = speed
@@ -731,7 +798,7 @@ class Bullet {
     this.letters = typeLegend[type][2]
   }
 
-  update () {
+  update() {
     this.center.y += this.speed.y
     const hit = game.bodies.filter(body => colliding(this, body))
 
@@ -759,7 +826,7 @@ GAME HELPER FUNCTIONS
 *********************************
 */
 
-function resizeCanvas () {
+function resizeCanvas() {
   const scale = window.devicePixelRatio
   canvas.width = Math.floor(window.innerWidth * 0.65 * scale)
   canvas.height = Math.floor(window.innerHeight * scale)
@@ -771,7 +838,7 @@ function resizeCanvas () {
   )
 }
 
-function createAliens (game) {
+function createAliens(game) {
   let newAliens = []
   const start = new Vec(startPos.x, startPos.y)
   let x = start.x
@@ -791,7 +858,7 @@ function createAliens (game) {
   return newAliens
 }
 
-function drawBody (ctx, body) {
+function drawBody(ctx, body) {
   // draws the bodies to the canvas
   const bodyType = body.type
   if (body instanceof Bullet) {
