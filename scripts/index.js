@@ -49,8 +49,8 @@ function loadUserData () {
         currentStreak: 34,
         longestStreak: 34,
         startDate: getToday(-10),
-        lastCompleted: getToday(-3),
-        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1]
+        lastCompleted: getToday(-2),
+        alienList: [1, 1, 1, 1, 1, 1, 1, 2, 0, 1, 1]
       }]
     }
   }
