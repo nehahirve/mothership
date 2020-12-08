@@ -1,61 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👾</text></svg>"
-    />
-    <link rel="stylesheet" href="stylesheets/reset.css" />
-    <link rel="stylesheet" href="stylesheets/starfield.min.css" />
-    <link rel="stylesheet" href="stylesheets/style.css" />
-    <title>Mothership</title>
-  </head>
 
-  <body>
-    <nav>
-      <header>GREETINGS,&nbsp&nbsp&nbspALIEN</header>
-      <span class="hi-score"></span>
-      <ul id="habit-list"></ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👾</text></svg>" />
+  <link rel="stylesheet" href="stylesheets/reset.css" />
+  <link rel="stylesheet" href="stylesheets/starfield.min.css" />
+  <link rel="stylesheet" href="stylesheets/style.css" />
+  <title>Mothership</title>
+</head>
 
-      <div id="heatmap"></div>
-      <div id="menu-bottom">
-        <button id="plus-icon">+</button>
-      </div>
-    </nav>
-    <main>
-      <canvas></canvas>
-      <div id="splash">
-        <img src="spaceinhabit.svg" alt="Space Inhabit Logo" />
-        <span>ADD A HABIT TO START</span>
-      </div>
-      <div id="calendar-wrapper">
-        <div id="calendar"></div>
-      </div>
-      <form class="hidden">
-        <h1>NEW&nbsp&nbsp&nbsp&nbspMISSION</h1>
-        <br />
-        <br />
-        <label><b>Name your new habit</b></label>
-        <br /><br />
-        <input type="text" placeholder="Dream big!" id="input-name" />
-        <br /><br />
-        <label
-          ><b
-            >Mission Length :&nbsp&nbsp&nbsp <span id="slider-length"></span></b
-        ></label>
-        <br />
-        <input type="range" min="7" max="50" id="input-length" />
-        <!-- changed from text to number-->
-        <div id="form-buttons">
-          <button class="save-button" type="submit">Save</button>
-          <button class="cancel-button">Cancel</button>
-        </div>
-      </form>
-    </main>
-  </body>
+<body>
+  <nav>
+    <header>GREETINGS,&nbsp&nbsp&nbspALIEN</header>
+    <span class="hi-score"></span>
+    <ul id="habit-list"></ul>
 
-  <script src="scripts/helpers.js"></script>
-  <script src="scripts/index.js"></script>
+    <div id="heatmap"></div>
+    <div id="menu-bottom">
+      <button id="plus-icon">+</button>
+    </div>
+  </nav>
+  <main>
+    <canvas></canvas>
+    <div id="splash">
+      <img src="spaceinhabit.svg" alt="Space Inhabit Logo" />
+    </div>
+    <div id="calendar-wrapper">
+      <div id="calendar"></div>
+    </div>
+    <form class="hidden">
+      <h1>NEW&nbsp&nbsp&nbsp&nbspMISSION</h1>
+      <br />
+      <br />
+      <label><b>Name your new habit</b></label>
+      <br /><br />
+      <input type="text" placeholder="Dream big!" id="input-name" />
+      <br /><br />
+      <label><b>Mission Length :&nbsp&nbsp&nbsp <span id="slider-length"></span></b></label>
+      <br />
+      <input type="range" min="7" max="50" id="input-length" />
+      <!-- changed from text to number-->
+      <div id="form-buttons">
+        <button class="save-button" type="submit">Save</button>
+        <button class="cancel-button">Cancel</button>
+      </div>
+    </form>
+  </main>
+</body>
+
+<script src="scripts/helpers.js"></script>
+<script src="scripts/index.js"></script>
+
 </html>
